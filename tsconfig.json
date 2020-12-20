@@ -1,0 +1,16 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+
+  "include": ["src/**/*", "@types/components/axis/y_tick.d.ts", "@types/components/axis/y_axis.d.ts", "@types/components/axis/x_tick.d.ts", "@types/components/axis/x_axis.d.ts"],
+  "exclude": [
+    "node_modules/*",
+    "__sapper__/*",
+    "public/*",
+    "dis/*",
+    "@types/*"
+  ],
+  "compilerOptions": {
+    "importsNotUsedAsValues": "preserve",
+    "sourceMap": false
+  }
+}

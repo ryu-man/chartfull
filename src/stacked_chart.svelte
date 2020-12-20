@@ -1,0 +1,55 @@
+<script lang="ts">
+    import { XAxis, YAxis, Grid, Line, Circle } from './components'
+    import Chartist from './chartist.svelte'
+  
+    export let width: number = 600
+    export let height: number = 400
+    export let margin = { top: 36, right: 36, bottom: 36, left: 100 }
+    export let data: Array<any> = []
+    export let groupBy: (d: any) => any = () => ''
+    export let radius: number = 8
+    export let connected: boolean = false
+  
+    export let style = {}
+  </script>
+  
+  <Chartist
+    class="bubble"
+    {width}
+    {height}
+    {margin}
+    {data}
+    {groupBy}
+    {style}
+    let:samples
+    let:colorScale>
+    <slot name="content" slot="content" test={true}>
+      <XAxis class="x" position="bottom" />
+      <YAxis
+        class="y"
+        format="~s"
+        position="right" />
+      <Grid />
+    </slot>
+  
+    <g>
+      {#each samples as entry}
+        <g>
+          {#if connected}
+            <slot name="line" lineData={entry[1]}>
+              <Line data={entry[1]} style={{ stroke: colorScale(entry[0]) }} />
+            </slot>
+          {/if}
+          {#each entry[1] as item, i}
+            <slot index={i} color={colorScale(groupBy(entry[0]))}>
+              <Circle index={i} duration={i * 96} r={radius} />
+            </slot>
+          {/each}
+        </g>
+      {/each}
+    </g>
+  </Chartist>
+  
+  <style>
+  </style>
+  

@@ -1,0 +1,12 @@
+/node_modules/
+/public/
+/dist/
+/example/
+/@types/
+.DS_Store
+package-lock.json
+.gitignore
+*.log
+test
+yarn.lock
+.vscode
