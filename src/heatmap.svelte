@@ -28,14 +28,14 @@
 </script>
 
 <Chartist
-  class="bubble"
+  class="heat"
   {width}
   {height}
   {margin}
   {data}
   {colorRange}
   {style}
-  let:samples
+  let:entries
   let:colorScale>
 
   <slot name="content" slot="content" test={true}>

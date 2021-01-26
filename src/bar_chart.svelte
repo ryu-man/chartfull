@@ -23,7 +23,7 @@
   {groupBy}
   {colorRange}
   {style}
-  let:samples
+  let:entries
   let:colorScale>
   <slot name="content" slot="content" test={true}>
     <XAxis class="x" position="bottom" />
@@ -36,7 +36,7 @@
           <Legend right="1vw" top="1vw" />
         {/if} -->
   </slot>
-    {#each samples as entry}
+    {#each entries as entry}
       <slot>
         <g>
           {#each entry[1] as item}

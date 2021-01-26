@@ -21,7 +21,7 @@
   {groupBy}
   {colorRange}
   {style}
-  let:samples
+  let:entries
   let:colorScale>
   <slot name="content" slot="content" test={true}>
     <XAxis class="x" position="bottom" />
@@ -30,13 +30,10 @@
       format="~s"
       position="right" />
     <Grid />
-    <!-- {#if keys.length > 1}
-          <Legend right="1vw" top="1vw" />
-        {/if} -->
   </slot>
 
   <g>
-    {#each samples as entry}
+    {#each entries as entry}
       <slot key={entry[0]} lineData={entry[1]} color={colorScale(entry[0])}>
         <Area
           data={entry[1]}

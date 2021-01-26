@@ -14,14 +14,14 @@
   </script>
   
   <Chartist
-    class="bubble"
+    class="stacked"
     {width}
     {height}
     {margin}
     {data}
     {groupBy}
     {style}
-    let:samples
+    let:entries
     let:colorScale>
     <slot name="content" slot="content" test={true}>
       <XAxis class="x" position="bottom" />
@@ -33,7 +33,7 @@
     </slot>
   
     <g>
-      {#each samples as entry}
+      {#each entries as entry}
         <g>
           {#if connected}
             <slot name="line" lineData={entry[1]}>
