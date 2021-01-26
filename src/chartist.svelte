@@ -1,93 +1,104 @@
-<script lang="ts">
-  import type { ScaleOrdinal } from 'd3'
-  import { group, scaleOrdinal, schemePaired } from 'd3'
-  import { setContext, tick } from 'svelte'
+<script>
+  import { group, scaleOrdinal, schemeCategory10 } from 'd3'
+  import { tick } from 'svelte'
   import { writable } from 'svelte/store'
+  import { fade } from 'svelte/transition'
   import { linear } from './components/scales'
-
-  import { key } from './context.svelte'
+  import { chartistContext, key, updateChartistContext } from './context.svelte'
   import { css } from './utils'
 
-  export let width: number = 300
-  export let height: number = 300
+  export let width = 300
+  export let height = 300
   export let margin = {}
-  export let data: any[] = []
-  export let groupBy: (d: any) => any = () => ""
-  export let colorRange: readonly string[] = schemePaired
+  export let data = []
+  export let groupBy = (d) => ''
+  export let colorRange = schemeCategory10
   export let style = {}
-  let _class = {}
+  let _class = ''
   export { _class as class }
+  export let type = ''
 
-  let _margin = { top: 32, right: 32, bottom: 72, left: 72, ...margin }
-  let innerWidth = width - _margin.left - _margin.right
-  let innerHeight = height - _margin.top - _margin.bottom
+  let _padding = { top: 32, right: 32, bottom: 72, left: 72, ...margin }
+  let innerWidth = width - _padding.left - _padding.right
+  let innerHeight = height - _padding.top - _padding.bottom
 
-  let colorScale: ScaleOrdinal<string, string>
+  let colorScale
 
-  let samples: any[] = []
+  let entries = []
 
-  let keys: string[] = []
+  let keys = []
 
-  const _context = {}
+  const { xAccessor, yAccessor } = chartistContext() ?? {}
+
   const _width = writable(width)
   const _height = writable(height)
   const _innerWidth = writable(innerWidth)
   const _innerHeight = writable(innerHeight)
-  const __margin = writable(_margin)
+  const __margin = writable(_padding)
   const _data = writable(data)
+  const _entries = writable([])
   const _keys = writable(keys)
-  const _xscale = writable(linear)
-  const _yscale = writable(linear)
-  const _xaccessor = writable((d) => d.x)
-  const _yaccessor = writable((d) => d.y)
+  const _xscale = writable(linear())
+  const _yscale = writable(linear())
+  const _colorScale = writable(undefined)
 
-  const context = {
+  let context = chartistContext()
+  context = {
     colorScale,
     width: _width,
     height: _height,
     innerWidth: _innerWidth,
     innerHeight: _innerHeight,
-    margin: _margin,
+    margin: _padding,
     keys,
-    data,
+    data: _data,
+    entries: _entries,
     defaultXScale: linear,
     xScale: _xscale,
     defaultYScale: linear,
     yScale: _yscale,
-    xAccessor: _xaccessor,
-    yAccessor: _yaccessor,
-    xTicks: null,
-    yTicks: null
+    defaultZScale: linear,
+    xAccessor: xAccessor ?? writable((d) => d.x),
+    yAccessor: yAccessor ?? writable((d) => d.y),
+    zAccessor: writable((d) => d.z),
+    xTicks: writable(null),
+    yTicks: writable(null),
+    type
   }
-  setContext(key, context)
 
-  function init(node: HTMLElement, data: any[]) {
+  updateChartistContext(context)
+
+  function init(node, data) {
     css(node, style)
     // data = data.sort((a, b) => xAccessor(a) - xAccessor(b))
+    if (typeof groupBy === typeof '') {
+      entries = Array.from(group(data, (d) => d[groupBy]).entries())
+    } else {
+      entries = Array.from(group(data, groupBy).entries())
+    }
+    keys = entries.map((e) => e[0])
+    $_entries = entries
 
-    samples = Array.from(group(data, groupBy).entries())
-    keys = samples.map((e) => e[0])
-    console.log(samples)
     width = node.offsetWidth
-    innerWidth = width - _margin.left - _margin.right
-    innerHeight = height - _margin.top - _margin.bottom
+    innerWidth = width - _padding.left - _padding.right
+    innerHeight = height - _padding.top - _padding.bottom
 
-    colorScale = scaleOrdinal<string>().domain(keys).range(colorRange)
-
+    colorScale = scaleOrdinal().domain(keys).range(colorRange)
 
     $_width = width
     $_innerWidth = innerWidth
     $_innerHeight = innerHeight
     $_keys = keys
-    // $_colorScale = colorScale
+    $_colorScale = colorScale
 
     return {
-      update(data: any[]) {
-        samples = Array.from(group(data, groupBy).entries())
-        keys = samples.map((e) => e[0])
+      update(data) {
+        entries = Array.from(group(data, groupBy).entries())
+        keys = entries.map((e) => e[0])
+        $_entries = entries
         width = node.offsetWidth
-        innerWidth = width - _margin.left - _margin.right
-        innerHeight = height - _margin.top - _margin.bottom
+        innerWidth = width - _padding.left - _padding.right
+        innerHeight = height - _padding.top - _padding.bottom
 
         $_width = width
         $_innerWidth = innerWidth
@@ -100,21 +111,37 @@
   }
 </script>
 
-<figure class="{_class + ' '}chartist" use:init={data}>
+<figure
+  use:init={data}
+  class="{_class && `${_class} `}chartist"
+  style={`--height:${height}px;`}
+  transition:fade={{ duration: 100 }}
+>
   <div
     class="elements"
-    style={`padding:${_margin.top}px ${_margin.right}px ${_margin.bottom}px ${_margin.left}px;height:${innerHeight}px;`}>
+    style={`padding:${_padding.top}px ${_padding.right}px ${_padding.bottom}px ${_padding.left}px;`}
+  >
+    <slot name="onther" />
     {#await tick() then value}
       <slot name="content" />
     {/await}
   </div>
   <svg
-    height={innerHeight}
+    {height}
     viewBox="0 0 {innerWidth} {innerHeight}"
     preserveAspectRatio="none"
-    style={`padding:${_margin.top}px ${_margin.right}px ${_margin.bottom}px ${_margin.left}px;`}>
+    vector-effect="non-scaling-stroke"
+    style={`padding:${_padding.top}px ${_padding.right}px ${_padding.bottom}px ${_padding.left}px;`}>
     {#await tick() then value}
-      <slot {samples} {keys} {colorScale} />
+      <slot
+        entries={$_entries}
+        {innerWidth}
+        {innerHeight}
+        {keys}
+        {colorScale}
+        xScale={$_xscale}
+        yScale={$_yscale}
+      />
     {/await}
   </svg>
 </figure>
@@ -122,8 +149,8 @@
 <style>
   .chartist {
     width: 100%;
-    min-width: 300px;
-    height: auto;
+    min-width: 600px;
+    height: var(--height);
     min-height: 300px;
     position: relative;
     margin: 0;
@@ -144,5 +171,12 @@
     position: relative;
     width: 100%;
     height: 100%;
+  }
+  :global(.chartist figcaption) {
+    position: absolute;
+    bottom: 105%;
+    right: 0;
+    font-weight: 600;
+    font-size: 1.2em;
   }
 </style>
