@@ -5,7 +5,7 @@
   import { css } from '../utils'
 
   import { easeBackIn } from 'd3'
-  import { charterContext } from '../context.svelte'
+  import { chartistContext } from '../context.svelte'
 
   /* type EasingFunction = (t: number) => number
   interface TransitionParams {
@@ -25,37 +25,29 @@
   export let height: number
   export let x: number
   export let y: number */
+  const { xScale, yScale, innerHeight } = chartistContext()
 
-  export let x1: number
-  export let x2: number
-  export let y1: number
-  export let y2: number
-
+  export let x: number
+  export let width: number
+  export let y: number
+  export let height: number
+  export let fill = 'black'
   export let style = {}
-  
-  const { xScale, yScale } = charterContext()()
-  
-  console.log(xScale(x1))
+
+  // console.log(xScale(x1))
   // console.log(x1, x2, y1, y2)
 
-  $: x = $xScale(x1)
+  /* $: x = $xScale(x1)
   $: y = $yScale(y1)
   $: width = Math.abs($xScale(x2) - $xScale(x1))
-  $: height = Math.abs($yScale(y2) - $yScale(y1))
+  $: height = Math.abs($yScale(y2) - $yScale(y1)) */
   // $:console.log(x,y,width,height)
 </script>
 
-<rect
-  use:css="{style}"
-  x="{x}"
-  y="{y}"
-  width="{width}"
-  height="{height}"
-></rect>
+<rect use:css={style} {x} {y} {width} {height} {fill} />
 
 <style>
   rect {
-    fill: #000;
     fill-opacity: 0.7;
     vector-effect: non-scaling-stroke;
   }

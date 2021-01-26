@@ -2,7 +2,7 @@
   import { tick } from 'svelte'
   import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
-  import { charterContext } from '../../context.svelte'
+  import { chartistContext } from '../../context.svelte'
   import GridLine from './grid_line.svelte'
 
   export let duration: number = 400
@@ -27,7 +27,7 @@
     xTicks,
     yTicks,
     margin
-  } = charterContext()
+  } = chartistContext()
 
   function tickValues(scale, ticks): any[] {
     return scale?.ticks?.(ticks) ?? scale.domain()
@@ -39,10 +39,11 @@
   class="chartist-grid"
   height={$height}
   viewBox="0 0 {$innerWidth} {$innerHeight}"
-  preserveAspectRatio="none">
+  preserveAspectRatio="none"
+  vector-effect="non-scaling-stroke" >
   {#await tick() then value}
     <g class="vertical">
-      {#each tickValues($xScale, xTicks) as tick, i (+tick || tick)}
+      {#each tickValues($xScale, $xTicks) as tick, i (+tick || tick)}
         <slot name="vertical" x={$xScale(tick)} index={i}>
           <GridLine
             x={$xScale(tick)}
@@ -57,7 +58,7 @@
       {/each}
     </g>
     <g class="horizontal">
-      {#each tickValues($yScale, yTicks) as tick, i (+tick || tick)}
+      {#each tickValues($yScale, $yTicks) as tick, i (+tick || tick)}
         <slot name="horizontal" y={$yScale(tick)} index={i}>
           <GridLine
             y={$yScale(tick)}

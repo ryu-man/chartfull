@@ -1,14 +1,22 @@
+<script context="module">
+  let xAxis
+  let yAxis
+
+  export let mirror = false
+
+  export const primaryAxis = () => (mirror ? yAxis : xAxis)
+  export const secondaryAxis = () => (!mirror ? yAxis : xAxis)
+
+  export function getRange(dimension, indent) {
+    return [indent, dimension]
+  }
+</script>
+
 <script lang="ts">
-  import { extent } from 'd3'
-
   import { tick } from 'svelte'
-  import { charterContext } from '../../context.svelte'
-
-  const context = charterContext()
-  let { innerWidth, data, xAccessor } = context
 
   export let scale: any
-  export let dimension:number
+  export let dimension: number
   export let ticks: number | null
   export let nice: boolean = false
   export let format: string
@@ -18,9 +26,6 @@
   export { _class as class }
 
   let formatter: (value: any) => string
-  console.log(scale)
-  ticks && (context.xTicks = ticks)
-  console.log('axis')
   nice && scale.nice()
   formatter = scale?.tickFormat?.(ticks, format) ?? ((d) => d)
 
@@ -43,39 +48,47 @@
   </div>
 
   <slot name="label">
-    <span style="position:absolute;right:0;">label</span>
+    <span style="position:absolute;left:100%;">label</span>
   </slot>
 </div>
 
-<style>
-  :global(.axis) {
+<style global>
+  .axis {
     position: absolute;
   }
-  :global(.x.axis) {
+  .x.axis {
     height: 2em;
     width: 100%;
   }
-  :global(.y.axis) {
+  .x.axis.mirror {
+    width: 2em;
+    height: 100%;
+  }
+  .y.axis {
     height: 100%;
     width: 2em;
   }
-  :global(.axis.top) {
+  .y.axis.mirror {
+    width: 100%;
+    height: 2em;
+  }
+  .axis.top {
     padding-bottom: 0.7em;
     bottom: 100%;
   }
-  :global(.axis.bottom) {
+  .axis.bottom {
     padding-top: 0.7em;
     top: 100%;
   }
-  :global(.axis.left) {
+  .axis.left {
     padding-right: 0.7em;
     right: 100%;
   }
-  :global(.axis.right) {
+  .axis.right {
     padding-left: 0.7em;
     left: 100%;
   }
-  :global(.axis > .inner-axis) {
+  .axis > .inner-axis {
     position: relative;
     width: inherit;
     height: inherit;

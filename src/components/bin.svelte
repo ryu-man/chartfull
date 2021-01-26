@@ -1,21 +1,21 @@
 <script lang="ts">
   import { css } from '../utils'
-  import { charterContext } from '../context.svelte'
+  import { chartistContext } from '../context.svelte'
 
   export let item: any
   export let style = {}
 
-  const {xScale, xAccessor, yScale, yAccessor, innerHeight} = charterContext()
+  const {xScale, xAccessor, yScale, yAccessor, innerHeight} = chartistContext()
 
   let x: number = 0
   let y: number = 0
   let width: number = 0
   let height: number = 0
 
-  $: x = $xScale($xAccessor(item)) 
-  $: y = $yScale($yAccessor(item))
+  $: x = $xScale(xAccessor(item)) 
+  $: y = $yScale(yAccessor(item))
   $: width = $xScale.bandwidth()
-  $: height =  $innerHeight - $yScale($yAccessor(item))
+  $: height =  $innerHeight - $yScale(yAccessor(item))
 </script>
 
 

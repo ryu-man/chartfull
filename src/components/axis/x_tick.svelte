@@ -1,42 +1,18 @@
-<script lang="ts">
+<script>
   import { cubicOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
+  import { fade } from 'svelte/transition'
   import { css } from '../../utils'
   import { easeBack } from 'd3'
 
   export let x = 0
-  export let tick: any
+  export let tick
   export let formatter
-  export let duration: number = 0
-  export let inTranstion: (
-    node: Element,
-    { delay, duration, easing, x, y, opacity }: Partial<any>
-  ) => Partial<any> = transition
-  export let outTranstion = transition
-  export let inParams: {
-    duration?: number
-    delay?: number
-    easing?: (t: number) => number
-    x?: number
-    y?: number
-  } & Partial<any> = {
-    duration: 400,
-    delay: 0,
-    x: 0,
-    y: 0
-  }
-  export let outParams: {
-    duration?: number
-    delay?: number
-    easing?: (t: number) => number
-    x?: number
-    y?: number
-  } = {
-    duration: 200,
-    delay: 0,
-    x: 0,
-    y: 0
-  }
+  export let duration = 0
+  export let inTranstion = () => {}
+  export let outTranstion = () => {}
+  export let inParams = {}
+  export let outParams = {}
   export let style = {}
 
   let pos = tweened(x, {
@@ -46,57 +22,43 @@
 
   $: $pos = x
 
-  function init(node: HTMLElement, p: number) {
+  function init(node, p) {
     css(node, style)
     node.style.position = 'absolute'
     node.style.whiteSpace = 'nowrap'
-    node.style.left = `calc(${p}% - ${node.offsetWidth / 2}px)`
+    node.style.left = `${p}%`
     return {
-      update(p: number) {
-        node.style.left = `calc(${p}% - ${node.offsetWidth / 2}px)`
+      update(p) {
+        node.style.left = `${p}%`
       }
     }
   }
   function transition(
-    node: HTMLElement,
-    {
-      delay = 0,
-      duration = 30,
-      easing = easeBack,
-      x = 0,
-      y = 0,
-      opacity = 0
-    }: TransitionParams
+    node,
+    { delay = 0, duration = 30, easing = easeBack, x = 0, y = 0, opacity = 0 }
   ) {
     return {
       delay: delay,
       duration: duration,
       easing: easing,
-      css: (t: number, u: number) => {
+      css: (t, u) => {
         return `transform: translate(${x * u}px,${y * u}px);opacity: ${t};`
       }
     }
   }
-  interface TransitionParams {
-    delay?: number
-    duration?: number
-    easing?: (t: number) => number
-    x?: number
-    y?: number
-    opacity?: number
-  }
 </script>
 
 <span
-  use:init="{$pos}"
-  in:inTranstion="{inParams}"
-  out:outTranstion="{outParams}"
-  class="tick"
->{formatter(tick)}</span>
+  use:init={$pos}
+  in:inTranstion|local={inParams}
+  out:outTranstion|local={outParams}
+  class="tick">{formatter(tick)}</span
+>
 
 <style>
-  span{
+  .tick {
     font-size: 1em;
     font-weight: 400;
+    transform: translateX(-50%);
   }
 </style>

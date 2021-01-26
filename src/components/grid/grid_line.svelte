@@ -2,7 +2,7 @@
   import { tweened } from 'svelte/motion'
   import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
-  import { charterContext } from '../../context.svelte'
+  import { chartistContext } from '../../context.svelte'
 
   export let x: number = 0
   export let y: number = 0
@@ -79,6 +79,7 @@
     stroke-opacity: inherit;
     stroke-miterlimit: inherit;
     stroke-linejoin: inherit;
+    vector-effect: non-scaling-stroke;
     /* background-color: currentColor; */
     /* border: none; */
   }

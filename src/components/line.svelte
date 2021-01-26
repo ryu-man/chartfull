@@ -1,36 +1,26 @@
-<script lang="ts">
+<script>
   import { css } from '../utils'
   import { curveMonotoneX, line } from 'd3'
-  import { charterContext } from '../context.svelte'
+  import { chartistContext } from '../context.svelte'
 
-  const context = charterContext()
-  const { xScale, xAccessor, yScale, yAccessor, innerHeight } = charterContext()
+  const { xScale, xAccessor, yScale, yAccessor } = chartistContext()
 
-  export let data: any[]
+  export let data = []
   export let curve = curveMonotoneX
   export let style = {}
-  let _class: string = ''
+  let _class = ''
   export { _class as class }
 
   let _line = line() // Creating the line
+    .x((d) => $xScale($xAccessor(d)))
+    .y((d) => $yScale($yAccessor(d)))
     .curve(curve)
   let path = 'M 0 0'
 
-  $: _line.x((d) => $xScale($xAccessor(d)))
-  $: _line.y((d) => $yScale($yAccessor(d)))
   $: path = _line(data)
-
-  function init(node: SVGPathElement, data: any[]) {
-    return {
-      update(data: any[]) {
-        path = _line(data)
-      }
-    }
-  }
 </script>
 
 <path
-  use:init={data}
   use:css={style}
   d={path}
   class="{_class} line"

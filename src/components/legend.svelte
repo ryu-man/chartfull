@@ -1,7 +1,7 @@
 <script lang="ts">
   import { css } from '../utils'
   import LegendItem from './legend/legend_item.svelte'
-  import { charterContext } from '../context.svelte'
+  import { chartistContext } from '../context.svelte'
 
   export let top: number | string = 'unset'
   export let left: number | string = 'unset'
@@ -9,7 +9,7 @@
   export let bottom: number | string = 'unset'
   export let style = {}
 
-  const context = charterContext()
+  const context = chartistContext()
   const { colorScale, keys } = $context
   
   console.log($context)

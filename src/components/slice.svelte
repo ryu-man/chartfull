@@ -1,28 +1,16 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import { tweened } from 'svelte/motion'
-  import { interpolate as interpolator } from 'd3'
-  import type { ScaleOrdinal } from 'd3'
-  import { charterContext } from '../context.svelte'
-
-  type Slice = {
-    data: { label: string; value: number }
-    endAngle: number
-    index: number
-    padAngle: number
-    startAngle: number
-    value: number
-  }
+  import { chartistContext } from '../context.svelte'
+  import type { ScaleOrdinal, PieArcDatum } from 'd3'
 
   export let index: number = 0
-  export let item: Slice
+  export let item: PieArcDatum<any>
   export let color: ScaleOrdinal<string, string> //(d: string) => string
   export let duration: number = 300
-  
 
   let active: boolean = false
 
-  const context = charterContext()
+  const context = chartistContext()
   const {
     innerArc,
     outerArc,
@@ -35,76 +23,18 @@
     value
   } = $context
 
-  const points = (item: { startAngle?: any; endAngle?: any }) => {
-    const a = innerArc.centroid(item) // line insertion in the slice
-    const b = outerArc.centroid(item) // line break: we use the other arc generator that has been built only for that
-    const c = outerArc.centroid(item) // Label position = almost the same as posB
-    const midangle = item.startAngle + (item.endAngle - item.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
-    c[0] = radius * (Math.round(midangle) < Math.PI ? 1 : -1) // multiply by 1 or -1 to put it on the right or on the left
-    return [a, b, c]
-  }
-  const textTranform = (item: { startAngle?: any; endAngle?: any }) => {
-    var pos = outerArc.centroid(item)
-    var midangle = item.startAngle + (item.endAngle - item.startAngle) / 2
-    pos[0] = radius * 1.1 * (Math.round(midangle) < Math.PI ? 1 : -1)
-    return `translate(${pos})`
-  }
-  const textAnchor = (item: { startAngle?: any; endAngle?: any }) => {
-    var midangle = item.startAngle + (item.endAngle - item.startAngle) / 2
-    return midangle < Math.PI ? 'start' : 'end'
-  }
-
   let path
-  let pathTween = tweened(innerArc(item), {
-    duration,
-    interpolate: (_a, _b) => {
-      const i = interpolator(path || item, item)
-      path = i(0)
-      return (t) => innerArc(i(t))
-    }
-  })
-  let text
-  let textTween = tweened(textTranform(item), {
-    duration,
-    interpolate: (a, b) => {
-      const i = interpolator(text || item, item)
-      text = i(0)
-      return (t) => textTranform(i(t))
-    }
-  })
-  let line
-  let lineTween = tweened(points(item), {
-    duration,
-    interpolate: (a, b) => {
-      const i = interpolator(line || item, item)
-      line = i(0)
-      return (t) => points(i(t))
-    }
-  })
+  let d= innerArc(item)
 
-  $: {
-    pathTween.set(innerArc(item))
-    textTween.set(textTranform(item))
-    lineTween.set(points(item))
-  }
+  $: d = innerArc(item)
 </script>
 
-<g class:active in:fade="{{ delay: index * 54 }}" out:fade>
-  <path
-    d="{$pathTween}"
-    fill="{color(label(item.data))}"
-    on:click="{() => (active = !active)}"
-  ></path>
+<g class:active in:fade={{ delay: index * 54 }} out:fade>
   <slot {item}>
-    <!-- <text dy=".35em" text-anchor="{textAnchor(item)}" transform="{$textTween}">
-      {label(item.data)}
-    </text>
-    <polyline
-      stroke="{color(label(item.data))}"
-      width="2"
-      fill="none"
-      points="{`${$lineTween}`}"
-    ></polyline> -->
+    <path
+      d={d}
+      fill={color(label(item.data))}
+      on:click={() => (active = !active)} />
   </slot>
 </g>
 
@@ -119,7 +49,7 @@
     stroke-width: 4px;
   }
   g {
-    transition: 0.3s;
+    transition: transform 0.3s;
   }
   g.active {
     transform: scale(1.1);

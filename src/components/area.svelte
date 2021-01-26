@@ -4,7 +4,7 @@
   import { interpolatePath } from 'd3-interpolate-path'
   import { css } from '../utils'
   import type { CurveFactory } from 'd3'
-  import { charterContext } from '../context.svelte'
+  import { chartistContext } from '../context.svelte'
 
   export let data: any[]
   export let delay: number = 0
@@ -23,7 +23,7 @@
     yAccessor,
     colorScale,
     innerHeight
-  } = charterContext()()
+  } = chartistContext()
 
   const _area = area()
     .x((d) => $xScale($xAccessor(d)))
