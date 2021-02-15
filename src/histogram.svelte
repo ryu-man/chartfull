@@ -1,11 +1,9 @@
 <script lang="ts">
   import { writable } from 'svelte/store'
   import { bin, extent, max } from 'd3'
-  import { Rect, Grid } from './components'
+  import { Rect, Grid , XAxis, YAxis} from './components'
   import { updateChartistContext } from './context.svelte'
   import Chartist from './chartist.svelte'
-  import XHistoAxis from './components/axis/x_histo_axis.svelte'
-  import YHistoAxis from './components/axis/y_histo_axis.svelte'
 
   export let width: number
   export let height: number = 400
@@ -53,8 +51,8 @@
   let:xScale
   let:yScale>
   <slot name="content" slot="content">
-    <XHistoAxis class="x" position="bottom" />
-    <YHistoAxis class="y" format="~s" position="right" />
+    <XAxis class="x" position="bottom" />
+    <YAxis class="y" format="~s" position="right" />
     <Grid />
   </slot>
   <g>
