@@ -1,5 +1,5 @@
 <script>
-  import { chartistContext } from '../../context.svelte'
+  import { graficoContext } from '../../context.svelte'
   import YTick from './y_tick.svelte'
   import Axis from './axis.svelte'
   import { extent } from 'd3'
@@ -11,7 +11,7 @@
     defaultYScale,
     yAccessor,
     yTicks
-  } = chartistContext()
+  } = graficoContext()
 
   export let scale = defaultYScale
   export let accessor

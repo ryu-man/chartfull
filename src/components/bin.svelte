@@ -1,6 +1,6 @@
 <script>
   import { css } from '../utils'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
   export let item
   export let style = {}
@@ -11,7 +11,7 @@
     yScale,
     yAccessor,
     innerHeight
-  } = chartistContext()
+  } = graficoContext()
 
   let x = 0
   let y = 0

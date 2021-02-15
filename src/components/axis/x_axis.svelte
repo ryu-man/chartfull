@@ -1,5 +1,5 @@
 <script>
-  import { chartistContext } from '../../context.svelte'
+  import { graficoContext } from '../../context.svelte'
   import XTick from './x_tick.svelte'
   import Axis from './axis.svelte'
   import { extent } from 'd3'
@@ -13,7 +13,7 @@
     entries,
     map,
     xTicks
-  } = chartistContext()
+  } = graficoContext()
 
   export let scale = defaultXScale
   export let accessor

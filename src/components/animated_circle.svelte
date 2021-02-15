@@ -3,9 +3,9 @@
   import { tweened } from 'svelte/motion'
   import { fade } from 'svelte/transition'
   import { css } from '../utils'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
-  const { xScale, xAccessor, yScale, yAccessor } = chartistContext()
+  const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
 
   export let index = 0
   export let item = {}

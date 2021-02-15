@@ -3,7 +3,7 @@
   import { area, curveMonotoneX } from 'd3'
   import { interpolatePath } from 'd3-interpolate-path'
   import { css } from '../utils'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
   export let data
   export let delay = 0
@@ -19,7 +19,7 @@
     yAccessor,
     colorScale,
     innerHeight
-  } = chartistContext()
+  } = graficoContext()
 
   const _area = area()
     .x((d) => $xScale($xAccessor(d)))

@@ -4,7 +4,7 @@
   import { writable } from 'svelte/store'
   import { fade } from 'svelte/transition'
   import { linear } from './components/scales'
-  import { chartistContext, key, updateChartistContext } from './context.svelte'
+  import { graficoContext, key, updateGraficoContext } from './context.svelte'
   import { css } from './utils'
 
   export let width = 300
@@ -28,7 +28,7 @@
 
   let keys = []
 
-  const { xAccessor, yAccessor } = chartistContext() ?? {}
+  const { xAccessor, yAccessor } = graficoContext() ?? {}
 
   const _width = writable(width)
   const _height = writable(height)
@@ -42,7 +42,7 @@
   const _yscale = writable(linear())
   const _colorScale = writable(undefined)
 
-  let context = chartistContext()
+  let context = graficoContext()
   context = {
     colorScale,
     width: _width,
@@ -66,7 +66,7 @@
     type
   }
 
-  updateChartistContext(context)
+  updateGraficoContext(context)
 
   function init(node, data) {
     css(node, style)

@@ -1,9 +1,9 @@
 <script>
   import { css } from '../utils'
   import { curveMonotoneX, line } from 'd3'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
-  const { xScale, xAccessor, yScale, yAccessor } = chartistContext()
+  const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
 
   export let data = []
   export let curve = curveMonotoneX

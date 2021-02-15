@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { bin, extent, max } from 'd3'
   import { Rect, Grid, XAxis, YAxis } from './components'
-  import { updateChartistContext } from './context.svelte'
+  import { updateGraficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
   export let width
@@ -14,7 +14,7 @@
   export let style = {}
   let type = 'histogram'
 
-  updateChartistContext({
+  updateGraficoContext({
     primaryDomain: (data, accessor) => extent(data, accessor),
     secondaryDomain: (data, accessor) => [
       0,

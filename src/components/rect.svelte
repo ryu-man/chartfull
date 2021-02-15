@@ -5,7 +5,7 @@
   import { css } from '../utils'
 
   import { easeBackIn } from 'd3'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
   /* type EasingFunction = (t: number) => number
   interface TransitionParams {
@@ -25,7 +25,7 @@
   export let height: number
   export let x: number
   export let y: number */
-  const { xScale, yScale, innerHeight } = chartistContext()
+  const { xScale, yScale, innerHeight } = graficoContext()
 
   export let x
   export let width

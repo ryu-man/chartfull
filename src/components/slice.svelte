@@ -1,6 +1,6 @@
 <script>
   import { fade } from 'svelte/transition'
-  import { chartistContext } from '../context.svelte'
+  import { graficoContext } from '../context.svelte'
 
   export let index = 0
   export let item
@@ -9,7 +9,7 @@
 
   let active = false
 
-  const context = chartistContext()
+  const context = graficoContext()
   const {
     innerArc,
     outerArc,

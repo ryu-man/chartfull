@@ -3,10 +3,10 @@
   
   export const key = {}
 
-  export function updateChartistContext(context) {
-    setContext(key, Object.assign(context, chartistContext()))
+  export function updateGraficoContext(context) {
+    setContext(key, Object.assign(context, graficoContext()))
   }
-  export function chartistContext() {
+  export function graficoContext() {
     return getContext(key)
   }
 </script>

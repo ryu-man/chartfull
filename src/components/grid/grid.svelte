@@ -2,7 +2,7 @@
   import { tick } from 'svelte'
   import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
-  import { chartistContext } from '../../context.svelte'
+  import { graficoContext } from '../../context.svelte'
   import GridLine from './grid_line.svelte'
 
   export let duration = 400
@@ -27,7 +27,7 @@
     xTicks,
     yTicks,
     margin
-  } = chartistContext()
+  } = graficoContext()
 
   function tickValues(scale, ticks) {
     return scale?.ticks?.(ticks) ?? scale.domain()
