@@ -3,7 +3,7 @@
   import { bin, extent, max } from 'd3'
   import { Rect, Grid , XAxis, YAxis} from './components'
   import { updateChartistContext } from './context.svelte'
-  import Chartist from './chartist.svelte'
+  import Grafico from './grafico.svelte'
 
   export let width: number
   export let height: number = 400
@@ -34,7 +34,7 @@
   })
 </script>
 
-<Chartist
+<Grafico
   class="histogram"
   {width}
   {height}
@@ -79,7 +79,7 @@
       </g>
     {/each}
   </g>
-</Chartist>
+</Grafico>
 
 <style>
 </style>

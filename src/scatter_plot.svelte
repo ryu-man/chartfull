@@ -1,6 +1,6 @@
 <script lang="ts">
   import { XAxis, YAxis, Grid, Line, Circle } from './components'
-  import Chartist from './chartist.svelte'
+  import Grafico from './grafico.svelte'
 
   export let width: number = 600
   export let height: number = 400
@@ -13,7 +13,7 @@
   export let style = {}
 </script>
 
-<Chartist
+<Grafico
   class="scatter"
   {width}
   {height}
@@ -48,7 +48,7 @@
       </g>
     {/each}
   </g>
-</Chartist>
+</Grafico>
 
 <style>
 </style>

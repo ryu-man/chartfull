@@ -3,7 +3,7 @@
   import { extent, scaleLinear } from 'd3'
   import { XAxis, YAxis, Grid } from './components'
   import type { ScaleLinear } from 'd3'
-  import Chartist from './chartist.svelte'
+  import Grafico from './grafico.svelte'
   import { key } from './context.svelte'
   import { writable } from 'svelte/store'
   import Circle from './components/circle.svelte'
@@ -45,7 +45,7 @@
   }
 </script>
 
-<Chartist
+<Grafico
   class="bubble"
   {width}
   {height}
@@ -79,7 +79,7 @@
       {/each}
     {/each}
   </g>
-</Chartist>
+</Grafico>
 
 <style>
   circle {

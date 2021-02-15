@@ -1,6 +1,6 @@
 <script>
   import { XAxis, YAxis, Legend, Grid, Line } from './components'
-  import Chartist from './chartist.svelte'
+  import Grafico from './grafico.svelte'
 
   export let width
   export let height
@@ -12,7 +12,7 @@
   export let style = {}
 </script>
 
-<Chartist
+<Grafico
   {width}
   {height}
   {margin}
@@ -42,4 +42,4 @@
           <Legend right="1vw" top="1vw" />
         {/if} -->
   </slot>
-</Chartist>
+</Grafico>

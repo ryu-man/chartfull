@@ -5,7 +5,7 @@
   import { scaleBand, scaleLinear } from 'd3'
   import { XAxis, YAxis, Rect, XTick, YTick } from './components'
   import { fade, fly } from 'svelte/transition'
-  import Chartist from './chartist.svelte'
+  import Grafico from './grafico.svelte'
   import Grid from './components/grid/grid.svelte'
   import { key } from './context.svelte'
   import Bin from './components/bin.svelte'
@@ -27,7 +27,7 @@
 
 </script>
 
-<Chartist
+<Grafico
   class="heat"
   {width}
   {height}
@@ -59,7 +59,7 @@
   </g>
 
   
-</Chartist>
+</Grafico>
 
 <!-- <div class="heatmap charter" use:init="{data}">
   {#await tick() then value}
