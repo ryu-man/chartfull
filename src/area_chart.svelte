@@ -1,13 +1,13 @@
-<script lang="ts">
+<script>
   import { Grid, Area, XAxis, YAxis } from './components'
   import Grafico from './grafico.svelte'
 
-  export let width: number
-  export let height: number
+  export let width
+  export let height
   export let margin
-  export let data: any[] = []
-  export let groupBy: (d: any) => any
-  export let colorRange: readonly string[]
+  export let data = []
+  export let groupBy
+  export let colorRange
 
   export let style = {}
 </script>

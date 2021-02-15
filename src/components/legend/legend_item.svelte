@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { css } from '../../utils'
 
   export let color: string

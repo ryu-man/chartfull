@@ -1,16 +1,16 @@
-<script lang="ts">
+<script>
   import { writable } from 'svelte/store'
   import { bin, extent, max } from 'd3'
-  import { Rect, Grid , XAxis, YAxis} from './components'
+  import { Rect, Grid, XAxis, YAxis } from './components'
   import { updateChartistContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
-  export let width: number
-  export let height: number = 400
+  export let width
+  export let height = 400
   export let margin = {}
-  export let data: any[] = []
-  export let groupBy: (d: any) => any = () => ''
-  export let colorRange: readonly string[]
+  export let data = []
+  export let groupBy = () => ''
+  export let colorRange
   export let style = {}
   let type = 'histogram'
 
@@ -22,7 +22,7 @@
     ],
     xAccessor: writable((d) => d.length),
     yAccessor: writable((d) => d.length),
-    bins : writable([]),
+    bins: writable([]),
 
     map: (entries, scale, accessor, ticks = null) => {
       const _bin = bin()
@@ -49,7 +49,8 @@
   let:innerWidth
   let:innerHeight
   let:xScale
-  let:yScale>
+  let:yScale
+>
   <slot name="content" slot="content">
     <XAxis class="x" position="bottom" />
     <YAxis class="y" format="~s" position="right" />
@@ -58,7 +59,6 @@
   <g>
     {#each entries as entry}
       <g>
-        <!-- {@debug bins} -->
         {#each entry[1] as bin}
           <slot
             {entry}
@@ -67,13 +67,15 @@
             {yScale}
             {innerHeight}
             {innerWidth}
-            {bin}>
+            {bin}
+          >
             <Rect
               x={xScale(bin.x0)}
               width={Math.max(0, xScale(bin.x1) - xScale(bin.x0))}
               y={yScale(bin.length)}
               height={Math.max(0, innerHeight - yScale(bin.length))}
-              fill={colorScale(entry[0])} />
+              fill={colorScale(entry[0])}
+            />
           </slot>
         {/each}
       </g>

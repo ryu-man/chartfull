@@ -12,24 +12,25 @@
   }
 </script>
 
-<script lang="ts">
+<script>
   import { tick } from 'svelte'
 
-  export let scale: any
-  export let dimension: number
-  export let ticks: number | null
-  export let nice: boolean = false
-  export let format: string
-  export let position: string = 'bottom'
+  export let scale
+  export let dimension
+  export let ticks
+  export let nice = false
+  export let format
+  export let position = 'bottom'
   export let style = {}
   let _class = ''
   export { _class as class }
 
-  let formatter: (value: any) => string
+  let formatter
+
   nice && scale.nice()
   formatter = scale?.tickFormat?.(ticks, format) ?? ((d) => d)
 
-  function tickValues(scale, ticks): any[] {
+  function tickValues(scale, ticks) {
     return scale?.ticks?.(ticks) ?? scale.domain()
   }
 </script>
@@ -42,7 +43,8 @@
           coord={(scale(tick) * 100) / dimension}
           {tick}
           index={i}
-          {formatter} />
+          {formatter}
+        />
       {/each}
     {/await}
   </div>

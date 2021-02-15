@@ -1,14 +1,13 @@
-<script lang="ts">
+<script>
   import { fade } from 'svelte/transition'
   import { chartistContext } from '../context.svelte'
-  import type { ScaleOrdinal, PieArcDatum } from 'd3'
 
-  export let index: number = 0
-  export let item: PieArcDatum<any>
-  export let color: ScaleOrdinal<string, string> //(d: string) => string
-  export let duration: number = 300
+  export let index = 0
+  export let item
+  export let color //(d: string) => string
+  export let duration = 300
 
-  let active: boolean = false
+  let active = false
 
   const context = chartistContext()
   const {
@@ -24,7 +23,7 @@
   } = $context
 
   let path
-  let d= innerArc(item)
+  let d = innerArc(item)
 
   $: d = innerArc(item)
 </script>
@@ -32,9 +31,10 @@
 <g class:active in:fade={{ delay: index * 54 }} out:fade>
   <slot {item}>
     <path
-      d={d}
+      {d}
       fill={color(label(item.data))}
-      on:click={() => (active = !active)} />
+      on:click={() => (active = !active)}
+    />
   </slot>
 </g>
 

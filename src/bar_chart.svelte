@@ -1,15 +1,15 @@
-<script lang="ts">
+<script>
   import { XAxis, YAxis, Grid } from './components'
   import Grafico from './grafico.svelte'
   import Bin from './components/bin.svelte'
 
-  export let width: number
-  export let height: number
+  export let width
+  export let height
   export let margin
-  export let data: any[] = []
-  export let groupBy: (d: any) => any
+  export let data = []
+  export let groupBy
   export let curve
-  export let colorRange: readonly string[]
+  export let colorRange
 
   export let style = {}
 </script>

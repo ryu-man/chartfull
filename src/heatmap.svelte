@@ -1,5 +1,4 @@
-<script lang="ts">
-  import type { ScaleLinear, ScaleBand } from 'd3'
+<script>
   import { setContext, tick } from 'svelte'
   import { css } from './utils'
   import { scaleBand, scaleLinear } from 'd3'
@@ -11,20 +10,18 @@
   import Bin from './components/bin.svelte'
   import { writable } from 'svelte/store'
 
-  export let width: number = 600
-  export let height: number = 400
+  export let width = 600
+  export let height = 400
   export let margin = {}
-  export let data: Array<any> = []
-  
-  export let colorAccessor: (d: any) => any = () => ''
+  export let data = []
 
-  export let colorDomain: [number, number] = [1, 100]
-  export let colorRange: [any, any] = ['white', '#69b3a2']
+  export let colorAccessor = () => ''
+
+  export let colorDomain = [1, 100]
+  export let colorRange = ['white', '#69b3a2']
   export let style = {}
 
- 
-  let colorScale: ScaleLinear<number, number>
-
+  let colorScale
 </script>
 
 <Grafico
@@ -36,29 +33,28 @@
   {colorRange}
   {style}
   let:entries
-  let:colorScale>
-
+  let:colorScale
+>
   <slot name="content" slot="content" test={true}>
     <XAxis class="x" position="bottom" />
-    <YAxis
-      class="y"
-      format="~s"
-      position="right" />
+    <YAxis class="y" format="~s" position="right" />
     <Grid />
   </slot>
-  
+
   <g>
     {#each data as item, i}
       <slot>
         <Bin
-          item="{item}"
-          style="{{ fill: colorScale(colorAccessor(item)), stroke: '#fff', strokeWidth: '2px' }}"
+          {item}
+          style={{
+            fill: colorScale(colorAccessor(item)),
+            stroke: '#fff',
+            strokeWidth: '2px'
+          }}
         />
       </slot>
     {/each}
   </g>
-
-  
 </Grafico>
 
 <!-- <div class="heatmap charter" use:init="{data}">
@@ -82,7 +78,6 @@
     </Chartist>
   {/await}
 </div> -->
-
 <style>
   .heatmap {
     overflow: hidden;

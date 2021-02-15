@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { quadIn } from 'svelte/easing'
   import { css } from '../utils'
   import { chartistContext } from '../context.svelte'
@@ -8,7 +8,7 @@
   export let index = 0
   export let cx
   export let cy
-  export let fill: string
+  export let fill
   export let r = 8
   export let duration = 0
   export let delay = 0

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { chartistContext } from '../../context.svelte'
   import XTick from './x_tick.svelte'
   import Axis from './axis.svelte'
@@ -15,16 +15,16 @@
     xTicks
   } = chartistContext()
 
-  export let scale: any = defaultXScale
-  export let accessor: () => any
+  export let scale = defaultXScale
+  export let accessor
   accessor && ($xAccessor = accessor)
-  export let indent: number = 0
-  export let ticks: number | null = null
-  export let domain: [any, any] = extent($data, $xAccessor)
-  export let range: [number, number] = [indent, $innerWidth]
-  export let nice: boolean = false
-  export let format: string
-  export let position: string = 'bottom'
+  export let indent = 0
+  export let ticks = null
+  export let domain = extent($data, $xAccessor)
+  export let range = [indent, $innerWidth]
+  export let nice = false
+  export let format
+  export let position = 'bottom'
   export let style = {}
   let _class = ''
   export { _class as class }
@@ -46,14 +46,16 @@
   let:coord
   let:index
   let:tick
-  let:formatter>
+  let:formatter
+>
   <slot x={coord} {index} {tick}>
     <XTick
       x={coord}
       {tick}
       {formatter}
       inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }} />
+      outParams={{ duration: 50 * index, x: 0, y: 36 }}
+    />
   </slot>
   <slot name="label" slot="label">
     <span class="label">label</span>
@@ -61,7 +63,7 @@
 </Axis>
 
 <style>
-  :global(.x.axis .label,.x.axis span[slot=label]){
+  :global(.x.axis .label, .x.axis span[slot='label']) {
     position: absolute;
     right: 0;
   }

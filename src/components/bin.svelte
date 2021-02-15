@@ -1,26 +1,31 @@
-<script lang="ts">
+<script>
   import { css } from '../utils'
   import { chartistContext } from '../context.svelte'
 
-  export let item: any
+  export let item
   export let style = {}
 
-  const {xScale, xAccessor, yScale, yAccessor, innerHeight} = chartistContext()
+  const {
+    xScale,
+    xAccessor,
+    yScale,
+    yAccessor,
+    innerHeight
+  } = chartistContext()
 
-  let x: number = 0
-  let y: number = 0
-  let width: number = 0
-  let height: number = 0
+  let x = 0
+  let y = 0
+  let width = 0
+  let height = 0
 
-  $: x = $xScale(xAccessor(item)) 
+  $: x = $xScale(xAccessor(item))
   $: y = $yScale(yAccessor(item))
   $: width = $xScale.bandwidth()
-  $: height =  $innerHeight - $yScale(yAccessor(item))
+  $: height = $innerHeight - $yScale(yAccessor(item))
 </script>
 
-
-
 <rect use:css={style} {x} {y} {width} {height} />
+
 <style>
   rect {
     fill: #000;

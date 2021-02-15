@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { quadIn } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import { fade } from 'svelte/transition'
@@ -9,7 +9,7 @@
 
   export let index = 0
   export let item = {}
-  export let fill: string
+  export let fill
   export let r = 8
   export let duration = 0
   export let delay = 0
@@ -32,10 +32,11 @@
   {r}
   cx={$cx}
   cy={$cy}
-  {fill} />
+  {fill}
+/>
 
 <style>
-  circle{
+  circle {
     vector-effect: non-scaling-stroke;
   }
 </style>

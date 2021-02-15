@@ -1,16 +1,15 @@
-<script lang="ts">
+<script>
   import { fade } from 'svelte/transition'
   import { tweened } from 'svelte/motion'
   import { interpolate as interpolator } from 'd3'
   import { chartistContext } from '../context.svelte'
-  import type { ScaleOrdinal, PieArcDatum } from 'd3'
 
-  export let index: number = 0
-  export let item: PieArcDatum<any>
-  export let color: ScaleOrdinal<string, string> //(d: string) => string
-  export let duration: number = 300
+  export let index = 0
+  export let item
+  export let color //(d: string) => string
+  export let duration = 300
 
-  let active: boolean = false
+  let active = false
 
   const context = chartistContext()
   const {
@@ -25,7 +24,7 @@
     value
   } = $context
 
-  const points = (item: { startAngle?: any; endAngle?: any }) => {
+  const points = (item) => {
     const a = innerArc.centroid(item) // line insertion in the slice
     const b = outerArc.centroid(item) // line break: we use the other arc generator that has been built only for that
     const c = outerArc.centroid(item) // Label position = almost the same as posB
@@ -33,13 +32,13 @@
     c[0] = radius * (Math.round(midangle) < Math.PI ? 1 : -1) // multiply by 1 or -1 to put it on the right or on the left
     return [a, b, c]
   }
-  const textTranform = (item: { startAngle?: any; endAngle?: any }) => {
+  const textTranform = (item) => {
     var pos = outerArc.centroid(item)
     var midangle = item.startAngle + (item.endAngle - item.startAngle) / 2
     pos[0] = radius * 1.1 * (Math.round(midangle) < Math.PI ? 1 : -1)
     return `translate(${pos})`
   }
-  const textAnchor = (item: { startAngle?: any; endAngle?: any }) => {
+  const textAnchor = (item) => {
     var midangle = item.startAngle + (item.endAngle - item.startAngle) / 2
     return midangle < Math.PI ? 'start' : 'end'
   }
@@ -84,16 +83,8 @@
     <path
       d={$pathTween}
       fill={color(label(item.data))}
-      on:click={() => (active = !active)} />
-    <!-- <text dy=".35em" text-anchor="{textAnchor(item)}" transform="{$textTween}">
-      {label(item.data)}
-    </text>
-    <polyline
-      stroke="{color(label(item.data))}"
-      width="2"
-      fill="none"
-      points="{`${$lineTween}`}"
-    ></polyline> -->
+      on:click={() => (active = !active)}
+    />
   </slot>
 </g>
 

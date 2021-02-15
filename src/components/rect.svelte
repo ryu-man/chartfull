@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { cubicIn } from 'svelte/easing'
   import { fade } from 'svelte/transition'
   import { tweened } from 'svelte/motion'
@@ -27,10 +27,10 @@
   export let y: number */
   const { xScale, yScale, innerHeight } = chartistContext()
 
-  export let x: number
-  export let width: number
-  export let y: number
-  export let height: number
+  export let x
+  export let width
+  export let y
+  export let height
   export let fill = 'black'
   export let style = {}
 

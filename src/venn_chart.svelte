@@ -1,14 +1,14 @@
-<script lang="ts">
+<script>
     import { XAxis, YAxis, Grid, Line, Circle } from './components'
     import Grafico from './chartist.svelte'
   
-    export let width: number = 600
-    export let height: number = 400
+    export let width= 600
+    export let height= 400
     export let margin = { top: 36, right: 36, bottom: 36, left: 100 }
-    export let data: Array<any> = []
-    export let groupBy: (d: any) => any = () => ''
-    export let radius: number = 8
-    export let connected: boolean = false
+    export let data= []
+    export let groupBy= () => ''
+    export let radius= 8
+    export let connected= false
   
     export let style = {}
   </script>

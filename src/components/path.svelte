@@ -1,21 +1,19 @@
-<script lang="ts">
+<script>
   import { tweened } from 'svelte/motion'
   import { backIn } from 'svelte/easing'
   import { curveMonotoneX, line } from 'd3'
-  import type { Line } from 'd3'
-  import type { Style } from '../utils/style'
   import { css } from '../utils/css'
   import { interpolatePath } from '../../node_modules/d3-interpolate-path/index'
 
-  export let data: Array<any>
-  export let x: (d) => number
-  export let y: (d) => number
+  export let data
+  export let x
+  export let y
   export let curve = curveMonotoneX
-  export let style: Style = {}
-  let _class: svelte.JSX.ClassName = ''
+  export let style = {}
+  let _class = ''
   export { _class as class }
 
-  let _line: Line<[number, number]> = line() // Creating the line
+  let _line = line() // Creating the line
     .x(x)
     .y(y)
     .curve(curve)
@@ -24,11 +22,11 @@
     interpolate: interpolatePath
   })
 
-  function init(node: SVGPathElement, data: Array<any>) {
+  function init(node, data) {
     css(node, style)
 
     return {
-      update(data: Array<any>) {
+      update(data) {
         $path = _line(data)
       }
     }
@@ -36,14 +34,13 @@
 </script>
 
 <path
-  use:init="{data}"
-  
-  d="{$path}"
+  use:init={data}
+  d={$path}
   class="{_class} line-data"
   fill="transparent"
   stroke="black"
   stroke-width="2px"
-></path>
+/>
 
 <style>
   path {

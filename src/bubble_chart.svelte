@@ -1,28 +1,27 @@
-<script lang="ts">
+<script>
   import { setContext } from 'svelte'
   import { extent, scaleLinear } from 'd3'
   import { XAxis, YAxis, Grid } from './components'
-  import type { ScaleLinear } from 'd3'
   import Grafico from './grafico.svelte'
   import { key } from './context.svelte'
   import { writable } from 'svelte/store'
   import Circle from './components/circle.svelte'
   import AnimatedCircle from './components/animated_circle.svelte'
 
-  export let width: number
-  export let height: number
+  export let width
+  export let height
   export let margin
-  export let groupBy: (d: any) => any
+  export let groupBy
   export let curve
-  export let colorRange: readonly string[]
+  export let colorRange
   export let style = {}
-  export let data: any[] = []
+  export let data = []
 
-  export let zAccessor: (d: any) => any = () => ''
-  export let zDomain: any[]
-  export let zRange: [number, number]
+  export let zAccessor = () => ''
+  export let zDomain
+  export let zRange
 
-  let zScale: ScaleLinear<number, number> = scaleLinear()
+  let zScale = scaleLinear()
 
   const context = writable({
     zScale
@@ -33,9 +32,9 @@
   zRange = zRange || [2, innerHeight * 0.1]
   zScale.domain(zDomain).range(zRange)
 
-  function init(node: HTMLElement, data: Array<any>) {
+  function init(node, data) {
     return {
-      update(data: Array<any>) {
+      update(data) {
         zDomain = extent(data, zAccessor)
         zScale.domain(zDomain)
 
@@ -61,9 +60,7 @@
     <XAxis position="bottom" />
     <YAxis format="~s" position="right" />
     <Grid />
-    <!-- {#if keys.length > 1}
-          <Legend right="1vw" top="1vw" />
-        {/if} -->
+
   </slot>
 
   <g>

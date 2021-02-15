@@ -1,19 +1,15 @@
-<script lang="ts">
+<script>
   import { tweened } from 'svelte/motion'
   import { area, curveMonotoneX } from 'd3'
   import { interpolatePath } from 'd3-interpolate-path'
   import { css } from '../utils'
-  import type { CurveFactory } from 'd3'
   import { chartistContext } from '../context.svelte'
 
-  export let data: any[]
-  export let delay: number = 0
-  export let duration: number = 300
-  export let interpolate: (
-    a: string,
-    b: string
-  ) => (t: number) => string = interpolatePath
-  export let curve: CurveFactory = curveMonotoneX
+  export let data
+  export let delay = 0
+  export let duration = 300
+  export let interpolate = interpolatePath
+  export let curve = curveMonotoneX
   export let style = {}
 
   const {
@@ -32,10 +28,10 @@
     .curve(curve)
   $: path = _area(data)
 
-  function init(node: SVGPathElement, data: any[]) {
+  function init(node, data) {
     css(node, style)
     return {
-      update(data: any[]) {
+      update(data) {
         path = _area(data)
       }
     }
@@ -48,7 +44,8 @@
   class="area-data"
   fill="transparent"
   stroke="black"
-  stroke-width="2px" />
+  stroke-width="2px"
+/>
 
 <style>
   path {

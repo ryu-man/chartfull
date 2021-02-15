@@ -1,20 +1,19 @@
-<script lang="ts">
+<script>
   import { tweened } from 'svelte/motion'
   import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
-  import { chartistContext } from '../../context.svelte'
 
-  export let x: number = 0
-  export let y: number = 0
-  export let width: number = 0
-  export let height: number = 0
+  export let x = 0
+  export let y = 0
+  export let width = 0
+  export let height = 0
   export let unite = 'px'
-  export let duration: number = 0
-  export let delay: number = 0
-  export let easing: any = cubicIn
+  export let duration = 0
+  export let delay = 0
+  export let easing = cubicIn
   export let vertical = false
   export let style = {}
-  let _class: string = ''
+  let _class = ''
 
   /* const context = charterContext()
   const { xScale, yScale, innerWidth, innerHeight, xTicks,yTicks } = $context */
@@ -27,19 +26,19 @@
 
   export { _class as class }
 
-  function left(node: HTMLElement, x: number) {
+  function left(node, x) {
     node.style.left = x + unite
 
     return {
-      update(x: number) {
+      update(x) {
         node.style.left = x + unite
       }
     }
   }
-  function top(node: HTMLElement, y: number) {
+  function top(node, y) {
     node.style.top = y + unite
     return {
-      update(y: number) {
+      update(y) {
         node.style.top = y + unite
       }
     }
@@ -54,7 +53,8 @@
     x2={$_x}
     y2={height}
     use:css={style}
-    class="{_class} grid-line" />
+    class="{_class} grid-line"
+  />
 {:else}
   <line
     x1={0}
@@ -62,7 +62,8 @@
     x2={width}
     y2={$_y}
     use:css={style}
-    class="{_class} grid-line" />
+    class="{_class} grid-line"
+  />
 {/if}
 
 <style>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { chartistContext } from '../../context.svelte'
   import YTick from './y_tick.svelte'
   import Axis from './axis.svelte'
@@ -13,16 +13,16 @@
     yTicks
   } = chartistContext()
 
-  export let scale: any = defaultYScale
-  export let accessor: () => any
+  export let scale = defaultYScale
+  export let accessor
   accessor && ($yAccessor = accessor)
-  export let indent: number = 0
-  export let ticks: number = null
-  export let domain: [any, any] = extent($data, $yAccessor)
-  export let range: [number, number] = [$innerHeight, indent]
-  export let nice: boolean = false
-  export let format: string = 's'
-  export let position: string = 'left'
+  export let indent = 0
+  export let ticks = null
+  export let domain = extent($data, $yAccessor)
+  export let range = [$innerHeight, indent]
+  export let nice = false
+  export let format = 's'
+  export let position = 'left'
   export let style = {}
   let _class = ''
   export { _class as class }

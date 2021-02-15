@@ -1,33 +1,32 @@
-<script lang="ts">
-    import { charterContext } from '../../context.svelte'
-    import XTick from './x_tick.svelte'
-    import Axis from './axis.svelte'
-    import { extent } from 'd3'
-  
-    const {
-      innerWidth,
-      zScale,
-      defaultZScale,
-      zAccessor,
-      data,
-      entries,
-      map,
-      primaryDomain,
-      secondaryDomain
-    } = charterContext()
-  
-    export let scale: any = defaultZScale
-    export let accessor: () => any
-    accessor && ($zAccessor = accessor)
-    export let indent: number = 0
-    export let domain: [any, any] = extent(data, $zAccessor)
-    export let range: [number, number] = [indent, $innerWidth]
+<script>
+  import { charterContext } from '../../context.svelte'
+  import XTick from './x_tick.svelte'
+  import Axis from './axis.svelte'
+  import { extent } from 'd3'
 
-    $zScale = scale(domain, range)
-  
-  </script>
-  
-  <!-- <Axis
+  const {
+    innerWidth,
+    zScale,
+    defaultZScale,
+    zAccessor,
+    data,
+    entries,
+    map,
+    primaryDomain,
+    secondaryDomain
+  } = charterContext()
+
+  export let scale = defaultZScale
+  export let accessor
+  accessor && ($zAccessor = accessor)
+  export let indent = 0
+  export let domain = extent(data, $zAccessor)
+  export let range = [indent, $innerWidth]
+
+  $zScale = scale(domain, range)
+</script>
+
+<!-- <Axis
     class={_class + ' x'}
     scale={$xScale}
     dimension={$innerWidth}
@@ -53,6 +52,5 @@
     </slot>
   </Axis>
    -->
-  <style>
-  </style>
-  
+<style>
+</style>
