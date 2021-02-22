@@ -1,29 +1,43 @@
-# Charter
+# Graficos
 
-A svelte library based on d3.js for making charts
+A chating library based [D3.js](https://www.d3.org) for [Svelte](https://www.svelte.dev)
 
 ## Get started
 
-Install using npm
-
-```js
+```bash
+# using npm
 npm install charter
+
+# using yarn
+yarn install charter
 ```
 
-Install using yarn
+## Usage
 
-```js
-yarn install charter
+```html
+<script>
+    import {Linechart, XAxis, YAxis, Line} from "grafico"
+    let data = []
+</script>
+
+<Linechart {data} groupby="{(o)=>o.prop}" >
+    <Line />
+    <div slot="content">
+        <XAxis accessor="{(o)=> o.xprop}" />
+        <YAxis accessor="{(o)=> o.xprop}" />
+    </div>
+</Linechart>
 ```
 
 ## Charts
 
-- Line plot
-- Area plot
-- Scatter plot
-- Pie chart
+- Line
+- Area
+- Scatter
+- Pie
 - Heat map
+- Histogram
 
+## Licence
 
-## Usage
-
+Graficos is [MIT Licence](./LICENSE)
