@@ -4,13 +4,15 @@ A chating library based [D3.js](https://www.d3.org) for [Svelte](https://www.sve
 
 ## Get started
 
-```bash
-# using npm
-npm install charter
+Coming soon !
 
-# using yarn
-yarn install charter
-```
+<!-- ```bash -->
+<!-- # using npm -->
+<!-- npm install charter -->
+<!--  -->
+<!-- # using yarn -->
+<!-- yarn install charter -->
+<!-- ``` -->
 
 ## Usage
 
