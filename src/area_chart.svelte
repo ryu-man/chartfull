@@ -4,7 +4,7 @@
 
   export let width
   export let height
-  export let margin
+  export let padding
   export let data = []
   export let groupBy
   export let colorRange
@@ -16,19 +16,17 @@
   class="area"
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {groupBy}
   {colorRange}
   {style}
   let:entries
-  let:colorScale>
+  let:colorScale
+>
   <slot name="content" slot="content" test={true}>
     <XAxis class="x" position="bottom" />
-    <YAxis
-      class="y"
-      format="~s"
-      position="right" />
+    <YAxis class="y" format="~s" position="right" />
     <Grid />
   </slot>
 
@@ -37,7 +35,8 @@
       <slot key={entry[0]} lineData={entry[1]} color={colorScale(entry[0])}>
         <Area
           data={entry[1]}
-          style={{ fill: colorScale(entry[0]), stroke: 'none' }} />
+          style={{ fill: colorScale(entry[0]), stroke: 'none' }}
+        />
       </slot>
     {/each}
   </g>

@@ -5,7 +5,7 @@
 
   export let width
   export let height
-  export let margin
+  export let padding
   export let data = []
   export let groupBy
   export let curve
@@ -18,35 +18,31 @@
   class="bar"
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {groupBy}
   {colorRange}
   {style}
   let:entries
-  let:colorScale>
+  let:colorScale
+>
   <slot name="content" slot="content" test={true}>
     <XAxis class="x" position="bottom" />
-    <YAxis
-      class="y"
-      format="~s"
-      position="right" />
+    <YAxis class="y" format="~s" position="right" />
     <Grid />
     <!-- {#if keys.length > 1}
           <Legend right="1vw" top="1vw" />
         {/if} -->
   </slot>
-    {#each entries as entry}
-      <slot>
-        <g>
-          {#each entry[1] as item}
-            <Bin {item} />
-          {/each}
-        </g>
-      </slot>
-    {/each}
-
-  
+  {#each entries as entry}
+    <slot>
+      <g>
+        {#each entry[1] as item}
+          <Bin {item} />
+        {/each}
+      </g>
+    </slot>
+  {/each}
 </Grafico>
 
 <style>

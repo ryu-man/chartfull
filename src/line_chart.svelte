@@ -4,7 +4,7 @@
 
   export let width
   export let height
-  export let margin
+  export let padding
   export let data = []
   export let groupBy
   export let curve
@@ -15,13 +15,14 @@
 <Grafico
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {groupBy}
   {colorRange}
   {style}
   let:entries
-  let:colorScale>
+  let:colorScale
+>
   <g>
     {#each entries as entry}
       <slot {entry}>
@@ -29,7 +30,8 @@
           class={entry[0]}
           data={entry[1]}
           {curve}
-          style={{ stroke: colorScale(entry[0]) }} />
+          style={{ stroke: colorScale(entry[0]) }}
+        />
       </slot>
     {/each}
   </g>

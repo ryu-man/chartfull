@@ -12,7 +12,7 @@
 
   export let width = 600
   export let height = 400
-  export let margin = {}
+  export let padding = {}
   export let data = []
 
   export let colorAccessor = () => ''
@@ -28,7 +28,7 @@
   class="heat"
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {colorRange}
   {style}

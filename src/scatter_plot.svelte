@@ -4,7 +4,7 @@
 
   export let width = 600
   export let height = 400
-  export let margin = { top: 36, right: 36, bottom: 36, left: 100 }
+  export let padding
   export let data = []
   export let groupBy = () => ''
   export let radius = 8
@@ -17,7 +17,7 @@
   class="scatter"
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {groupBy}
   {style}

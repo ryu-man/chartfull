@@ -10,7 +10,7 @@
 
   export let width
   export let height
-  export let margin
+  export let padding
   export let groupBy
   export let curve
   export let colorRange
@@ -48,7 +48,7 @@
   class="bubble"
   {width}
   {height}
-  {margin}
+  {padding}
   {data}
   {groupBy}
   {colorRange}
@@ -60,7 +60,6 @@
     <XAxis position="bottom" />
     <YAxis format="~s" position="right" />
     <Grid />
-
   </slot>
 
   <g>
