@@ -1,6 +1,6 @@
 <script context="module">
   import { getContext, setContext } from 'svelte'
-  
+
   export const key = {}
 
   export function updateGraficoContext(context) {
@@ -12,5 +12,9 @@
 </script>
 
 <script>
-  setContext(key, {})
+  export let value = {}
+  
+  setContext(key, value)
 </script>
+
+<slot />
