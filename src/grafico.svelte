@@ -80,19 +80,14 @@
   setContext(key, context)
 
   function init(node, data) {
+    return configure(node, data)
+  }
+
+  function basicConfiguration(node, data = [], { width, height, padding }) {
     $_width = node.offsetWidth
 
     $_innerWidth = width - padding.left - padding.right
     $_innerHeight = height - padding.top - padding.bottom
-
-    return configure(node, data, {
-      width,
-      height,
-      padding
-    })
-  }
-
-  function basicConfiguration(node, data = [], { width, height, padding }) {
     // data = data.sort((a, b) => xAccessor(a) - xAccessor(b))
     if (typeof groupBy === typeof '') {
       $entries = Array.from(group(data, (d) => d[groupBy]).entries())
