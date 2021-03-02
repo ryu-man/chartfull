@@ -1,66 +1,34 @@
 <script>
-  import { tweened } from 'svelte/motion'
-  import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
 
-  export let x = 0
-  export let y = 0
-  export let width = 0
-  export let height = 0
-  export let unite = 'px'
-  export let duration = 0
-  export let delay = 0
-  export let easing = cubicIn
+  export let x1 = 0
+  export let y1 = 0
+  export let x2 = 0
+  export let y2 = 0
   export let vertical = false
   export let style = {}
   let _class = ''
 
-  /* const context = charterContext()
-  const { xScale, yScale, innerWidth, innerHeight, xTicks,yTicks } = $context */
-
-  const _x = tweened(x, { duration, delay, easing })
-  const _y = tweened(y, { duration, delay, easing })
-
-  $: $_x = x
-  $: $_y = y
 
   export { _class as class }
-
-  function left(node, x) {
-    node.style.left = x + unite
-
-    return {
-      update(x) {
-        node.style.left = x + unite
-      }
-    }
-  }
-  function top(node, y) {
-    node.style.top = y + unite
-    return {
-      update(y) {
-        node.style.top = y + unite
-      }
-    }
-  }
 </script>
 
 {#if vertical}
   <!-- content here -->
   <line
-    x1={$_x}
+    x1={x1}
     y1={0}
-    x2={$_x}
-    y2={height}
+    x2={x2}
+    y2={y2}
     use:css={style}
     class="{_class} grid-line"
   />
 {:else}
   <line
     x1={0}
-    y1={$_y}
-    x2={width}
-    y2={$_y}
+    y1={y1}
+    x2={x2}
+    y2={y2}
     use:css={style}
     class="{_class} grid-line"
   />

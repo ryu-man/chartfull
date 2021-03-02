@@ -1,13 +1,8 @@
 <script>
   import { tick } from 'svelte'
-  import { cubicIn } from 'svelte/easing'
   import { css } from '../../utils'
   import { graficoContext } from '../../context.svelte'
   import GridLine from './grid_line.svelte'
-
-  export let duration = 400
-  export let delay = 0
-  export let easing = cubicIn
 
   export let stroke = 'rgba(0, 0, 0, 0.1)'
   export let strokeDasharray
@@ -25,8 +20,7 @@
     innerWidth,
     innerHeight,
     xTicks,
-    yTicks,
-    margin
+    yTicks
   } = graficoContext()
 
   function tickValues(scale, ticks) {
@@ -45,39 +39,42 @@
     strokeMiterlimit,
     strokeOpacity
   }}
-  class="chartist-grid"
+  class="grafico-grid"
   height={$height}
-  viewBox="0 0 {$innerWidth} {$innerHeight}"
+  viewBox={`0 0 ${$innerWidth} ${$innerHeight}`}
   preserveAspectRatio="none"
   vector-effect="non-scaling-stroke"
 >
   {#await tick() then value}
     <g class="vertical">
       {#each tickValues($xScale, $xTicks) as tick, i (+tick || tick)}
-        <slot name="vertical" x={$xScale(tick)} index={i}>
+        <slot
+          name="vertical"
+          x1={$xScale(tick)}
+          y1={0}
+          x2={$xScale(tick)}
+          y2={$innerHeight}
+          index={i}
+        >
           <GridLine
-            x={$xScale(tick)}
-            width={$innerWidth}
-            height={$innerHeight}
-            unite="%"
-            {duration}
-            delay={delay * i}
-            {easing}
+            x1={$xScale(tick)}
+            x2={$xScale(tick)}
+            y2={$innerHeight}
             vertical
           />
         </slot>
       {/each}
     </g><g class="horizontal">
       {#each tickValues($yScale, $yTicks) as tick, i (+tick || tick)}
-        <slot name="horizontal" y={$yScale(tick)} index={i}>
-          <GridLine
-            y={$yScale(tick)}
-            width={$innerWidth}
-            height={$innerHeight}
-            unite="%"
-            {duration}
-            delay={delay * i}
-          />
+        <slot
+          name="horizontal"
+          x1={0}
+          y1={$yScale(tick)}
+          x2={$innerWidth}
+          y2={$yScale(tick)}
+          index={i}
+        >
+          <GridLine y1={$yScale(tick)} x2={$innerWidth} y2={$yScale(tick)} />
         </slot>
       {/each}
     </g>
@@ -85,7 +82,7 @@
 </svg>
 
 <style>
-  .chartist-grid {
+  .grafico-grid {
     position: absolute;
     top: 0;
     left: 0;
