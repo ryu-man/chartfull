@@ -19,14 +19,12 @@
 
   padding = { top: 32, right: 32, bottom: 72, left: 72, ...padding }
 
-  let { innerWidth, innerHeight } = getInnerSize({ width, height }, padding)
-
-  let entries
+  let innerSize = getInnerSize({ width, height }, padding)
 
   const _width = writable(width)
   const _height = writable(height)
-  const _innerWidth = writable(innerWidth)
-  const _innerHeight = writable(innerHeight)
+  const _innerWidth = writable(innerSize.innerWidth)
+  const _innerHeight = writable(innerSize.innerHeight)
   const __padding = writable(padding)
   const _data = writable(data)
   const _entries = writable([])
@@ -34,6 +32,8 @@
   const _xscale = writable(linear())
   const _yscale = writable(linear())
   const _colorScale = writable(undefined)
+  const xTicks = writable(thresholds)
+  const yTicks = writable(null)
 
   let context = {
     xAccessor: writable((d) => d.length),
@@ -54,50 +54,42 @@
     defaultXScale: linear,
     defaultYScale: linear,
     defaultZScale: linear,
-    xScale: _xscale,
-    yScale: _yscale,
-    xTicks: writable(thresholds),
-    yTicks: writable(null)
+    xTicks,
+    yTicks
   }
 
-  function histogramConfiguration(
-    node,
-    data = [],
-    { width, height, padding, keys = $_keys }
-  ) {
+  function histogramConfiguration(node, data = []) {
+    $_width = node.offsetWidth
     let { innerWidth, innerHeight } = getInnerSize({ width, height }, padding)
+    $_innerWidth = innerWidth
+    $_innerHeight = innerHeight
 
-    let entries = []
     $_xscale.domain(extent(data, accessor))
-    $_xscale.range([0, innerWidth])
-    $_xscale.ticks(thresholds)
+    $_xscale.range([0, $_innerWidth])
+    $_xscale.ticks($xTicks)
     // $_xscale = $_xscale
 
     const bins = bin()
       .value(accessor)
       .domain($_xscale.domain())
-      .thresholds($_xscale.ticks())
+      .thresholds($xTicks)
 
     $_yscale.domain([0, max(bins(data), (d) => d.length)])
-    $_yscale.range([innerHeight, 0])
+    $_yscale.range([$_innerHeight, 0])
     $_yscale = $_yscale
 
     if (typeof groupBy === typeof '') {
-      $_entries = entries = Array.from(
+      $_entries = Array.from(
         group(data, (d) => d[groupBy]).entries()
       ).map(([key, data]) => [key, bins(data)])
     } else {
-      $_entries = entries = Array.from(
+      $_entries = Array.from(
         group(data, groupBy).entries()
       ).map(([key, data]) => [key, bins(data)])
     }
-    $_keys = entries.map((e) => e[0])
+    $_keys = $_entries.map((e) => e[0])
 
-    $_width = width = node.offsetWidth
-    $_innerWidth = innerWidth = width - padding.left - padding.right
-    $_innerHeight = innerHeight = height - padding.top - padding.bottom
-
-    $_colorScale = scaleOrdinal().domain(keys).range(colorRange)
+    $_colorScale = scaleOrdinal().domain($_keys).range(colorRange)
 
     return {
       update(data) {
