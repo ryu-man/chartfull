@@ -1,18 +1,15 @@
 <script>
   import { setContext } from 'svelte'
   import { extent, scaleLinear } from 'd3'
-  import { XAxis, YAxis, Grid } from './components'
+  import { XAxis, YAxis, Grid, Circle } from './components'
   import Grafico from './grafico.svelte'
   import { key } from './context.svelte'
   import { writable } from 'svelte/store'
-  import Circle from './components/circle.svelte'
-  import AnimatedCircle from './components/animated_circle.svelte'
 
   export let width
   export let height
   export let padding
   export let groupBy
-  export let curve
   export let colorRange
   export let style = {}
   export let data = []
@@ -53,6 +50,7 @@
   {groupBy}
   {colorRange}
   {style}
+  updateOnResize
   let:entries
   let:colorScale
 >
@@ -63,14 +61,10 @@
   </slot>
 
   <g>
-    {#each entries as entry}
-      {#each entry[1] as item}
-        <slot>
-          <AnimatedCircle
-            {item}
-            r={zScale(zAccessor(item))}
-            fill={colorScale(entry[0])}
-          />
+    {#each entries as [key, data]}
+      {#each data as item}
+        <slot {key} {data} color={colorScale(key)}>
+          <Circle {item} r={zScale(zAccessor(item))} fill={colorScale(key)} />
         </slot>
       {/each}
     {/each}
@@ -78,7 +72,4 @@
 </Grafico>
 
 <style>
-  circle {
-    mix-blend-mode: multiply;
-  }
 </style>

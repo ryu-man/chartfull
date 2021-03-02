@@ -1,6 +1,6 @@
 <script>
   import { group, scaleOrdinal, schemeCategory10 } from 'd3'
-  import { getContext, setContext, tick } from 'svelte'
+  import { setContext, tick } from 'svelte'
   import { writable } from 'svelte/store'
   import { fade } from 'svelte/transition'
   import { linear } from './components/scales'
@@ -15,6 +15,7 @@
   export let groupBy = (d) => ''
   export let colorRange = schemeCategory10
   export let style = {}
+  export let updateOnResize = false
   let _class = ''
   export { _class as class }
 
@@ -92,6 +93,14 @@
 
     $colorScale = scaleOrdinal().domain($keys).range(colorRange)
 
+    let resizeListener
+    if (updateOnResize) {
+      resizeListener = window.addEventListener('resize', (e) => {
+        $_width = node.offsetWidth
+        $innerWidth = $_width - padding.left - padding.right
+      })
+    }
+
     return {
       update(data) {
         $entries = Array.from(group(data, groupBy).entries())
@@ -102,6 +111,9 @@
         $innerHeight = $_height - padding.top - padding.bottom
 
         $colorScale.domain($keys)
+      },
+      destroy() {
+        resizeListener && window.removeEventListener(resizeListener)
       }
     }
   }
@@ -126,7 +138,6 @@
     {height}
     viewBox="0 0 {$innerWidth} {$innerHeight}"
     preserveAspectRatio="none"
-    vector-effect="non-scaling-stroke"
     style={`padding:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;`}
   >
     {#await tick() then value}

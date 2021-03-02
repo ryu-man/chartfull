@@ -39,7 +39,11 @@
   } else {
   }
   ticks && ($xTicks = ticks)
-  console.log(range)
+
+  $: {
+    $xScale.range([indent, $innerWidth])
+    $xScale = $xScale
+  }
 </script>
 
 <Axis

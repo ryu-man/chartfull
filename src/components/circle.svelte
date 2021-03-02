@@ -1,25 +1,23 @@
 <script>
-  import { quadIn } from 'svelte/easing'
-  import { css } from '../utils'
   import { graficoContext } from '../context.svelte'
 
   const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
 
-  export let index = 0
-  export let cx
-  export let cy
-  export let fill
+  export let item = {}
   export let r = 8
-  export let duration = 0
-  export let delay = 0
-  export let easing = quadIn
-  export let style = {}
+
+  $: cx = $xScale($xAccessor(item))
+  $: cy = $yScale($yAccessor(item))
+
 </script>
 
-<circle use:css={style} {r} {cx} {cy} />
+<slot {cx} {cy}>
+  <circle {r} {cx} {cy} />
+</slot>
 
 <style>
   circle {
     vector-effect: non-scaling-stroke;
+    mix-blend-mode: multiply;
   }
 </style>
