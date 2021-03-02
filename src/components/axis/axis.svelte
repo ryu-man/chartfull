@@ -102,6 +102,6 @@
   .y.axis :global(.label, span[slot='label']) {
     position: absolute;
     left: 0;
-    bottom: 105%;
+    bottom: 101%;
   }
 </style>
