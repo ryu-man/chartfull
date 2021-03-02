@@ -95,11 +95,11 @@
     width: inherit;
     height: inherit;
   }
-  .x.axis :global(.label, span[slot='label']) {
+  .x.axis :global(.label) {
     position: absolute;
     right: 0;
   }
-  .y.axis :global(.label, span[slot='label']) {
+  .y.axis :global(.label) {
     position: absolute;
     left: 0;
     bottom: 101%;
