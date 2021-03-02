@@ -19,7 +19,7 @@
   export { _class as class }
 
   padding = { top: 32, right: 32, bottom: 72, left: 72, ...padding }
-  let { innerWidth, innerHeight } = getInnerSize({ width, height }, padding)
+  let innerSize = getInnerSize({ width, height }, padding)
 
   const {
     xAccessor = writable((d) => d.x),
@@ -31,21 +31,16 @@
     colorScale = writable([]),
     width: _width = writable(width),
     height: _height = writable(height),
-    innerWidth: _innerWidth = writable(innerWidth),
-    innerHeight: _innerHeight = writable(innerHeight),
+    innerWidth = writable(innerSize.innerWidth),
+    innerHeight = writable(innerSize.innerHeight),
     zAccessor = writable((d) => d.z),
     xTicks = writable(null),
     yTicks = writable(null),
     ...rest
   } = graficoContext() ?? {}
 
-  // const _width = writable(width)
-  // const _height = writable(height)
-  // const _innerWidth = writable(innerWidth)
-  // const _innerHeight = writable(innerHeight)
   const _padding = writable(padding)
   const _data = writable(data)
-  // const _entries = entries
   const _keys = keys
   const _xscale = xScale
   const _yscale = yScale
@@ -57,8 +52,8 @@
     colorScale,
     width: _width,
     height: _height,
-    innerWidth: _innerWidth,
-    innerHeight: _innerHeight,
+    innerWidth,
+    innerHeight,
     margin: padding,
     padding,
     keys,
@@ -83,11 +78,10 @@
     return configure(node, data)
   }
 
-  function basicConfiguration(node, data = [], { width, height, padding }) {
+  function basicConfiguration(node, data = []) {
     $_width = node.offsetWidth
-
-    $_innerWidth = width - padding.left - padding.right
-    $_innerHeight = height - padding.top - padding.bottom
+    $innerWidth = $_width - padding.left - padding.right
+    $innerHeight = $_height - padding.top - padding.bottom
     // data = data.sort((a, b) => xAccessor(a) - xAccessor(b))
     if (typeof groupBy === typeof '') {
       $entries = Array.from(group(data, (d) => d[groupBy]).entries())
@@ -96,7 +90,7 @@
     }
     $keys = $entries.map((e) => e[0])
 
-    $colorScale = scaleOrdinal().domain(keys).range(colorRange)
+    $colorScale = scaleOrdinal().domain($keys).range(colorRange)
 
     return {
       update(data) {
@@ -104,8 +98,8 @@
         $keys = $entries.map((e) => e[0])
 
         $_width = node.offsetWidth
-        $_innerWidth = width - padding.left - padding.right
-        $_innerHeight = height - padding.top - padding.bottom
+        $innerWidth = $_width - padding.left - padding.right
+        $innerHeight = $_height - padding.top - padding.bottom
 
         $colorScale.domain($keys)
       }
@@ -118,7 +112,6 @@
   use:init={data}
   class="{_class && `${_class} `}grafico"
   style={`--height:${height}px;`}
-  transition:fade={{ duration: 100 }}
 >
   <div
     class="elements"
@@ -131,7 +124,7 @@
   </div>
   <svg
     {height}
-    viewBox="0 0 {innerWidth} {innerHeight}"
+    viewBox="0 0 {$innerWidth} {$innerHeight}"
     preserveAspectRatio="none"
     vector-effect="non-scaling-stroke"
     style={`padding:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;`}
@@ -139,8 +132,8 @@
     {#await tick() then value}
       <slot
         entries={$entries}
-        innerWidth={$_innerWidth}
-        innerHeight={$_innerHeight}
+        innerWidth={$innerWidth}
+        innerHeight={$innerHeight}
         keys={$keys}
         colorScale={$colorScale}
         xScale={$xScale}

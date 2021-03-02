@@ -54,7 +54,7 @@
   </slot>
 </div>
 
-<style global>
+<style>
   .axis {
     position: absolute;
   }
@@ -94,5 +94,14 @@
     position: relative;
     width: inherit;
     height: inherit;
+  }
+  .x.axis :global(.label, span[slot='label']) {
+    position: absolute;
+    right: 0;
+  }
+  .y.axis :global(.label, span[slot='label']) {
+    position: absolute;
+    left: 0;
+    bottom: 105%;
   }
 </style>

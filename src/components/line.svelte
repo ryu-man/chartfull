@@ -5,19 +5,27 @@
 
   const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
 
-  export let data = []
+  export let values = []
   export let curve = curveMonotoneX
   export let style = {}
   let _class = ''
   export { _class as class }
 
-  let _line = line() // Creating the line
-    .x((d) => $xScale($xAccessor(d)))
-    .y((d) => $yScale($yAccessor(d)))
+  const _line = line() // Creating the line
+    .x(x)
+    .y(y)
     .curve(curve)
-  let path = 'M 0 0'
 
-  $: path = _line(data)
+  let path = ''
+
+  $: path = _line(values)
+
+  function x(d) {
+    return $xScale($xAccessor(d))
+  }
+  function y(d) {
+    return $yScale($yAccessor(d))
+  }
 </script>
 
 <path
@@ -25,7 +33,8 @@
   d={path}
   class="{_class} line"
   fill="transparent"
-  stroke-width="2px" />
+  stroke-width="2px"
+/>
 
 <style>
   path {

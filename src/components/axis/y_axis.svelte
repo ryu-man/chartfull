@@ -10,12 +10,14 @@
     yScale,
     defaultYScale,
     yAccessor,
-    yTicks
+    yTicks,
+    histogram
   } = graficoContext()
 
   export let scale = defaultYScale
-  export let accessor
-  accessor && ($yAccessor = accessor)
+  export let accessor = $yAccessor
+  $yAccessor = accessor
+  // !$yAccessor && accessor && ($yAccessor = accessor)
   export let indent = 0
   export let ticks = null
   export let domain = extent($data, $yAccessor)
@@ -27,7 +29,14 @@
   let _class = ''
   export { _class as class }
 
-  $yScale = scale(domain, range)
+  if (!histogram) {
+    if (scale) {
+      $yScale = scale(domain, range)
+    } else {
+      $yScale = defaultYScale(domain, range)
+    }
+  } else {
+  }
   ticks && ($yTicks = ticks)
 </script>
 
@@ -35,7 +44,7 @@
   class={_class + ' y'}
   scale={$yScale}
   dimension={$innerHeight}
-  {ticks}
+  ticks={$yTicks}
   {format}
   {position}
   {style}
@@ -60,9 +69,4 @@
 </Axis>
 
 <style>
-  :global(.y.axis .label, .y.axis span[slot='label']) {
-    position: absolute;
-    left: 0;
-    bottom: 105%;
-  }
 </style>

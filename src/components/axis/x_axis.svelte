@@ -1,8 +1,8 @@
 <script>
   import { graficoContext } from '../../context.svelte'
+  import { extent } from 'd3'
   import XTick from './x_tick.svelte'
   import Axis from './axis.svelte'
-  import { extent } from 'd3'
 
   const {
     innerWidth,
@@ -10,14 +10,14 @@
     defaultXScale,
     xAccessor,
     data,
-    entries,
-    map,
-    xTicks
+    xTicks,
+    histogram
   } = graficoContext()
 
-  export let scale = defaultXScale
-  export let accessor
-  accessor && ($xAccessor = accessor)
+  export let scale
+  export let accessor = $xAccessor
+  $xAccessor = accessor
+  // !$xAccessor && accessor && ($xAccessor = accessor)
   export let indent = 0
   export let ticks = null
   export let domain = extent($data, $xAccessor)
@@ -29,16 +29,24 @@
   let _class = ''
   export { _class as class }
 
-  $xScale = scale(domain, range)
+  // transform && ($entries = transform($entries, $xScale, $xAccessor, 30))
+  if (!histogram) {
+    if (scale) {
+      $xScale = scale(domain, range)
+    } else {
+      $xScale = defaultXScale(domain, range)
+    }
+  } else {
+  }
   ticks && ($xTicks = ticks)
-  map && ($entries = map($entries, $xScale, $xAccessor, 30))
+  console.log(range)
 </script>
 
 <Axis
   class={_class + ' x'}
   scale={$xScale}
   dimension={$innerWidth}
-  {ticks}
+  ticks={$xTicks}
   {format}
   {position}
   {style}
@@ -63,8 +71,4 @@
 </Axis>
 
 <style>
-  :global(.x.axis .label, .x.axis span[slot='label']) {
-    position: absolute;
-    right: 0;
-  }
 </style>
