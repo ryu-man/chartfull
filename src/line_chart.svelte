@@ -24,14 +24,9 @@
   let:colorScale
 >
   <g>
-    {#each entries as entry}
-      <slot {entry}>
-        <Line
-          class={entry[0]}
-          data={entry[1]}
-          {curve}
-          style={{ stroke: colorScale(entry[0]) }}
-        />
+    {#each entries as [key, data]}
+      <slot {key} {data} color={colorScale(key)}>
+        <Line class={key} {data} {curve} style={{ stroke: colorScale(key) }} />
       </slot>
     {/each}
   </g>
