@@ -7,7 +7,7 @@
     setContext(key, Object.assign(context, graficoContext()))
   }
   export function graficoContext() {
-    return getContext(key)
+    return getContext(key) || {}
   }
 </script>
 
