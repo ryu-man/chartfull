@@ -34,8 +34,6 @@
     // radius: _radius,
     // innerRadius: _innerRadius,
     data: _data,
-    key,
-    value,
     ...rest
   }
 
