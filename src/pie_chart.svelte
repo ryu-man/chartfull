@@ -2,7 +2,7 @@
   import { tick } from 'svelte'
   import Context, { graficoContext } from './context.svelte'
   import { writable } from 'svelte/store'
-  import { getInnerSize } from './utils'
+  import { css, getInnerSize } from './utils'
   import Pie from './components/pie.svelte'
 
   // set the dimensions and margins of the graph
@@ -10,15 +10,10 @@
   export let height = width
   export let padding = {}
   export let data = []
-  export let key = (d) => d.key
-  export let value = (d) => d.value
-  export let style
-
-  console.log(width)
+  export let style = {}
 
   padding = { top: 32, right: 32, bottom: 72, left: 72, ...padding }
   const innerSize = getInnerSize({ width, height }, padding)
-  export let radius = innerSize.innerWidth / 2
 
   const {
     width: _width = writable(width),
@@ -58,8 +53,8 @@
 <Context value={context}>
   <figure
     use:init={data}
+    use:css={{ ...style, width: `${$_width}px`, height: `${$_height}px` }}
     class="pie grafico"
-    style={`width:${$_width}px;height:${$_height}px;`}
   >
     <svg viewBox={`0 0 ${$_width} ${$_height}`} preserveAspectRatio="none">
       {#await tick() then value}

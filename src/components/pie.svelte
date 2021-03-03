@@ -10,8 +10,6 @@
     innerWidth,
     innerHeight,
     data,
-    key,
-    value,
     // innerArc = writable(),
     radius: _radius = writable(16),
     innerRadius: _innerRadius = writable(0),
@@ -22,6 +20,8 @@
   export let radius = $_radius
   export let innerRadius = $_innerRadius
   export let colorRange = schemeCategory10
+  export let key = (d) => d.key
+  export let value = (d) => d.value
 
   radius && ($_radius = radius)
   innerRadius && ($_innerRadius = innerRadius)
