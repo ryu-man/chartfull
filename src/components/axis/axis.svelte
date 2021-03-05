@@ -50,7 +50,6 @@
   </div>
 
   <slot name="label">
-    <span style="position:absolute;left:100%;">label</span>
   </slot>
 </div>
 
