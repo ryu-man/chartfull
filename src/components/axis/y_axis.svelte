@@ -11,16 +11,16 @@
     defaultYScale,
     yAccessor,
     yTicks,
-    histogram
+    bins,
+    defaultYDomain = (data, accessor, bins) => extent(data, accessor)
   } = graficoContext()
 
-  export let scale = defaultYScale
+  export let scale
   export let accessor = $yAccessor
   $yAccessor = accessor
-  // !$yAccessor && accessor && ($yAccessor = accessor)
   export let indent = 0
   export let ticks = null
-  export let domain = extent($data, $yAccessor)
+  export let domain = defaultYDomain
   export let range = [$innerHeight, indent]
   export let nice = false
   export let format = 's'
@@ -29,15 +29,16 @@
   let _class = ''
   export { _class as class }
 
-  if (!histogram) {
-    if (scale) {
-      $yScale = scale(domain, range)
-    } else {
-      $yScale = defaultYScale(domain, range)
-    }
-  } else {
+  if (scale) {
+    $yScale = scale(domain?.($data, $yAccessor, $bins) ?? domain, range)
+  } else if (!$yScale) {
+    scale = defaultYScale
+    $yScale = scale(domain?.($data, $yAccessor, $bins) ?? domain, range)
   }
-  ticks && ($yTicks = ticks)
+
+  $: $yTicks = ticks
+  $: $yScale.range(range)
+  $: $yScale.domain(domain?.($data, $yAccessor, $bins) ?? domain)
 </script>
 
 <Axis
@@ -63,9 +64,7 @@
       outParams={{ duration: 50 * index, x: -36 }}
     />
   </slot>
-  <slot name="label" slot="label">
-    <span class="label">label</span>
-  </slot>
+  <slot name="label" slot="label" />
 </Axis>
 
 <style>

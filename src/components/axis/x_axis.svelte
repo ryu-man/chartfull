@@ -11,16 +11,16 @@
     xAccessor,
     data,
     xTicks,
-    histogram
+    bins,
+    defaultXDomain = (data, accessor, bins) => extent(data, accessor)
   } = graficoContext()
 
   export let scale
   export let accessor = $xAccessor
   $xAccessor = accessor
-  // !$xAccessor && accessor && ($xAccessor = accessor)
   export let indent = 0
   export let ticks = null
-  export let domain = extent($data, $xAccessor)
+  export let domain = defaultXDomain
   export let range = [indent, $innerWidth]
   export let nice = false
   export let format
@@ -29,21 +29,16 @@
   let _class = ''
   export { _class as class }
 
-  // transform && ($entries = transform($entries, $xScale, $xAccessor, 30))
-  if (!histogram) {
-    if (scale) {
-      $xScale = scale(domain, range)
-    } else {
-      $xScale = defaultXScale(domain, range)
-    }
-  } else {
+  if (scale) {
+    $xScale = scale(domain?.($data, $xAccessor) ?? domain, range)
+  } else if (!$xScale) {
+    scale = defaultXScale
+    $xScale = scale(domain?.($data, $xAccessor) ?? domain, range)
   }
-  ticks && ($xTicks = ticks)
 
-  $: {
-    $xScale.range([indent, $innerWidth])
-    $xScale = $xScale
-  }
+  $: $xTicks = ticks
+  $: $xScale.range(range)
+  $: $xScale.domain(domain?.($data, $xAccessor) ?? domain)
 </script>
 
 <Axis
@@ -69,9 +64,7 @@
       outParams={{ duration: 50 * index, x: 0, y: 36 }}
     />
   </slot>
-  <slot name="label" slot="label">
-    <span class="label">label</span>
-  </slot>
+  <slot name="label" slot="label" />
 </Axis>
 
 <style>
