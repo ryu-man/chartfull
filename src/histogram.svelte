@@ -34,13 +34,19 @@
   const _colorScale = writable(undefined)
   const xTicks = writable(thresholds)
   const yTicks = writable(null)
+  const bins = writable(bin())
+  const defaultYDomain = (data, accessor, bins) => [
+    0,
+    max(bins(data), accessor)
+  ]
 
   let context = {
-    xAccessor: writable((d) => d.length),
+    xAccessor: writable(accessor),
     yAccessor: writable((d) => d.length),
     xScale: _xscale,
     yScale: _yscale,
     entries: _entries,
+    bins,
     histogram: true,
     colorScale: _colorScale,
     width: _width,
@@ -54,6 +60,7 @@
     defaultXScale: linear,
     defaultYScale: linear,
     defaultZScale: linear,
+    defaultYDomain,
     xTicks,
     yTicks
   }
@@ -69,23 +76,20 @@
     $_xscale.ticks($xTicks)
     // $_xscale = $_xscale
 
-    const bins = bin()
-      .value(accessor)
-      .domain($_xscale.domain())
-      .thresholds($xTicks)
+    $bins.value(accessor).domain($_xscale.domain()).thresholds($xTicks)
 
-    $_yscale.domain([0, max(bins(data), (d) => d.length)])
+    $_yscale.domain(defaultYDomain(data, (d) => d.length, $bins))
     $_yscale.range([$_innerHeight, 0])
     $_yscale = $_yscale
 
     if (typeof groupBy === typeof '') {
       $_entries = Array.from(
         group(data, (d) => d[groupBy]).entries()
-      ).map(([key, data]) => [key, bins(data)])
+      ).map(([key, data]) => [key, $bins(data)])
     } else {
       $_entries = Array.from(
         group(data, groupBy).entries()
-      ).map(([key, data]) => [key, bins(data)])
+      ).map(([key, data]) => [key, $bins(data)])
     }
     $_keys = $_entries.map((e) => e[0])
 
@@ -97,11 +101,11 @@
         if (typeof groupBy === typeof '') {
           entries = Array.from(
             group(data, (d) => d[groupBy]).entries()
-          ).map(([key, data]) => [key, bins(data)])
+          ).map(([key, data]) => [key, $bins(data)])
         } else {
           entries = Array.from(
             group(data, groupBy).entries()
-          ).map(([key, data]) => [key, bins(data)])
+          ).map(([key, data]) => [key, $bins(data)])
         }
 
         $_keys = entries.map((e) => e[0])
