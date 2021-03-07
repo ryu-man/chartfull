@@ -50,8 +50,7 @@
       {#each entries as [key, data]}
         <g>
           {#each data as item}
-            
-            <slot {key} {data} {item}>
+            <slot {key} {data} {item} {innerWidth} {innerHeight} xAccessor={$xAccessor} yAccessor={$yAccessor}>
               <Rect
                 x1={$xAccessor(item)}
                 x2={$xAccessor(item)}
