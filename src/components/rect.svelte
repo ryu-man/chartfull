@@ -4,13 +4,13 @@
   const { xScale, yScale } = graficoContext()
 
   export let x1
-  export let x2
   export let y1
-  export let y2
+  export let x2 = 0
+  export let y2 = 0
 
   $: _x1 = $xScale(x1) || 0
-  $: _x2 = $xScale(x2) || 0
   $: _y1 = $yScale(y1) || 0
+  $: _x2 = $xScale(x2) || 0
   $: _y2 = $yScale(y2) || 0
 
 </script>
