@@ -1,56 +1,20 @@
 <script context="module">
-  let xAxis
-  let yAxis
-
-  export let mirror = false
-
-  export const primaryAxis = () => (mirror ? yAxis : xAxis)
-  export const secondaryAxis = () => (!mirror ? yAxis : xAxis)
-
-  export function getRange(dimension, indent) {
-    return [indent, dimension]
-  }
 </script>
 
 <script>
   import { tick } from 'svelte'
 
-  export let scale
-  export let dimension
-  export let ticks
-  export let nice = false
-  export let format
   export let position = 'bottom'
-  export let style = {}
   let _class = ''
   export { _class as class }
-
-  let formatter
-
-  nice && scale.nice()
-  formatter = scale?.tickFormat?.(ticks, format) ?? ((d) => d)
-
-  function tickValues(scale, ticks) {
-    return scale?.ticks?.(ticks) ?? scale.domain()
-  }
 </script>
 
 <div class="{_class + ' '}{position + ' '} axis">
   <div class="inner-axis">
-    {#await tick() then value}
-      {#each tickValues(scale, ticks) as tick, i (+tick || tick)}
-        <slot
-          coord={(scale(tick) * 100) / dimension}
-          {tick}
-          index={i}
-          {formatter}
-        />
-      {/each}
-    {/await}
+    <slot />
   </div>
 
-  <slot name="label">
-  </slot>
+  <slot name="label" />
 </div>
 
 <style>

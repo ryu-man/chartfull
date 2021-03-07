@@ -2,8 +2,7 @@
   import { group, scaleOrdinal, schemeCategory10 } from 'd3'
   import { setContext, tick } from 'svelte'
   import { writable } from 'svelte/store'
-  import { fade } from 'svelte/transition'
-  import { linear } from './components/scales'
+  import { scaleLinear } from 'd3-scale'
   import { graficoContext, key } from './context.svelte'
   import { css, getInnerSize } from './utils'
 
@@ -25,10 +24,10 @@
   const {
     xAccessor = writable((d) => d.x),
     yAccessor = writable((d) => d.y),
-    xScale = writable(linear()),
-    yScale = writable(linear()),
+    xScale = writable(scaleLinear()),
+    yScale = writable(scaleLinear()),
+    data: _data = writable(data),
     entries = writable([]),
-    keys = writable([]),
     colorScale = writable([]),
     width: _width = writable(width),
     height: _height = writable(height),
@@ -40,15 +39,6 @@
     ...rest
   } = graficoContext() ?? {}
 
-  const _padding = writable(padding)
-  const _data = writable(data)
-  const _keys = keys
-  const _xscale = xScale
-  const _yscale = yScale
-  const _xaccessor = xAccessor
-  const _yaccessor = yAccessor
-  const _colorScale = colorScale
-
   let context = {
     colorScale,
     width: _width,
@@ -57,12 +47,11 @@
     innerHeight,
     margin: padding,
     padding,
-    keys,
     data: _data,
     entries,
-    defaultXScale: linear,
-    defaultYScale: linear,
-    defaultZScale: linear,
+    defaultXScale: scaleLinear,
+    defaultYScale: scaleLinear,
+    defaultZScale: scaleLinear,
     xScale,
     yScale,
     xAccessor,
@@ -83,15 +72,15 @@
     $_width = node.offsetWidth
     $innerWidth = $_width - padding.left - padding.right
     $innerHeight = $_height - padding.top - padding.bottom
-    // data = data.sort((a, b) => xAccessor(a) - xAccessor(b))
     if (typeof groupBy === typeof '') {
       $entries = Array.from(group(data, (d) => d[groupBy]).entries())
     } else {
       $entries = Array.from(group(data, groupBy).entries())
     }
-    $keys = $entries.map((e) => e[0])
 
-    $colorScale = scaleOrdinal().domain($keys).range(colorRange)
+    $colorScale = scaleOrdinal()
+      .domain($entries.map((e) => e[0]))
+      .range(colorRange)
 
     let resizeListener
     if (updateOnResize) {
@@ -104,13 +93,12 @@
     return {
       update(data) {
         $entries = Array.from(group(data, groupBy).entries())
-        $keys = $entries.map((e) => e[0])
 
         $_width = node.offsetWidth
         $innerWidth = $_width - padding.left - padding.right
         $innerHeight = $_height - padding.top - padding.bottom
 
-        $colorScale.domain($keys)
+        $colorScale.domain($entries.map((e) => e[0]))
       },
       destroy() {
         resizeListener && window.removeEventListener(resizeListener)
@@ -145,7 +133,6 @@
         entries={$entries}
         innerWidth={$innerWidth}
         innerHeight={$innerHeight}
-        keys={$keys}
         colorScale={$colorScale}
         xScale={$xScale}
         yScale={$yScale}

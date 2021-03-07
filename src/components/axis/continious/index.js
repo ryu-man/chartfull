@@ -1,0 +1,6 @@
+export { default as LinearXAxis } from './linear_x.svelte'
+export { default as LinearYAxis } from './linear_y.svelte'
+export { default as TimeXAxis } from './time_x.svelte'
+export { default as TimeYAxis } from './time_y.svelte'
+export { default as UTCXAxis } from './utc_x.svelte'
+export { default as UTCYAxis } from './utc_y.svelte'
