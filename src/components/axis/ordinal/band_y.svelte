@@ -25,6 +25,7 @@
   export let align
   export let step
   export let bandwidth
+  export let tickValues
 
   let _class
   export { _class as class }
