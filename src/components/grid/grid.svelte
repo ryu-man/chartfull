@@ -1,5 +1,5 @@
 <script>
-  import { tick } from 'svelte'
+  import { tick as Tick } from 'svelte'
   import { css } from '../../utils'
   import { graficoContext } from '../../context.svelte'
   import GridLine from './grid_line.svelte'
@@ -45,7 +45,7 @@
   preserveAspectRatio="none"
   vector-effect="non-scaling-stroke"
 >
-  {#await tick() then value}
+  {#await Tick() then value}
     <g class="vertical">
       {#each tickValues($xScale, $xTicks) as tick, i (+tick || tick)}
         <slot
