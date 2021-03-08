@@ -1,7 +1,7 @@
 <script>
   import { setContext, tick } from 'svelte'
   import { writable } from 'svelte/store'
-  import { scaleLinear,scaleOrdinal } from 'd3-scale'
+  import { scaleLinear, scaleOrdinal } from 'd3-scale'
   import { schemeCategory10 } from 'd3-scale-chromatic'
   import { group } from 'd3-array'
   import { graficoContext, key } from './context.svelte'
@@ -118,10 +118,14 @@
     class="elements"
     style={`padding:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;`}
   >
-    <slot name="onther" />
-    {#await tick() then value}
-      <slot name="content" />
-    {/await}
+    <div class="inner">
+      {#await tick() then value}
+        <slot name="xaxis" />
+        <slot name="yaxis" />
+        <slot name="grid" />
+        <slot name="legend" />
+      {/await}
+    </div>
   </div>
   <svg
     {height}
@@ -151,22 +155,22 @@
     position: relative;
     margin: 0;
   }
-  .grafico :global(.x.axis.bottom ~ .grafico-grid){
+  .grafico :global(.x.axis.bottom ~ .grafico-grid) {
     border-bottom-width: 2px;
     border-bottom-style: solid;
     border-bottom-color: currentColor;
   }
-  .grafico :global(.x.axis.top ~ .grafico-grid){
+  .grafico :global(.x.axis.top ~ .grafico-grid) {
     border-top-width: 2px;
     border-top-style: solid;
     border-top-color: currentColor;
   }
-  .grafico :global(.y.axis.left ~ .grafico-grid){
+  .grafico :global(.y.axis.left ~ .grafico-grid) {
     border-left-width: 2px;
     border-left-style: solid;
     border-left-color: currentColor;
   }
-  .grafico :global(.y.axis.right ~ .grafico-grid){
+  .grafico :global(.y.axis.right ~ .grafico-grid) {
     border-right-width: 2px;
     border-right-style: solid;
     border-right-color: currentColor;
@@ -183,11 +187,10 @@
     right: 0;
     bottom: 0;
   }
-  .elements > :global(div) {
+  .elements > .inner {
     position: relative;
     width: 100%;
     height: 100%;
-    /* display: contents; */
   }
   .grafico :global(figcaption) {
     position: absolute;

@@ -38,14 +38,17 @@
     let:innerWidth
     let:innerHeight
   >
-    <slot name="content" slot="content" test={true}>
-      <XAxis class="x" position="bottom" />
-      <YAxis class="y" format="~s" position="right" />
-      <Grid />
-      <!-- {#if keys.length > 1}
-            <Legend right="1vw" top="1vw" />
-          {/if} -->
+    <slot name="xaxis" slot="xaxis">
+      <XAxis position="bottom" />
     </slot>
+    <slot name="yaxis" slot="yaxis">
+      <YAxis />
+    </slot>
+    <slot name="grid" slot="grid">
+      <Grid />
+    </slot>
+    <slot name="legend" slot="legend" />
+
     {#await tick() then value}
       {#each entries as [key, data]}
         <g>

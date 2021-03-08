@@ -28,11 +28,15 @@
 
   zDomain = zDomain || extent(data, zAccessor)
   zRange = zRange || [2, innerHeight * 0.1]
-  $zScale = $zScale.domain(zDomain).range(zRange)
+  // $zScale = $zScale.domain(zDomain).range(zRange)
 
   $: {
     zDomain = extent(data, zAccessor)
     $zScale = $zScale.domain(zDomain)
+  }
+  $: {
+    zRange = zRange || [2, innerHeight * 0.1]
+    $zScale = $zScale.range(zRange)
   }
 </script>
 
@@ -50,11 +54,16 @@
     let:entries
     let:colorScale
   >
-    <slot name="content" slot="content">
+    <slot name="xaxis" slot="xaxis">
       <XAxis position="bottom" />
-      <YAxis format="~s" position="right" />
+    </slot>
+    <slot name="yaxis" slot="yaxis">
+      <YAxis />
+    </slot>
+    <slot name="grid" slot="grid">
       <Grid />
     </slot>
+    <slot name="legend" slot="legend" />
 
     <g>
       {#each entries as [key, data]}
