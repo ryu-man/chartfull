@@ -44,7 +44,6 @@
 
   $: $yScale.range(_range($innerWidth, $innerHeight))
   $: $yScale.domain(_domain($data, $yAccessor, $bins))
-  $: console.log(_tickValues($yScale))
 </script>
 
 <Axis class={_class + ' y'} {position}>

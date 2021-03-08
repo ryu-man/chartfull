@@ -12,7 +12,6 @@
   const context = graficoContext()
   const { colorScale, keys } = $context
 
-  console.log($context)
   let _style = {
     backgroundColor: '#fff',
     padding: '8px',

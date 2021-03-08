@@ -27,7 +27,6 @@
 
   radius && ($_radius = radius)
   innerRadius && ($_innerRadius = innerRadius)
-  console.log(_radius)
   const context = {
     // arc,
     // innerArc,
@@ -41,7 +40,6 @@
     ...rest
   }
 
-  console.log($_innerRadius, $_radius)
   const arc = d3Arc().innerRadius($_innerRadius).outerRadius($_radius)
 
   // $innerArc = d3Arc().innerRadius($_radius).outerRadius($_radius)

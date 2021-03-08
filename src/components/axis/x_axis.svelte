@@ -40,7 +40,6 @@
   let _tickValues =
     typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
 
-  $: console.log(_tickValues(scale))
   $: $xScale.range(_range($innerWidth, $innerHeight))
   $: $xScale.domain(_domain($data, $xAccessor, $bins))
 </script>
