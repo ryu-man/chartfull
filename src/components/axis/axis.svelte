@@ -37,19 +37,19 @@
     width: 100%;
     height: 2em;
   }
-  .axis.top {
+  .axis.top:not(.y) {
     padding-bottom: 0.7em;
     bottom: 100%;
   }
-  .axis.bottom {
+  .axis.bottom:not(.y) {
     padding-top: 0.7em;
     top: 100%;
   }
-  .axis.left {
+  .axis.left:not(.x) {
     padding-right: 0.7em;
     right: 100%;
   }
-  .axis.right {
+  .axis.right:not(.x) {
     padding-left: 0.7em;
     left: 100%;
   }
@@ -77,5 +77,17 @@
   }
   .y.axis :global(.tick) {
     transform: translateY(-50%);
+  }
+  .x.axis.top :global(.tick) {
+    bottom: 0;
+  }
+  .x.axis.bottom :global(.tick) {
+    top: 0;
+  }
+  .y.axis.left :global(.tick) {
+    right: 0;
+  }
+  .y.axis.right :global(.tick) {
+    left: 0;
   }
 </style>
