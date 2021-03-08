@@ -2,6 +2,7 @@
   import XAxis from '../x_axis.svelte'
   import XTick from '../x_tick.svelte'
   import { scaleUtc } from 'd3-scale'
+  import { graficoContext } from '../../../context.svelte'
 
   const {
     innerWidth,
@@ -39,7 +40,7 @@
   invert = scale.invert
 
   let formatter = scale.tickFormat(ticks, tickFormat)
-  
+
   $: $xTicks = ticks
   $: $xScale.rangeRound(rangeRound?.($innerWidth, $innerHeight) ?? rangeRound)
 </script>
@@ -49,7 +50,7 @@
   {scale}
   {domain}
   {range}
-  tickValues = {tickValues || scale.ticks(ticks)}
+  tickValues={tickValues || scale.ticks(ticks)}
   {position}
   let:index
   let:tick

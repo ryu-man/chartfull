@@ -2,6 +2,7 @@
   import YAxis from '../y_axis.svelte'
   import YTick from '../y_tick.svelte'
   import { scaleLinear } from 'd3-scale'
+  import { graficoContext } from '../../../context.svelte'
 
   const {
     innerWidth,
@@ -52,7 +53,7 @@
   {domain}
   {range}
   {position}
-  tickValues = {tickValues || scale.ticks(ticks)}
+  tickValues={tickValues || scale.ticks(ticks)}
   let:index
   let:tick
 >
