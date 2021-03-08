@@ -46,7 +46,7 @@
   let _rangeRound =
     typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
   let _tickValues =
-    typeof tickValues !== 'function' ? () => tickValues || scale .domain(): tickValues
+    typeof tickValues !== 'function' ? (scale) => tickValues || scale .domain(): tickValues
   let formatter = (d) => d
 
   $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
@@ -59,7 +59,7 @@
   {domain}
   {range}
   {position}
-  tickValues={_tickValues($data, $xAccessor, $bins)}
+  tickValues={_tickValues}
   let:index
   let:tick
 >
