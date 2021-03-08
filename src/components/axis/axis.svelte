@@ -2,14 +2,15 @@
 </script>
 
 <script>
+  import { classNames } from '../../utils'
   import { tick } from 'svelte'
 
-  export let position = 'bottom'
-  let _class = ''
+  export let position
+  let _class
   export { _class as class }
 </script>
 
-<div class="{_class + ' '}{position + ' '} axis">
+<div class="{classNames(_class, position, 'axis')}">
   <div class="inner-axis">
     <slot />
   </div>

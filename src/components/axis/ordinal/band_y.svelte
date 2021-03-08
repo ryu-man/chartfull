@@ -29,7 +29,7 @@
 
   let _class
   export { _class as class }
-  export let position = 'bottom'
+  export let position
   let scale = scaleBand()
   export let accessor = $yAccessor
   // $yAccessor = accessor
