@@ -20,6 +20,8 @@
   export let rangeRound
   export let round = false
   export let padding
+  export let paddingInner
+  export let paddingOuter
   export let align
   export let step
   export let bandwidth
@@ -33,6 +35,8 @@
 
   round && scale.round(round)
   padding && scale.padding(padding)
+  paddingInner && scale.padding(paddingInner)
+  paddingOuter && scale.padding(paddingOuter)
   align && scale.align(align)
   step && scale.step(step)
   bandwidth = scale.bandwidth()
