@@ -1,6 +1,8 @@
 <script>
   import { writable } from 'svelte/store'
-  import { bin, extent, max, group, scaleOrdinal, schemeAccent } from 'd3'
+  import { scaleOrdinal } from 'd3-scale'
+  import { schemeAccent } from 'd3-scale-chromatic'
+  import { bin, extent, max, group } from 'd3-array'
   import { Rect, Grid, XAxis, YAxis } from './components'
   import Context, { graficoContext, key } from './context.svelte'
   import Grafico from './grafico.svelte'

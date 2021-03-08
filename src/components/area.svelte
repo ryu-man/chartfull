@@ -1,14 +1,13 @@
 <script>
   import { tweened } from 'svelte/motion'
-  import { area, curveMonotoneX } from 'd3'
-  import { interpolatePath } from 'd3-interpolate-path'
+  import { area, curveMonotoneX } from 'd3-shape'
   import { css } from '../utils'
   import { graficoContext } from '../context.svelte'
 
   export let data
   export let delay = 0
   export let duration = 300
-  export let interpolate = interpolatePath
+  export let interpolate
   export let curve = curveMonotoneX
   export let style = {}
 

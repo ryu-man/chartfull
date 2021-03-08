@@ -1,7 +1,9 @@
 <script>
   import { setContext, tick } from 'svelte'
   import { css } from './utils'
-  import { scaleBand, scaleLinear } from 'd3'
+  import { scaleOrdinal } from 'd3-scale'
+  import { schemeAccent } from 'd3-scale-chromatic'
+  import { bin, extent, max, group } from 'd3-array'
   import { XAxis, YAxis, Rect, XTick, YTick } from './components'
   import { fade, fly } from 'svelte/transition'
   import Grafico from './grafico.svelte'

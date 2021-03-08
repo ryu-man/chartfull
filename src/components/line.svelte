@@ -1,6 +1,6 @@
 <script>
   import { css } from '../utils'
-  import { curveMonotoneX, line } from 'd3'
+  import { curveMonotoneX, line } from 'd3-shape'
   import { graficoContext } from '../context.svelte'
 
   const { xScale, xAccessor, yScale, yAccessor } = graficoContext()

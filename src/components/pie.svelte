@@ -1,5 +1,7 @@
 <script>
-  import { pie, arc as d3Arc, schemeCategory10, scaleOrdinal } from 'd3'
+  import { pie, arc as d3Arc } from 'd3-shape'
+  import { scaleOrdinal } from 'd3-scale'
+  import { schemeCategory10 } from 'd3-scale-chromatic'
   import { writable } from 'svelte/store'
   import Context, { graficoContext } from '../context.svelte'
 

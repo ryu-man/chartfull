@@ -1,8 +1,9 @@
 <script>
-  import { group, scaleOrdinal, schemeCategory10 } from 'd3'
   import { setContext, tick } from 'svelte'
   import { writable } from 'svelte/store'
-  import { scaleLinear } from 'd3-scale'
+  import { scaleLinear,scaleOrdinal } from 'd3-scale'
+  import { schemeCategory10 } from 'd3-scale-chromatic'
+  import { group } from 'd3-array'
   import { graficoContext, key } from './context.svelte'
   import { css, getInnerSize } from './utils'
 
