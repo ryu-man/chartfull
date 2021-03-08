@@ -2,6 +2,7 @@
   import XAxis from '../x_axis.svelte'
   import XTick from '../x_tick.svelte'
   import { scaleBand } from 'd3-scale'
+  import { graficoContext } from '../../../context.svelte'
 
   const {
     innerWidth,
@@ -32,16 +33,19 @@
   export let accessor = $xAccessor
   // $xAccessor = accessor
 
-  scale.round(round)
-  scale.padding(padding)
-  scale.align(align)
-  scale.step(step)
+  round && scale.round(round)
+  padding && scale.padding(padding)
+  align && scale.align(align)
+  step && scale.step(step)
   bandwidth = scale.bandwidth()
 
+  let _rangeRound =
+    typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
+  let _tickValues =
+    typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
   let formatter = (d) => d
 
-  $: $xTicks = ticks
-  $: scale.rangeRound(rangeRound?.($innerWidth, $innerHeight) ?? rangeRound)
+  $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
 <XAxis
@@ -51,7 +55,7 @@
   {domain}
   {range}
   {position}
-  tickValues={tickValues || (domain?.($data, $xAccessor, $bins) ?? domain)}
+  tickValues={_tickValues($data, $xAccessor, $bins)}
   let:index
   let:tick
 >

@@ -2,6 +2,7 @@
   import YAxis from '../y_axis.svelte'
   import YTick from '../y_tick.svelte'
   import { scaleBand } from 'd3-scale'
+  import { graficoContext } from '../../../context.svelte'
 
   const {
     innerWidth,
@@ -30,17 +31,19 @@
   export let accessor = $yAccessor
   // $yAccessor = accessor
 
-  scale.round(round)
-  scale.padding(padding)
-  scale.align(align)
-  scale.step(step)
+  round && scale.round(round)
+  padding && scale.padding(padding)
+  align && scale.align(align)
+  step && scale.step(step)
   bandwidth = scale.bandwidth()
 
+  let _rangeRound =
+    typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
+    let _tickValues =
+    typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
   let formatter = (d) => d
 
-  $: $yTicks = ticks
-  $: tickValues = domain?.($data, $yAccessor, $bins) ?? domain
-  $: scale.rangeRound(rangeRound?.($innerWidth, $innerHeight) ?? rangeRound)
+  $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
 <YAxis
@@ -49,7 +52,7 @@
   {accessor}
   {domain}
   {range}
-  {tickValues}
+  tickValues={_tickValues($data, $yAccessor, $bins)}
   {position}
   let:index
   let:tick
