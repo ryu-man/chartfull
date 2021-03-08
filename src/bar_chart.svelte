@@ -50,7 +50,16 @@
       {#each entries as [key, data]}
         <g>
           {#each data as item}
-            <slot {key} {data} {item} {innerWidth} {innerHeight} xAccessor={$xAccessor} yAccessor={$yAccessor}>
+            <slot
+              {key}
+              {data}
+              {item}
+              {innerWidth}
+              {innerHeight}
+              xAccessor={$xAccessor}
+              yAccessor={$yAccessor}
+              bandwidth={$xScale?.bandwidth?.() ?? $yScale?.bandwidth?.()}
+            >
               <Rect
                 x1={$xAccessor(item)}
                 x2={$xAccessor(item)}
@@ -60,12 +69,7 @@
                 let:width
                 let:height
               >
-                <rect
-                  {x}
-                  {y}
-                  width={width}
-                  height={height}
-                />
+                <rect {x} {y} {width} {height} />
               </Rect>
             </slot>
           {/each}
