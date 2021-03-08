@@ -151,6 +151,26 @@
     position: relative;
     margin: 0;
   }
+  .grafico :global(.x.axis.bottom ~ .grafico-grid){
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: currentColor;
+  }
+  .grafico :global(.x.axis.top ~ .grafico-grid){
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-top-color: currentColor;
+  }
+  .grafico :global(.y.axis.left ~ .grafico-grid){
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: currentColor;
+  }
+  .grafico :global(.y.axis.right ~ .grafico-grid){
+    border-right-width: 2px;
+    border-right-style: solid;
+    border-right-color: currentColor;
+  }
   svg {
     width: 100%;
     overflow: visible;
