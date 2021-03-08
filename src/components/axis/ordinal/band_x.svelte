@@ -65,7 +65,7 @@
 >
   <slot coord={(scale(tick) * 100) / $innerWidth} {tick} {index}>
     <XTick
-      y={(scale(tick) * 100) / $innerWidth}
+      x={(scale(tick) * 100) / $innerWidth}
       {tick}
       {formatter}
       inParams={{ duration: 100 * index, x: 0, y: 36 }}
