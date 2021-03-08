@@ -44,7 +44,7 @@
   let _rangeRound =
     typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
     let _tickValues =
-    typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
+    typeof tickValues !== 'function' ? () => tickValues || scale.domain() : tickValues
   let formatter = (d) => d
 
   $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
