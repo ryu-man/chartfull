@@ -40,7 +40,7 @@
   paddingInner && scale.padding(paddingInner)
   paddingOuter && scale.padding(paddingOuter)
   align && scale.align(align)
-  step && scale.step(step)
+  step = scale.step()
   bandwidth = scale.bandwidth()
 
   let _rangeRound =
