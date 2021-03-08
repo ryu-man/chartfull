@@ -67,4 +67,15 @@
     left: 0;
     bottom: 101%;
   }
+
+  .axis :global(.tick) {
+    font-size: 1em;
+    font-weight: 400;
+  }
+  .x.axis :global(.tick) {
+    transform: translateX(-50%);
+  }
+  .y.axis :global(.tick) {
+    transform: translateY(-50%);
+  }
 </style>
