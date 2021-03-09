@@ -1,6 +1,5 @@
 <script>
   import YAxis from '../y_axis.svelte'
-  import YTick from '../y_tick.svelte'
   import { scaleUtc } from 'd3-scale'
   import { graficoContext } from '../../../context.svelte'
 
@@ -40,11 +39,19 @@
   scale.clamp(clamp)
   scale.interpolate(interpolate)
   invert = scale.invert
+
   let formatter = scale.tickFormat(ticks, tickFormat)
+
+  $: _rangeRound =
+    typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
+  $: _tickValues =
+    typeof tickValues !== 'function'
+      ? (scale) => tickValues || scale.ticks(ticks)
+      : tickValues
 
   $: !tickValues && (tickValues = scale.ticks(ticks))
   $: $yTicks = ticks
-  $: $yScale.rangeRound(rangeRound?.($innerWidth, $innerHeight) ?? rangeRound)
+  $: $yScale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
 <YAxis
@@ -53,19 +60,19 @@
   {domain}
   {range}
   {position}
-  tickValues={tickValues || scale.ticks(ticks)}
+  tickValues={_tickValues}
   let:index
   let:tick
+  let:x
+  let:y
+  let:tickPosition
 >
-  <slot coord={(scale(tick) * 100) / $innerHeight} {tick} {index}>
-    <YTick
-      x={(scale(tick) * 100) / $innerHeight}
-      {tick}
-      {formatter}
-      inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }}
-    />
-  </slot>
+<slot {tick} {index} {x} {y} {tickPosition} {formatter}>
+  <span
+    use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
+    class="tick">{formatter(tick)}</span
+  >
+</slot>
 
   <slot name="label" slot="label" />
 </YAxis>

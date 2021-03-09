@@ -1,7 +1,5 @@
 import { default as XAxis } from './x_axis.svelte'
-import { default as XTick } from './x_tick.svelte'
 import { default as YAxis } from './y_axis.svelte'
-import { default as YTick } from './y_tick.svelte'
 import AxisLabel from './label.svelte'
 import {
   LinearXAxis,
@@ -16,9 +14,7 @@ import './config'
 
 export {
   XAxis,
-  XTick,
   YAxis,
-  YTick,
   AxisLabel,
   LinearXAxis,
   LinearYAxis,

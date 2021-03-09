@@ -1,6 +1,5 @@
 <script>
   import XAxis from '../x_axis.svelte'
-  import XTick from '../x_tick.svelte'
   import { scaleBand } from 'd3-scale'
   import { graficoContext } from '../../../context.svelte'
 
@@ -46,7 +45,9 @@
   let _rangeRound =
     typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
   let _tickValues =
-    typeof tickValues !== 'function' ? (scale) => tickValues || scale .domain(): tickValues
+    typeof tickValues !== 'function'
+      ? (scale) => tickValues || scale.domain()
+      : tickValues
   let formatter = (d) => d
 
   $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
@@ -62,15 +63,15 @@
   tickValues={_tickValues}
   let:index
   let:tick
+  let:x
+  let:y
+  let:tickPosition
 >
-  <slot coord={(scale(tick) * 100) / $innerWidth} {tick} {index}>
-    <XTick
-      x={(scale(tick) * 100) / $innerWidth}
-      {tick}
-      {formatter}
-      inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }}
-    />
+  <slot {tick} {index} {x} {y} {tickPosition}>
+    <span
+      use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
+      class="tick">{tick}</span
+    >
   </slot>
 
   <slot name="label" slot="label" />

@@ -1,9 +1,20 @@
+<script context="module">
+  export function tickPosition(node, { x = 0, y = 0, position = 'left' }) {
+    node.style.top = `${y}%`
+    if (position === 'left') {
+      node.style.right = `${x}%`
+    }
+    if (position === 'right') {
+      node.style.left = `${x}%`
+    }
+  }
+</script>
+
 <script>
   import { graficoContext } from '../../context.svelte'
   import { tick as Tick } from 'svelte'
   import { scaleLinear } from 'd3-scale'
   import { extent } from 'd3-array'
-  import YTick from './y_tick.svelte'
   import Axis from './axis.svelte'
 
   const {
@@ -49,14 +60,17 @@
 <Axis class={_class + ' y'} {position}>
   {#await Tick() then value}
     {#each _tickValues($yScale) as tick, index (+tick || tick)}
-      <slot {index} {tick}>
-        <YTick
-          y={(scale(tick) * 100) / $innerHeight}
-          {tick}
-          formatter={(d) => d}
-          inParams={{ duration: 100 * index, x: 0, y: 36 }}
-          outParams={{ duration: 50 * index, x: 0, y: 36 }}
-        />
+      <slot
+        {index}
+        {tick}
+        y={(scale(tick) * 100) / $innerHeight}
+        x={0}
+        {tickPosition}
+      >
+        <span
+          use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
+          class="tick">{tick}</span
+        >
       </slot>
     {/each}
   {/await}

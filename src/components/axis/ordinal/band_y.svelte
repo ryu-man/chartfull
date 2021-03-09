@@ -1,6 +1,5 @@
 <script>
   import YAxis from '../y_axis.svelte'
-  import YTick from '../y_tick.svelte'
   import { scaleBand } from 'd3-scale'
   import { graficoContext } from '../../../context.svelte'
 
@@ -44,8 +43,10 @@
 
   let _rangeRound =
     typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
-    let _tickValues =
-    typeof tickValues !== 'function' ? (scale) => tickValues || scale.domain() : tickValues
+  let _tickValues =
+    typeof tickValues !== 'function'
+      ? (scale) => tickValues || scale.domain()
+      : tickValues
   let formatter = (d) => d
 
   $: rangeRound && scale.rangeRound(_rangeRound($innerWidth, $innerHeight))
@@ -61,16 +62,16 @@
   {position}
   let:index
   let:tick
+  let:x
+  let:y
+  let:tickPosition
 >
-  <slot coord={(scale(tick) * 100) / $innerHeight} {tick} {index}>
-    <YTick
-      y={(scale(tick) * 100) / $innerHeight}
-      {tick}
-      {formatter}
-      inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }}
-    />
-  </slot>
+<slot {tick} {index} {x} {y} {tickPosition}>
+  <span
+    use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
+    class="tick">{tick}</span
+  >
+</slot>
 
   <slot name="label" slot="label" />
 </YAxis>

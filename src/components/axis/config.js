@@ -1,7 +1,5 @@
 import XAxis from './x_axis.svelte'
 import YAxis from './y_axis.svelte'
-import XTick from './x_tick.svelte'
-import YTick from './y_tick.svelte'
 import Label from './label.svelte'
 import {
   LinearXAxis,
@@ -13,8 +11,6 @@ import {
 } from './continious'
 import { BandXAxis, BandYAxis } from './ordinal'
 
-XAxis.tick = XTick
-YAxis.tick = YTick
 
 XAxis.linear = LinearXAxis
 YAxis.linear = LinearYAxis

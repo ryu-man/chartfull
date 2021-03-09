@@ -1,6 +1,5 @@
 <script>
   import XAxis from '../x_axis.svelte'
-  import XTick from '../x_tick.svelte'
   import { scaleLinear } from 'd3-scale'
   import { graficoContext } from '../../../context.svelte'
 
@@ -31,18 +30,24 @@
   export let scale = scaleLinear()
   export let position = 'bottom'
   export let accessor = $xAccessor
-  // $xAccessor = accessor
 
   nice && scale.nice(ticks)
-  scale.unknown(unknown)
-  scale.clamp(clamp)
-  scale.interpolate(interpolate)
+  unknown && scale.unknown(unknown)
+  clamp && scale.clamp(clamp)
+  interpolate && scale.interpolate(interpolate)
   invert = scale.invert
 
   let formatter = scale.tickFormat(ticks, tickFormat)
 
+  $: _rangeRound =
+    typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
+  $: _tickValues =
+    typeof tickValues !== 'function'
+      ? (scale) => tickValues || scale.ticks(ticks)
+      : tickValues
+
   $: $xTicks = ticks
-  $: $xScale.rangeRound(rangeRound?.($innerWidth, $innerHeight) ?? rangeRound)
+  $: rangeRound && $xScale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
 <XAxis
@@ -52,18 +57,18 @@
   {domain}
   {range}
   {position}
-  tickValues={tickValues || scale.ticks(ticks)}
+  tickValues={_tickValues}
   let:index
   let:tick
+  let:x
+  let:y
+  let:tickPosition
 >
-  <slot coord={(scale(tick) * 100) / $innerWidth} {tick} {index}>
-    <XTick
-      x={(scale(tick) * 100) / $innerWidth}
-      {tick}
-      {formatter}
-      inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }}
-    />
+  <slot {tick} {index} {x} {y} {tickPosition} {formatter}>
+    <span
+      use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
+      class="tick">{formatter(tick)}</span
+    >
   </slot>
 
   <slot name="label" slot="label" />
