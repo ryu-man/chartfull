@@ -38,19 +38,19 @@
     width: 100%;
     height: 2em;
   }
-  .axis.top:not(.y) {
+  .x.axis.top {
     padding-bottom: 0.7em;
     bottom: 100%;
   }
-  .axis.bottom:not(.y) {
+  .x.axis.bottom {
     padding-top: 0.7em;
     top: 100%;
   }
-  .axis.left:not(.x) {
+  .y.axis.left {
     padding-right: 0.7em;
     right: 100%;
   }
-  .axis.right:not(.x) {
+  .y.axis.right {
     padding-left: 0.7em;
     left: 100%;
   }
@@ -72,6 +72,8 @@
   .axis :global(.tick) {
     font-size: 1em;
     font-weight: 400;
+    position: absolute;
+    white-space: nowrap;
   }
   .x.axis :global(.tick) {
     transform: translateX(-50%);
