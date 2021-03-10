@@ -1,7 +1,6 @@
 <script context="module">
   export function tickPosition(node, { x = 0, y = 0, position = 'left' }) {
     function setPos({ x = 0, y = 0, position = 'left' }) {
-      console.log(`${y}%`)
       node.style.top = `${y}%`
       if (position === 'left') {
         node.style.right = `${x}%`
