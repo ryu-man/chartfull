@@ -133,6 +133,7 @@
     style={`padding:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;`}
   >
     {#await tick() then value}
+      <slot name="grid" />
       <slot
         entries={$entries}
         innerWidth={$innerWidth}
@@ -141,8 +142,6 @@
         xScale={$xScale}
         yScale={$yScale}
       />
-
-      <slot name="grid" />
     {/await}
   </svg>
 </figure>
