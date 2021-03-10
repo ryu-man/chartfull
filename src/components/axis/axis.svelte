@@ -1,16 +1,12 @@
-<script context="module">
-</script>
-
 <script>
   import { classNames } from '../../utils'
-  import { tick } from 'svelte'
 
   export let position
   let _class
   export { _class as class }
 </script>
 
-<div class="{classNames(_class, position, 'axis')}">
+<div class={classNames(_class, position, 'axis')}>
   <div class="inner-axis">
     <slot />
   </div>
@@ -20,39 +16,50 @@
 
 <style>
   .axis {
+    --border-width: 2px;
     position: absolute;
+    
   }
   .x.axis {
     height: 2em;
-    width: 100%;
-  }
-  .x.axis.mirror {
-    width: 2em;
-    height: 100%;
+    width: calc(100% + var(--border-width) * 2);
+    left: calc(var(--border-width) * -1);
+    padding-left: var(--border-width);
+    padding-right: var(--border-width);
+    box-sizing: border-box;
   }
   .y.axis {
     height: 100%;
     width: 2em;
   }
-  .y.axis.mirror {
-    width: 100%;
-    height: 2em;
-  }
   .x.axis.top {
     padding-bottom: 0.7em;
     bottom: 100%;
+
+    border-bottom: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: currentColor;
   }
   .x.axis.bottom {
     padding-top: 0.7em;
     top: 100%;
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-top-color: currentColor;
   }
   .y.axis.left {
     padding-right: 0.7em;
     right: 100%;
+    border-right-width: 2px;
+    border-right-style: solid;
+    border-right-color: currentColor;
   }
   .y.axis.right {
     padding-left: 0.7em;
     left: 100%;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: currentColor;
   }
   .axis > .inner-axis {
     position: relative;
@@ -70,6 +77,7 @@
   }
 
   .axis :global(.tick) {
+    height: 26px;
     font-size: 1em;
     font-weight: 400;
     position: absolute;
