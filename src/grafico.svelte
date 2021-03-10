@@ -39,7 +39,7 @@
     yTicks = writable(null),
     ...rest
   } = graficoContext() ?? {}
-  
+
   let context = {
     colorScale,
     width: _width,
@@ -122,7 +122,6 @@
       {#await tick() then value}
         <slot name="xaxis" />
         <slot name="yaxis" />
-        <slot name="grid" />
         <slot name="legend" />
       {/await}
     </div>
@@ -142,6 +141,8 @@
         xScale={$xScale}
         yScale={$yScale}
       />
+
+      <slot name="grid" />
     {/await}
   </svg>
 </figure>
