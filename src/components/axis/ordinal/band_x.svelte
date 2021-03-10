@@ -70,6 +70,8 @@
   <slot {tick} {index} {x} {y} {tickPosition}>
     <span
       use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
+      style="transform:translate(calc(-50% + {(scale?.bandwidth?.() ?? 0) /
+        2}px),0);"
       class="tick">{tick}</span
     >
   </slot>

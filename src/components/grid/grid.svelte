@@ -45,7 +45,10 @@
   vector-effect="non-scaling-stroke"
 >
   {#await Tick() then value}
-    <g class="vertical">
+    <g
+      class="vertical"
+      transform="translate({($xScale?.bandwidth?.() ?? 0) / 2},0)"
+    >
       {#each tickValues($xScale, $xTicks) as tick, i (+tick || tick)}
         <slot
           name="vertical"
@@ -65,7 +68,10 @@
         </slot>
       {/each}
     </g>
-    <g class="horizontal">
+    <g
+      class="horizontal"
+      transform="translate(0, {($yScale?.bandwidth?.() ?? 0) / 2})"
+    >
       {#each tickValues($yScale, $yTicks) as tick, i (+tick || tick)}
         <slot
           name="horizontal"
