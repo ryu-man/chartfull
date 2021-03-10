@@ -4,13 +4,6 @@
   import { css } from '../utils'
   import { graficoContext } from '../context.svelte'
 
-  export let data
-  export let delay = 0
-  export let duration = 300
-  export let interpolate
-  export let curve = curveMonotoneX
-  export let style = {}
-
   const {
     xScale,
     yScale,
@@ -20,31 +13,20 @@
     innerHeight
   } = graficoContext()
 
-  const _area = area()
-    .x((d) => $xScale($xAccessor(d)))
-    .y0($innerHeight)
-    .y1((d) => $yScale($yAccessor(d)))
-    .curve(curve)
-  $: path = _area(data)
+  export let data
+  export let curve = curveMonotoneX
+  export let x = (d) => $xScale($xAccessor(d))
+  export let y0 = $innerHeight
+  export let y1 = (d) => $yScale($yAccessor(d))
 
-  function init(node, data) {
-    css(node, style)
-    return {
-      update(data) {
-        path = _area(data)
-      }
-    }
-  }
+  const _area = area().x(x).y0(y0).y1(y1).curve(curve)
+
+  $: d = _area(data)
 </script>
 
-<path
-  use:init={data}
-  d={path}
-  class="area-data"
-  fill="transparent"
-  stroke="black"
-  stroke-width="2px"
-/>
+<slot {d}>
+  <path {d} class="area" />
+</slot>
 
 <style>
   path {
