@@ -1,11 +1,19 @@
 <script context="module">
   export function tickPosition(node, { x = 0, y = 0, position = 'bottom' }) {
-    node.style.left = `${x}%`
-    if (position === 'bottom') {
-      node.style.top = `${y}%`
+    function setPos({ x = 0, y = 0, position = 'left' }) {
+      node.style.left = `${x}%`
+      if (position === 'bottom') {
+        node.style.top = `${y}%`
+      }
+      if (position === 'top') {
+        node.style.bottom = `${y}%`
+      }
     }
-    if (position === 'top') {
-      node.style.bottom = `${y}%`
+    setPos({ x, y, position })
+    return {
+      update({ x = 0, y = 0, position = 'left' }) {
+        setPos({ x, y, position })
+      }
     }
   }
 </script>
@@ -61,12 +69,12 @@
       <slot
         {index}
         {tick}
-        x={(scale(tick) * 100) / $innerWidth}
+        x={($xScale(tick) * 100) / $innerWidth}
         y={0}
         {tickPosition}
       >
         <span
-          use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
+          use:tickPosition={{ x: ($xScale(tick) * 100) / $innerWidth, y: 0 }}
           class="tick">{tick}</span
         >
       </slot>
