@@ -5,6 +5,7 @@ export { default as Rect } from './rect.svelte'
 export { default as Circle } from './circle.svelte'
 export { default as Slice } from './slice.svelte'
 export { default as Pie } from './pie.svelte'
-export { Grid, GridLine } from './grid'
+export { default as Grid } from './grid.svelte'
 export { XAxis, YAxis } from './axis'
+
 export * as Scales from './scales'
