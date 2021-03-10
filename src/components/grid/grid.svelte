@@ -2,7 +2,6 @@
   import { tick as Tick } from 'svelte'
   import { css } from '../../utils'
   import { graficoContext } from '../../context.svelte'
-  import GridLine from './grid_line.svelte'
 
   export let stroke = 'rgba(0, 0, 0, 0.1)'
   export let strokeDasharray
@@ -56,15 +55,17 @@
           y2={$innerHeight}
           index={i}
         >
-          <GridLine
+          <line
             x1={$xScale(tick)}
+            y1={0}
             x2={$xScale(tick)}
             y2={$innerHeight}
-            vertical
+            class="grid-line"
           />
         </slot>
       {/each}
-    </g><g class="horizontal">
+    </g>
+    <g class="horizontal">
       {#each tickValues($yScale, $yTicks) as tick, i (+tick || tick)}
         <slot
           name="horizontal"
@@ -74,7 +75,13 @@
           y2={$yScale(tick)}
           index={i}
         >
-          <GridLine y1={$yScale(tick)} x2={$innerWidth} y2={$yScale(tick)} />
+          <line
+            x1={0}
+            y1={$yScale(tick)}
+            x2={$innerWidth}
+            y2={$yScale(tick)}
+            class="grid-line"
+          />
         </slot>
       {/each}
     </g>
@@ -87,6 +94,28 @@
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
+  }
+
+  .grid-line {
+    position: absolute;
+    mix-blend-mode: darken;
+    /* height: var(--line-width);
+    width: 100%; */
+    stroke: inherit;
+    stroke-dasharray: inherit;
+    stroke-width: inherit;
+    stroke-dashoffset: inherit;
+    stroke-linecap: inherit;
+    stroke-opacity: inherit;
+    stroke-miterlimit: inherit;
+    stroke-linejoin: inherit;
+    vector-effect: non-scaling-stroke;
+    /* background-color: currentColor; */
+    /* border: none; */
+  }
+  .vertical .grid-line {
+    width: var(--line-width);
     height: 100%;
   }
 </style>
