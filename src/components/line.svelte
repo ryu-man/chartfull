@@ -6,6 +6,8 @@
   const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
 
   export let data = []
+  export let x = (d) => $xScale($xAccessor(d))
+  export let y = (d) => $yScale($yAccessor(d))
   export let curve = curveMonotoneX
   export let style = {}
   let _class = ''
@@ -19,13 +21,6 @@
   let d = ''
 
   $: d = _line(data)
-
-  function x(d) {
-    return $xScale($xAccessor(d))
-  }
-  function y(d) {
-    return $yScale($yAccessor(d))
-  }
 </script>
 
 <slot {d}>
