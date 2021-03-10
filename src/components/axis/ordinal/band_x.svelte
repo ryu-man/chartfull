@@ -36,8 +36,8 @@
 
   round && scale.round(round)
   padding && scale.padding(padding)
-  paddingInner && scale.padding(paddingInner)
-  paddingOuter && scale.padding(paddingOuter)
+  paddingInner && scale.paddingInner(paddingInner)
+  paddingOuter && scale.paddingOuter(paddingOuter)
   align && scale.align(align)
   step = scale.step()
   bandwidth = scale.bandwidth()

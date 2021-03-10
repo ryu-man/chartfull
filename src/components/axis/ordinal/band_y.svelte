@@ -35,8 +35,8 @@
 
   round && scale.round(round)
   padding && scale.padding(padding)
-  paddingInner && scale.padding(paddingInner)
-  paddingOuter && scale.padding(paddingOuter)
+  paddingInner && scale.paddingInner(paddingInner)
+  paddingOuter && scale.paddingOuter(paddingOuter)
   align && scale.align(align)
   step = scale.step()
   bandwidth = scale.bandwidth()
@@ -66,12 +66,12 @@
   let:y
   let:tickPosition
 >
-<slot {tick} {index} {x} {y} {tickPosition}>
-  <span
-    use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
-    class="tick">{tick}</span
-  >
-</slot>
+  <slot {tick} {index} {x} {y} {tickPosition}>
+    <span
+      use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
+      class="tick">{tick}</span
+    >
+  </slot>
 
   <slot name="label" slot="label" />
 </YAxis>
