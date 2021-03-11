@@ -27,13 +27,18 @@
   <slot name="xaxis" slot="xaxis">
     <XAxis position="bottom" />
   </slot>
+  
   <slot name="yaxis" slot="yaxis">
     <YAxis />
   </slot>
+
   <slot name="grid" slot="grid">
     <Grid />
   </slot>
+
   <slot name="legend" slot="legend" />
+
+  <slot name="title" slot="title" />
 
   <g>
     {#each entries as entry}

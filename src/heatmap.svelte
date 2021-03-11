@@ -39,14 +39,19 @@
     <slot name="xaxis" slot="xaxis">
       <XAxis scale={$xScale} />
     </slot>
+
     <slot name="yaxis" slot="yaxis">
       <YAxis scale={$yScale} />
     </slot>
+
     <slot name="grid" slot="grid">
       <!-- <Grid /> -->
     </slot>
+
     <slot name="legend" slot="legend" />
 
+    <slot name="title" slot="title" />
+    
     <g>
       {#each data as item, i}
         <slot

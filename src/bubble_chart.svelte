@@ -23,24 +23,18 @@
     yAccessor = writable((d) => d.y),
     xScale = writable(scaleLinear()),
     yScale = writable(scaleLinear()),
-    zScale = writable(scaleLinear())
+    zScale = writable(scaleLinear()),
+    innerWidth = writable(48)
   } = graficoContext()
 
-  zDomain = zDomain || extent(data, zAccessor)
-  zRange = zRange || [2, innerHeight * 0.1]
-  // $zScale = $zScale.domain(zDomain).range(zRange)
+  $: $zScale.domain(zDomain || extent(data, zAccessor)), ($zScale = $zScale)
 
-  $: {
-    zDomain = extent(data, zAccessor)
-    $zScale = $zScale.domain(zDomain)
-  }
-  $: {
-    zRange = zRange || [2, innerHeight * 0.1]
-    $zScale = $zScale.range(zRange)
-  }
+  $: $zScale.range(zRange || [2, $innerWidth * 0.05]), ($zScale = $zScale)
+
+  $: $xScale.range([0, $innerWidth]), ($xScale = $xScale)
 </script>
 
-<Context value={{ xAccessor, yAccessor, xScale, yScale, zScale }}>
+<Context value={{ xAccessor, yAccessor, xScale, yScale, zScale, innerWidth }}>
   <Grafico
     class="bubble"
     {width}
@@ -57,13 +51,18 @@
     <slot name="xaxis" slot="xaxis">
       <XAxis position="bottom" />
     </slot>
+
     <slot name="yaxis" slot="yaxis">
       <YAxis />
     </slot>
+
     <slot name="grid" slot="grid">
       <Grid />
     </slot>
+
     <slot name="legend" slot="legend" />
+
+    <slot name="title" slot="title" />
 
     <g>
       {#each entries as [key, data]}

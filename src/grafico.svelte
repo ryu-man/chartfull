@@ -144,6 +144,7 @@
       />
     {/await}
   </svg>
+  <slot name="title"></slot>
 </figure>
 
 <style>
