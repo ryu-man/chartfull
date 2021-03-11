@@ -15,7 +15,7 @@ export function register(node, events) {
 
 export function getInnerSize(
   { width = 0, height = 0 },
-  { top = 0, right = 0, bottom = 0, left = 0 }
+  { top = 32, right = 32, bottom = 72, left = 72 }
 ) {
   return {
     innerWidth: width - left - right,
