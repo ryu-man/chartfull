@@ -39,6 +39,7 @@
   invert = scale.invert
 
   let formatter = scale.tickFormat(ticks, tickFormat)
+  
   $: _rangeRound =
     typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
   $: _tickValues =
@@ -53,10 +54,11 @@
 <XAxis
   class={_class}
   {scale}
+  {accessor}
   {domain}
   {range}
-  tickValues={_tickValues}
   {position}
+  tickValues={_tickValues}
   let:index
   let:tick
   let:x
