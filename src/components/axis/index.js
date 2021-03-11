@@ -7,7 +7,15 @@ import {
   TimeXAxis,
   TimeYAxis,
   UTCXAxis,
-  UTCYAxis
+  UTCYAxis,
+  LogXAxis,
+  LogYAxis,
+  PowXAxis,
+  PowYAxis,
+  SqrtXAxis,
+  SqrtYAxis,
+  SymlogXAxis,
+  SymlogYAxis
 } from './continious'
 import { BandXAxis, BandYAxis } from './ordinal'
 import './config'
@@ -22,6 +30,14 @@ export {
   TimeYAxis,
   UTCXAxis,
   UTCYAxis,
+  LogXAxis,
+  LogYAxis,
+  PowXAxis,
+  PowYAxis,
+  SqrtXAxis,
+  SqrtYAxis,
+  SymlogXAxis,
+  SymlogYAxis,
   BandXAxis,
   BandYAxis
 }

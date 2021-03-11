@@ -7,10 +7,17 @@ import {
   TimeXAxis,
   TimeYAxis,
   UTCXAxis,
-  UTCYAxis
+  UTCYAxis,
+  LogXAxis,
+  LogYAxis,
+  PowXAxis,
+  PowYAxis,
+  SqrtXAxis,
+  SqrtYAxis,
+  SymlogXAxis,
+  SymlogYAxis
 } from './continious'
 import { BandXAxis, BandYAxis } from './ordinal'
-
 
 XAxis.linear = LinearXAxis
 YAxis.linear = LinearYAxis
@@ -20,6 +27,21 @@ YAxis.time = TimeYAxis
 
 XAxis.utc = UTCXAxis
 YAxis.utc = UTCYAxis
+
+XAxis.utc = UTCXAxis
+YAxis.utc = UTCYAxis
+
+XAxis.log = LogXAxis
+YAxis.log = LogYAxis
+
+XAxis.pow = PowXAxis
+YAxis.pow = PowYAxis
+
+XAxis.sqrt = SqrtXAxis
+YAxis.sqrt = SqrtYAxis
+
+XAxis.symlog = SymlogXAxis
+YAxis.symlog = SymlogYAxis
 
 XAxis.band = BandXAxis
 YAxis.band = BandYAxis

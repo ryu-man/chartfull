@@ -6,6 +6,26 @@ export { default as Circle } from './circle.svelte'
 export { default as Slice } from './slice.svelte'
 export { default as Pie } from './pie.svelte'
 export { default as Grid } from './grid.svelte'
-export { XAxis, YAxis } from './axis'
+export {
+  XAxis,
+  YAxis,
+  AxisLabel,
+  LinearXAxis,
+  LinearYAxis,
+  TimeXAxis,
+  TimeYAxis,
+  UTCXAxis,
+  UTCYAxis,
+  LogXAxis,
+  LogYAxis,
+  PowXAxis,
+  PowYAxis,
+  SqrtXAxis,
+  SqrtYAxis,
+  SymlogXAxis,
+  SymlogYAxis,
+  BandXAxis,
+  BandYAxis
+} from './axis'
 
 export * as Scales from './scales'

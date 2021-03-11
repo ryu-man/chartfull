@@ -2,18 +2,35 @@ export {
   Area,
   Circle,
   Grid,
-  GridLine,
   Legend,
   Line,
   Pie,
   Rect,
-  Scales,
-  Slice,
-  XAxis,
-  XTick,
-  YAxis,
-  YTick
+  Slice
 } from './components'
+
+export {
+  XAxis,
+  YAxis,
+  AxisLabel,
+  LinearXAxis,
+  LinearYAxis,
+  TimeXAxis,
+  TimeYAxis,
+  UTCXAxis,
+  UTCYAxis,
+  LogXAxis,
+  LogYAxis,
+  PowXAxis,
+  PowYAxis,
+  SqrtXAxis,
+  SqrtYAxis,
+  SymlogXAxis,
+  SymlogYAxis,
+  BandXAxis,
+  BandYAxis
+} from './components'
+
 export { default as LineChart } from './line_chart.svelte'
 export { default as PieChart } from './pie_chart.svelte'
 export { default as BarChart } from './bar_chart.svelte'
