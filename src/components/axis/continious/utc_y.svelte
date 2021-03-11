@@ -49,14 +49,14 @@
       ? (scale) => tickValues || scale.ticks(ticks)
       : tickValues
 
-  $: !tickValues && (tickValues = scale.ticks(ticks))
   $: $yTicks = ticks
-  $: $yScale.rangeRound(_rangeRound($innerWidth, $innerHeight))
+  $: rangeRound && $yScale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
 <YAxis
   class={_class}
   {scale}
+  {accessor}
   {domain}
   {range}
   {position}
@@ -67,12 +67,12 @@
   let:y
   let:tickPosition
 >
-<slot {tick} {index} {x} {y} {tickPosition} {formatter}>
-  <span
-    use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
-    class="tick">{formatter(tick)}</span
-  >
-</slot>
+  <slot {tick} {index} {x} {y} {tickPosition} {formatter}>
+    <span
+      use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
+      class="tick">{formatter(tick)}</span
+    >
+  </slot>
 
   <slot name="label" slot="label" />
 </YAxis>
