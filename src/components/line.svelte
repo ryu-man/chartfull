@@ -9,9 +9,6 @@
   export let x = (d) => $xScale($xAccessor(d))
   export let y = (d) => $yScale($yAccessor(d))
   export let curve = curveMonotoneX
-  export let style = {}
-  let _class = ''
-  export { _class as class }
 
   const _line = line() // Creating the line
     .x(x)
@@ -21,16 +18,12 @@
   let d = ''
 
   $: d = _line(data)
+
+  console.log(data, _line(data))
 </script>
 
 <slot {d}>
-  <path
-    use:css={style}
-    {d}
-    class="{_class} line"
-    fill="transparent"
-    stroke-width="2px"
-  />
+  <path {d} fill="transparent" stroke="black" />
 </slot>
 
 <style>
