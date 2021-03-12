@@ -1,5 +1,7 @@
 <script>
-  import { XAxis, YAxis, Grid, Line, Circle } from './components'
+  import { writable } from 'svelte/store'
+  import { scaleLinear } from 'd3-scale'
+  import { XAxis, YAxis, Grid, Line } from './components'
   import Context, { graficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
@@ -8,8 +10,6 @@
   export let padding
   export let data = []
   export let groupBy = () => ''
-  export let radius = 8
-  export let connected = false
   export let style = {}
 
   const {
@@ -49,16 +49,27 @@
     <slot name="title" slot="title" />
 
     <g>
-      {#each entries as entry}
+      {#each entries as [key, data]}
         <g>
-          {#if connected}
-            <slot name="line" lineData={entry[1]}>
-              <Line data={entry[1]} style={{ stroke: colorScale(entry[0]) }} />
-            </slot>
-          {/if}
-          {#each entry[1] as item, i}
-            <slot index={i} color={colorScale(groupBy(entry[0]))}>
-              <Circle index={i} duration={i * 96} r={radius} />
+          <slot name="line" />
+          {#each data as item, i}
+            <slot
+              {key}
+              {data}
+              {item}
+              index={i}
+              color={colorScale(key)}
+              xScale={$xScale}
+              xAccessor={$xAccessor}
+              yScale={$yScale}
+              yAccessor={$yAccessor}
+            >
+              <circle
+                cx={$xScale($xAccessor(item))}
+                cy={$yScale($yAccessor(item))}
+                r={4}
+                fill={colorScale(key)}
+              />
             </slot>
           {/each}
         </g>
