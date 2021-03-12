@@ -1,7 +1,7 @@
 <script>
   import { scaleLinear } from 'd3-scale'
   import { extent } from 'd3-array'
-  import { XAxis, YAxis, Grid, Circle } from './components'
+  import { XAxis, YAxis, Grid } from './components'
   import Grafico from './grafico.svelte'
   import Context, { graficoContext, key } from './context.svelte'
   import { writable } from 'svelte/store'
@@ -24,17 +24,19 @@
     xScale = writable(scaleLinear()),
     yScale = writable(scaleLinear()),
     zScale = writable(scaleLinear()),
-    innerWidth = writable(48)
+    innerWidth = writable(48),
+    innerHeight = writable(48)
   } = graficoContext()
 
   $: $zScale.domain(zDomain || extent(data, zAccessor)), ($zScale = $zScale)
 
-  $: $zScale.range(zRange || [2, $innerWidth * 0.05]), ($zScale = $zScale)
+  $: $zScale.range(zRange || [0, $innerHeight * 0.1]),
+    ($zScale = $zScale)
 
   $: $xScale.range([0, $innerWidth]), ($xScale = $xScale)
 </script>
 
-<Context value={{ xAccessor, yAccessor, xScale, yScale, zScale, innerWidth }}>
+<Context value={{ xAccessor, yAccessor, xScale, yScale, zScale, innerWidth, innerHeight }}>
   <Grafico
     class="bubble"
     {width}
@@ -49,11 +51,11 @@
     let:colorScale
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis position="bottom" />
+      <XAxis scale={$xScale} accessor={$xAccessor} />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis />
+      <YAxis scale={$yScale} accessor={$yAccessor} />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -67,9 +69,18 @@
     <g>
       {#each entries as [key, data]}
         {#each data as item}
-          <slot {key} {data} color={colorScale(key)}>
-            <Circle
-              {item}
+          <slot
+            {key}
+            {data}
+            color={colorScale(key)}
+            xScale={$xScale}
+            xAccessor={$xAccessor}
+            yScale={$yScale}
+            yAccessor={$yAccessor}
+          >
+            <circle
+              cx={$xScale($xAccessor(item))}
+              cy={$yScale($yAccessor(item))}
               r={$zScale(zAccessor(item))}
               fill={colorScale(key)}
             />
