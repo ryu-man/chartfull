@@ -1,7 +1,7 @@
 <script>
   import { css } from '../../utils'
 
-  export let color: string
+  export let color
 </script>
 
 <div class="legend-item">

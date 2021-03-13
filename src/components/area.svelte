@@ -1,7 +1,5 @@
 <script>
-  import { tweened } from 'svelte/motion'
   import { area, curveMonotoneX } from 'd3-shape'
-  import { css } from '../utils'
   import { graficoContext } from '../context.svelte'
 
   const {
@@ -9,7 +7,6 @@
     yScale,
     xAccessor,
     yAccessor,
-    colorScale,
     innerHeight
   } = graficoContext()
 
