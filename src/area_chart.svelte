@@ -36,11 +36,11 @@
     let:colorScale
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis position="bottom" />
+      <XAxis scale={$xScale} accessor={$xAccessor} />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis format="~s" />
+      <YAxis scale={$xScale} accessor={$xAccessor} />
     </slot>
 
     <slot name="grid" slot="grid">
