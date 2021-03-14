@@ -1,35 +1,70 @@
 <script>
-  import { graficoContext } from '../context.svelte'
-  import { min } from 'd3-array'
-  const { xScale, yScale } = graficoContext()
+  import { tweened } from 'svelte/motion'
+  import { backOut } from 'svelte/easing'
 
-  export let x1
-  export let y1
-  export let x2 = $xScale.bandwidth
-    ? x1
-    : min($xScale.domain())
-  export let y2 = $yScale.bandwidth
-    ? y1
-    : min($yScale.domain())
+  export let x = 0
+  export let y = 0
+  export let width = 0
+  export let height = 0
 
-  $: _x1 = $xScale(x1) || 0
-  $: _y1 = $yScale(y1) || 0
-  $: _x2 = $xScale(x2) || 0
-  $: _y2 = $yScale(y2) || 0
+  export let defaultX = 0
+  export let defaultY = 0
+  export let defaultWidth = 0
+  export let defaultHeight = 0
+
+  export let optionsX
+  optionsX = {
+    ...{
+      duration: 0,
+      delay: 0,
+      easing: backOut,
+    },
+    ...optionsX
+  }
+
+  export let optionsY
+  optionsY = {
+    ...{
+      duration: 0,
+      delay: 0,
+      easing: backOut,
+    },
+    ...optionsY
+  }
+
+  export let optionsWidth
+  optionsWidth = {
+    ...{
+      duration: 0,
+      delay: 0,
+      easing: backOut,
+    },
+    ...optionsWidth
+  }
+
+  export let optionsHeight
+  optionsHeight = {
+    ...{
+      duration: 0,
+      delay: 0,
+      easing: backOut,
+    },
+    ...optionsHeight
+  }
+
+  const _x = tweened(defaultX, optionsX)
+  const _y = tweened(defaultY, optionsY)
+  const _width = tweened(defaultWidth, optionsWidth)
+  const _height = tweened(defaultHeight, optionsHeight)
+
+  $: $_x = x
+  $: $_y = y
+  $: $_width = width
+  $: $_height = height
 </script>
 
-<slot
-  x={Math.min(_x1, _x2)}
-  y={Math.min(_y1, _y2)}
-  width={Math.abs(_x2 - _x1)}
-  height={Math.abs(_y2 - _y1)}
->
-  <rect
-    x={Math.min(_x1, _x2)}
-    y={Math.min(_y1, _y2)}
-    width={Math.abs(_x2 - _x1)}
-    height={Math.abs(_y2 - _y1)}
-  />
+<slot x={$_x} y={$_y} width={$_width} height={$_height}>
+  <rect x={$_x} y={$_y} width={$_width} height={$_height} />
 </slot>
 
 <style>
