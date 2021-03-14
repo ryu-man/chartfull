@@ -27,21 +27,13 @@
 </script>
 
 <Context value={{ xAccessor, yAccessor, xScale, yScale }}>
-  <Grafico
-    class="heat"
-    {width}
-    {height}
-    {padding}
-    {data}
-    {colorRange}
-    {style}
-  >
+  <Grafico class="heat" {width} {height} {padding} {data} {colorRange} {style}>
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} />
+      <XAxis scale={$xScale} accessor={$xAccessor} />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$yScale} />
+      <YAxis scale={$yScale} accessor={$yAccessor} />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -51,7 +43,7 @@
     <slot name="legend" slot="legend" />
 
     <slot name="title" slot="title" />
-    
+
     <g>
       {#each data as item, i}
         <slot
@@ -60,6 +52,10 @@
           xBandwidth={$xScale.bandwidth()}
           yBandwidth={$yScale.bandwidth()}
           color={$colorScale(colorAccessor(item))}
+          xScale={$xScale}
+          xAccessor={$xAccessor}
+          yScale={$yScale}
+          yAccessor={$yAccessor}
         >
           <rect
             x={$xScale($xAccessor(item))}
