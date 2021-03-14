@@ -11,7 +11,6 @@
   export let padding
   export let data = []
   export let groupBy
-  export let curve
   export let colorRange
 
   export let style = {}
@@ -55,8 +54,8 @@
     <slot name="title" slot="title" />
 
     {#await tick() then value}
-      {#each entries as [key, data]}
-        <g>
+      {#each entries as [key, data], index}
+        <g class={key}>
           {#each data as item}
             <slot
               {key}
@@ -64,14 +63,18 @@
               {item}
               {innerWidth}
               {innerHeight}
+              {index}
+              xScale={$xScale}
               xAccessor={$xAccessor}
+              yScale={$yScale}
               yAccessor={$yAccessor}
               bandwidth={$xScale?.bandwidth?.() ?? $yScale?.bandwidth?.()}
             >
               <Rect
-                x1={$xAccessor(item)}
-                x2={$xAccessor(item)}
-                y1={$yAccessor(item)}
+                x={$xScale($xAccessor(item))}
+                y={0}
+                width={$xScale($xAccessor(item)) + xScale.bandwidth()}
+                height={innerHeight - $yScale($yAccessor(item))}
                 let:x
                 let:y
                 let:width
@@ -88,4 +91,8 @@
 </Context>
 
 <style>
+  g :global(rect.hor) {
+    transform: rotateX(180deg);
+    transform-origin: center;
+  }
 </style>
