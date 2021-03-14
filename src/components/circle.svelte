@@ -1,34 +1,42 @@
 <script>
-  import { quadIn } from 'svelte/easing'
+  import { backOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
-  import { graficoContext } from '../context.svelte'
 
-  const { xScale, xAccessor, yScale, yAccessor } = graficoContext()
+  export let cx = 0
+  export let cy = 0
+  export let defaultCX = 0
+  export let defaultCY = 0
 
-  export let item = {}
-  export let duration = 0
-  export let delay = 0
-  export let easing = quadIn
-  export let interpolate
+  export let durationCX = 0
+  export let delayCX = 0
+  export let easingCX = backOut
+  export let interpolateCX
 
-  $: cx = tweened($xScale($xAccessor(item)), {
-    delay: delay,
-    duration,
-    easing,
-    interpolate
+  export let durationCY = 0
+  export let delayCY = 0
+  export let easingCY = backOut
+  export let interpolateCY
+
+  const _cx = tweened(defaultCX, {
+    duration: durationCX,
+    delay: delayCX,
+    easing: easingCX,
+    interpolate: interpolateCX
   })
-  $: cy = tweened(
-    $yScale($yAccessor(item), {
-      delay: delay,
-      duration,
-      easing,
-      interpolate
-    })
-  )
+
+  const _cy = tweened(defaultCY, {
+    duration: durationCY,
+    delay: delayCY,
+    easing: easingCY,
+    interpolate: interpolateCY
+  })
+
+  $: $_cx = cx
+  $: $_cy = cy
 </script>
 
-<slot cx={$cx} cy={$cy}>
-  <circle r={8} cx={$cx} cy={$cy} />
+<slot cx={$_cx} cy={$_cy}>
+  <circle r={8} cx={$_cx} cy={$_cy} />
 </slot>
 
 <style>
