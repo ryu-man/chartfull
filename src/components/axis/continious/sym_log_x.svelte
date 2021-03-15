@@ -1,6 +1,6 @@
 <script>
   import XAxis from '../x_axis.svelte'
-  import { scaleSymlog } from '../../../scales'
+  import { scaleSymlog } from 'd3-scale'
 
   const {
     innerWidth,

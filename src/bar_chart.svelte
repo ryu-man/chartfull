@@ -1,6 +1,6 @@
 <script>
   import { XAxis, YAxis, Grid, Rect } from './components'
-  import { scaleBand, scaleLinear } from './scales'
+  import { scaleBand, scaleLinear } from 'd3-scale'
   import Context, { graficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
   import { writable } from 'svelte/store'

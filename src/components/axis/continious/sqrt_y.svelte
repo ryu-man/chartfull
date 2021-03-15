@@ -1,6 +1,6 @@
 <script>
   import YAxis from '../y_axis.svelte'
-  import { scaleSqrt } from '../../../scales'
+  import { scaleSqrt } from 'd3-scale'
 
   const {
     innerWidth,
