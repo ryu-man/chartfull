@@ -54,16 +54,17 @@
     <slot name="title" slot="title" />
 
     {#await tick() then value}
-      {#each entries as [key, data], index}
+      {#each entries as [key, data], i}
         <g class={key}>
-          {#each data as item}
+          {#each data as item, j}
             <slot
               {key}
               {data}
               {item}
               {innerWidth}
               {innerHeight}
-              {index}
+              {i}
+              {j}
               xScale={$xScale}
               xAccessor={$xAccessor}
               yScale={$yScale}
