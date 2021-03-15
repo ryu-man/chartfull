@@ -30,13 +30,22 @@
 
   $: $zScale.domain(zDomain || extent(data, zAccessor)), ($zScale = $zScale)
 
-  $: $zScale.range(zRange || [0, $innerHeight * 0.1]),
-    ($zScale = $zScale)
+  $: $zScale.range(zRange || [0, $innerHeight * 0.1]), ($zScale = $zScale)
 
   $: $xScale.range([0, $innerWidth]), ($xScale = $xScale)
 </script>
 
-<Context value={{ xAccessor, yAccessor, xScale, yScale, zScale, innerWidth, innerHeight }}>
+<Context
+  value={{
+    xAccessor,
+    yAccessor,
+    xScale,
+    yScale,
+    zScale,
+    innerWidth,
+    innerHeight
+  }}
+>
   <Grafico
     class="bubble"
     {width}
@@ -67,16 +76,21 @@
     <slot name="title" slot="title" />
 
     <g>
-      {#each entries as [key, data]}
-        {#each data as item}
+      {#each entries as [key, data], i}
+        {#each data as item, j}
           <slot
             {key}
             {data}
+            {item}
+            {i}
+            {j}
             color={colorScale(key)}
             xScale={$xScale}
             xAccessor={$xAccessor}
             yScale={$yScale}
             yAccessor={$yAccessor}
+            zScale={$zScale}
+            {zAccessor}
           >
             <circle
               cx={$xScale($xAccessor(item))}
