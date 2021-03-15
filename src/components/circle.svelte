@@ -4,39 +4,39 @@
 
   export let cx = 0
   export let cy = 0
+  export let r = 8
+
   export let defaultCX = 0
   export let defaultCY = 0
+  export let defaultR = 0
 
-  export let durationCX = 0
-  export let delayCX = 0
-  export let easingCX = backOut
-  export let interpolateCX
+  export let optionsCX = {
+    duration: 0,
+    delay: 0,
+    easing: backOut
+  }
+  export let optionsCY = {
+    duration: 0,
+    delay: 0,
+    easing: backOut
+  }
+  export let optionsR = {
+    duration: 0,
+    delay: 0,
+    easing: backOut
+  }
 
-  export let durationCY = 0
-  export let delayCY = 0
-  export let easingCY = backOut
-  export let interpolateCY
-
-  const _cx = tweened(defaultCX, {
-    duration: durationCX,
-    delay: delayCX,
-    easing: easingCX,
-    interpolate: interpolateCX
-  })
-
-  const _cy = tweened(defaultCY, {
-    duration: durationCY,
-    delay: delayCY,
-    easing: easingCY,
-    interpolate: interpolateCY
-  })
+  const _cx = tweened(defaultCX, optionsCX)
+  const _cy = tweened(defaultCY, optionsCY)
+  const _r = tweened(defaultR, optionsR)
 
   $: $_cx = cx
   $: $_cy = cy
+  $: $_r = r
 </script>
 
-<slot cx={$_cx} cy={$_cy}>
-  <circle r={8} cx={$_cx} cy={$_cy} />
+<slot cx={$_cx} cy={$_cy} r={$_r}>
+  <circle r={$_r} cx={$_cx} cy={$_cy} />
 </slot>
 
 <style>
