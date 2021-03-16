@@ -29,7 +29,7 @@
     yScale = writable(scaleLinear()),
     data: _data = writable(data),
     entries = writable([]),
-    colorScale = writable([]),
+    colorScale = writable(scaleOrdinal()),
     width: _width = writable(width),
     height: _height = writable(height),
     innerWidth = writable(innerSize.innerWidth),
@@ -79,9 +79,7 @@
       $entries = Array.from(group(data, groupBy).entries())
     }
 
-    $colorScale = scaleOrdinal()
-      .domain($entries.map((e) => e[0]))
-      .range(colorRange)
+    $colorScale.domain($entries.map((e) => e[0])).range(colorRange)
 
     let resizeListener
     if (updateOnResize) {
