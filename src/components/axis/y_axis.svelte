@@ -28,55 +28,59 @@
   const {
     innerWidth,
     innerHeight,
-    yScale,
-    yAccessor,
-    yTicks,
+    yScales,
+    yTickValues,
     data,
     bins,
     defaultYDomain = (data, accessor, bins) => extent(data, accessor),
     defaultRange = (innerWidth, innerHeight) => [innerHeight, 0]
   } = graficoContext()
+  let {yAxisId} = graficoContext()
 
+  export let id = 'default'
   export let domain = defaultYDomain
   export let range = defaultRange
   export let scale
   export let tickValues = []
   export let position = 'left'
-  export let accessor = $yAccessor
-  $yAccessor = accessor
   let _class = ''
   export { _class as class }
 
+  const Scale = yScales[id]
+  yAxisId = id
+
   if (scale) {
-    $yScale = scale
-  } else if ($yScale) {
-    scale = $yScale
+    $Scale = scale
+  } else if ($Scale) {
+    scale = $Scale
   } else {
     scale = scaleLinear()
-    $yScale = scale
+    $Scale = scale
   }
 
-  let _range = typeof range !== 'function' ? () => range : range
-  let _domain = typeof domain !== 'function' ? () => domain : domain
-  let _tickValues =
+  let Range = typeof range !== 'function' ? () => range : range
+  let Domain = typeof domain !== 'function' ? () => domain : domain
+  let TickValues =
     typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
 
-  $: $yScale.range(_range($innerWidth, $innerHeight))
-  $: $yScale.domain(_domain($data, $yAccessor, $bins))
+  $yTickValues = TickValues
+
+  $: $Scale.range(Range($innerWidth, $innerHeight))
+  $: $Scale.domain(Domain($data, $bins))
 </script>
 
-<Axis class={_class + ' y'} {position}>
+<Axis class={_class + ' y'} {position} {id}>
   {#await Tick() then value}
-    {#each _tickValues($yScale) as tick, index (+tick || tick)}
+    {#each TickValues($Scale) as tick, index (+tick || tick)}
       <slot
         {index}
         {tick}
-        y={($yScale(tick) * 100) / $innerHeight}
+        y={($Scale(tick) * 100) / $innerHeight}
         x={0}
         {tickPosition}
       >
         <span
-          use:tickPosition={{ y: ($yScale(tick) * 100) / $innerHeight, x: 0 }}
+          use:tickPosition={{ y: ($Scale(tick) * 100) / $innerHeight, x: 0 }}
           class="tick">{tick}</span
         >
       </slot>
