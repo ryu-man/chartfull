@@ -2,18 +2,21 @@
   import { graficoContext } from '../context.svelte'
 
   const {
-    xScale,
-    yScale,
-    height,
+    xScales,
+    yScales,
     innerWidth,
     innerHeight,
-    xTicks,
-    yTicks
+    xTickValues,
+    yTickValues,
+    xAxisId: xAxisID,
+    yAxisId: yAxisID
   } = graficoContext()
 
-  function tickValues(scale, ticks) {
-    return scale?.ticks?.(ticks) ?? scale.domain()
-  }
+  export let xAxisId = xAxisID
+  export let yAxisId = yAxisID
+
+  const xScale = xScales[xAxisId]
+  const yScale = yScales[yAxisId]
 </script>
 
 <g class="grafico-grid">
@@ -21,7 +24,7 @@
     class="vertical"
     transform="translate({($xScale?.bandwidth?.() ?? 0) / 2},0)"
   >
-    {#each tickValues($xScale, $xTicks) as tick, i (+tick || tick)}
+    {#each $xTickValues($xScale) as tick, i (+tick || tick)}
       <slot
         name="vertical"
         x1={$xScale(tick)}
@@ -44,7 +47,7 @@
     class="horizontal"
     transform="translate(0, {($yScale?.bandwidth?.() ?? 0) / 2})"
   >
-    {#each tickValues($yScale, $yTicks) as tick, i (+tick || tick)}
+    {#each $yTickValues($yScale) as tick, i (+tick || tick)}
       <slot
         name="horizontal"
         x1={0}
