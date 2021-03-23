@@ -1,6 +1,5 @@
 <script>
   import { tweened } from 'svelte/motion'
-  import { backOut } from 'svelte/easing'
 
   export let x = 0
   export let y = 0
@@ -16,8 +15,7 @@
   optionsX = {
     ...{
       duration: 0,
-      delay: 0,
-      easing: backOut,
+      delay: 0
     },
     ...optionsX
   }
@@ -26,8 +24,7 @@
   optionsY = {
     ...{
       duration: 0,
-      delay: 0,
-      easing: backOut,
+      delay: 0
     },
     ...optionsY
   }
@@ -36,8 +33,7 @@
   optionsWidth = {
     ...{
       duration: 0,
-      delay: 0,
-      easing: backOut,
+      delay: 0
     },
     ...optionsWidth
   }
@@ -46,8 +42,7 @@
   optionsHeight = {
     ...{
       duration: 0,
-      delay: 0,
-      easing: backOut,
+      delay: 0
     },
     ...optionsHeight
   }
