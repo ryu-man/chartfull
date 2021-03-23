@@ -1,13 +1,18 @@
 <script>
   import { stack as Stack } from 'd3-shape'
-  export let data
+
+  export let data = []
   export let keys = []
   export let offset
   export let order
-  export let value = []
-  const stack = Stack().keys(keys).offset(offset).order(order).value(value)
+  export let value
 
-  $: _ = stack(data)
+  const stack = Stack()
+
+  $: stack.keys(keys)
+  $: offset && stack.offset(offset)
+  $: order && stack.order(order)
+  $: value && stack.value(value)
 </script>
 
-<slot data={_} />
+<slot data={stack(data)} />
