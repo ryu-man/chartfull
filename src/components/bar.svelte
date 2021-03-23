@@ -6,7 +6,6 @@
     yScales,
     xAccessors,
     yAccessors,
-    colorScale
   } = graficoContext()
 
   export let xAxisId = 'default'
@@ -16,8 +15,6 @@
 
   xAccessors[xAxisId] = x
   yAccessors[yAxisId] = y
-
-  colorScale.domain([...colorScale.domain(), id])
 
   const xScale = xScales[xAxisId]
   const yScale = yScales[yAxisId]
