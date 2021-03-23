@@ -1,10 +1,9 @@
 <script>
-  import { backOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
 
   export let cx = 0
   export let cy = 0
-  export let r = 8
+  export let r = 0
 
   export let defaultCX = 0
   export let defaultCY = 0
@@ -12,18 +11,15 @@
 
   export let optionsCX = {
     duration: 0,
-    delay: 0,
-    easing: backOut
+    delay: 0
   }
   export let optionsCY = {
     duration: 0,
-    delay: 0,
-    easing: backOut
+    delay: 0
   }
   export let optionsR = {
     duration: 0,
-    delay: 0,
-    easing: backOut
+    delay: 0
   }
 
   const _cx = tweened(defaultCX, optionsCX)
@@ -35,9 +31,7 @@
   $: $_r = r
 </script>
 
-<slot cx={$_cx} cy={$_cy} r={$_r}>
-  <circle r={$_r} cx={$_cx} cy={$_cy} />
-</slot>
+<slot cx={$_cx} cy={$_cy} r={$_r} />
 
 <style>
   circle {
