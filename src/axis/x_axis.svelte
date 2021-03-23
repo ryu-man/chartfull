@@ -50,9 +50,9 @@
     $Scale = scale
   }
 
-  $: scale.range(range)
-  $: scale.domain(Domain(scale, domain))
-  $: $xTickValues = TickValues(tickValues, scale)
+  $: $Scale.range(range)
+  $: $Scale.domain(Domain($Scale, domain))
+  $: $xTickValues = TickValues(tickValues, $Scale)
 
   function Domain(scale, domain) {
     return typeof domain === 'function' ? domain(scale) : domain || []

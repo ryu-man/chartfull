@@ -42,8 +42,8 @@
   let _class = ''
   export { _class as class }
 
-  const Scale = yScales[id]
   yAxisId = id
+  const Scale = yScales[id]
 
   if (scale) {
     $Scale = scale
@@ -54,9 +54,9 @@
     $Scale = scale
   }
 
-  $: scale.range(range)
-  $: scale.domain(Domain(scale, domain))
-  $: $yTickValues = TickValues(tickValues, scale)
+  $: $Scale.range(range)
+  $: $Scale.domain(Domain($Scale, domain))
+  $: $yTickValues = TickValues(tickValues, $Scale)
 
   function Domain(scale, domain) {
     return typeof domain === 'function' ? domain(scale) : domain || []
