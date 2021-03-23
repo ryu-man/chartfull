@@ -7,7 +7,6 @@
     yScales,
     xAccessors,
     yAccessors,
-    innerHeight
   } = graficoContext()
 
   export let xAxisId = 'default'
@@ -17,7 +16,7 @@
   const xScale = xScales[xAxisId]
   const yScale = yScales[yAxisId]
   export let x = xAccessors[xAxisId]
-  export let y0 = $innerHeight
+  export let y0 = 0
   export let y1 = yAccessors[yAxisId]
 
   xAccessors[xAxisId] = x
