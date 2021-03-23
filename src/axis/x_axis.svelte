@@ -22,24 +22,19 @@
   import { graficoContext } from '../../context.svelte'
   import { tick as Tick } from 'svelte'
   import { scaleLinear } from 'd3-scale'
-  import { extent } from 'd3-array'
   import Axis from './axis.svelte'
 
   const {
-    innerWidth,
-    innerHeight,
+    innerWidthStore,
     xScales,
-    xTickValues,
-    data,
-    bins,
-    defaultXDomain = (data, accessor, bins) => extent(data, accessor),
-    defaultRange = (innerWidth, innerHeight) => [0, innerWidth]
+    xTickValues
   } = graficoContext()
   let { xAxisId } = graficoContext()
 
   export let id = 'default'
-  export let domain = defaultXDomain
-  export let range = defaultRange
+  export let domain = [0, 1]
+  export let range = [0, 1]
+
   export let scale
   export let tickValues
   export let position = 'bottom'
@@ -58,29 +53,35 @@
     $Scale = scale
   }
 
-  let Range = typeof range !== 'function' ? () => range : range
-  let Domain = typeof domain !== 'function' ? () => domain : domain
-  let TickValues =
-    typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
+  $: scale.range(range)
+  $: scale.domain(Domain(scale, domain))
+  $: $xTickValues = TickValues(tickValues, scale)
 
-  $xTickValues = TickValues
-
-  $: $Scale = $Scale.range(Range($innerWidth, $innerHeight))
-  $: $Scale = $Scale.domain(Domain($data, $bins))
+  function Domain(scale, domain) {
+    return typeof domain === 'function' ? domain(scale) : domain || []
+  }
+  function TickValues(tickValues, scale) {
+    return typeof tickValues === 'function'
+      ? tickValues(scale)
+      : tickValues || []
+  }
 </script>
 
 <Axis class={_class + ' x'} {position} {id}>
   {#await Tick() then value}
-    {#each TickValues($Scale) as tick, index (+tick || tick)}
+    {#each $xTickValues as tick, index (+tick || tick)}
       <slot
         {index}
         {tick}
-        x={($Scale(tick) * 100) / $innerWidth}
+        x={(scale(tick) * 100) / $innerWidthStore}
         y={0}
         {tickPosition}
       >
         <span
-          use:tickPosition={{ x: ($Scale(tick) * 100) / $innerWidth, y: 0 }}
+          use:tickPosition={{
+            x: (scale(tick) * 100) / $innerWidthStore,
+            y: 0
+          }}
           class="tick">{tick}</span
         >
       </slot>

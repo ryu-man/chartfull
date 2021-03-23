@@ -1,6 +1,7 @@
 <script>
   import { classNames } from '../../utils'
 
+  export let id = {}
   export let position
   let _class
   export { _class as class }
@@ -66,12 +67,14 @@
     width: inherit;
     height: inherit;
   }
-  .x.axis :global(.label) {
+  .axis :global(.label){
     position: absolute;
+    white-space: nowrap;
+  }
+  .x.axis :global(.label) {
     right: 0;
   }
   .y.axis :global(.label) {
-    position: absolute;
     left: 0;
     bottom: 101%;
   }

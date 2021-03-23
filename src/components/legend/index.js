@@ -1,1 +1,0 @@
-export {default as LegendItem} from './legend_item.svelte'

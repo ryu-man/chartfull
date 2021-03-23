@@ -22,26 +22,22 @@
   import { graficoContext } from '../../context.svelte'
   import { tick as Tick } from 'svelte'
   import { scaleLinear } from 'd3-scale'
-  import { extent } from 'd3-array'
   import Axis from './axis.svelte'
+  import { storeScale } from '../../scale/store_scale'
 
   const {
-    innerWidth,
-    innerHeight,
+    innerWidthStore,
+    innerHeightStore,
     yScales,
-    yTickValues,
-    data,
-    bins,
-    defaultYDomain = (data, accessor, bins) => extent(data, accessor),
-    defaultRange = (innerWidth, innerHeight) => [innerHeight, 0]
+    yTickValues
   } = graficoContext()
-  let {yAxisId} = graficoContext()
+  let { yAxisId } = graficoContext()
 
   export let id = 'default'
-  export let domain = defaultYDomain
-  export let range = defaultRange
+  export let domain = [0, 1]
+  export let range = [1, 0]
   export let scale
-  export let tickValues = []
+  export let tickValues
   export let position = 'left'
   let _class = ''
   export { _class as class }
@@ -54,33 +50,39 @@
   } else if ($Scale) {
     scale = $Scale
   } else {
-    scale = scaleLinear()
+    scale = storeScale(scaleLinear())
     $Scale = scale
   }
 
-  let Range = typeof range !== 'function' ? () => range : range
-  let Domain = typeof domain !== 'function' ? () => domain : domain
-  let TickValues =
-    typeof tickValues !== 'function' ? () => tickValues || [] : tickValues
+  $: scale.range(range)
+  $: scale.domain(Domain(scale, domain))
+  $: $yTickValues = TickValues(tickValues, scale)
 
-  $yTickValues = TickValues
-
-  $: $Scale.range(Range($innerWidth, $innerHeight))
-  $: $Scale.domain(Domain($data, $bins))
+  function Domain(scale, domain) {
+    return typeof domain === 'function' ? domain(scale) : domain || []
+  }
+  function TickValues(tickValues, scale) {
+    return typeof tickValues === 'function'
+      ? tickValues(scale)
+      : tickValues || []
+  }
 </script>
 
 <Axis class={_class + ' y'} {position} {id}>
   {#await Tick() then value}
-    {#each TickValues($Scale) as tick, index (+tick || tick)}
+    {#each $yTickValues as tick, index (+tick || tick)}
       <slot
         {index}
         {tick}
-        y={($Scale(tick) * 100) / $innerHeight}
+        y={(scale(tick) * 100) / $innerHeightStore}
         x={0}
         {tickPosition}
       >
         <span
-          use:tickPosition={{ y: ($Scale(tick) * 100) / $innerHeight, x: 0 }}
+          use:tickPosition={{
+            y: (scale(tick) * 100) / $innerHeightStore,
+            x: 0
+          }}
           class="tick">{tick}</span
         >
       </slot>
