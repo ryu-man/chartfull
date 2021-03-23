@@ -1,35 +1,16 @@
 <script>
-  import { css } from '../utils'
-  import { graficoContext } from '../context.svelte'
+  import { bin as Bin } from 'd3-array'
 
-  export let item
-  export let style = {}
+  export let data = []
+  export let domain = []
+  export let value
+  export let thresholds
 
-  const {
-    xScale,
-    xAccessor,
-    yScale,
-    yAccessor,
-    innerHeight
-  } = graficoContext()
+  const bin = Bin()
 
-  let x = 0
-  let y = 0
-  let width = 0
-  let height = 0
-
-  $: x = $xScale(xAccessor(item))
-  $: y = $yScale(yAccessor(item))
-  $: width = $xScale.bandwidth()
-  $: height = $innerHeight - $yScale(yAccessor(item))
+  $: domain && bin.domain(domain)
+  $: value && bin.value(value)
+  $: thresholds && bin.thresholds(thresholds)
 </script>
 
-<rect use:css={style} {x} {y} {width} {height} />
-
-<style>
-  rect {
-    fill: #000;
-    fill-opacity: 0.7;
-    vector-effect: non-scaling-stroke;
-  }
-</style>
+<slot data={bin(data)} />
