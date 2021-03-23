@@ -1,64 +1,55 @@
 <script>
-  import { graficoContext } from '../../../context.svelte'
-  import { scaleIdentity } from '../../../scales'
   import YAxis from '../y_axis.svelte'
-  import YTick from '../y_tick.svelte'
+  import { scaleLinear } from 'd3-scale'
+  import { max } from 'd3-array'
+  import Declare from '../../declare.svelte'
+  import Continious from './continious.svelte'
 
-  const {
-    innerWidth,
-    innerHeight,
-    yScale,
-    yAccessor,
-    yTicks,
-    data,
-    bins,
-    defaultXDomain = (data, accessor, bins) => extent(data, accessor),
-    defaultRange = (innerWidth, innerHeight) => [0, innerWidth]
-  } = graficoContext()
-
-  export let invert
-  export let domain = defaultXDomain($data, $yAccessor, $bins)
-  export let range = defaultRange($innerWidth, $innerHeight)
+  export let id = 'default'
+  export let domain = [0, 1]
+  export let range = [0, 1]
+  export let rangeRound
+  export let clamp = false
   export let unknown
+  export let interpolate
   export let ticks
   export let tickFormat
-  export let nice
-
-  /* export let tickArguments
-  export let tickValues
-  export let tickFormat
-  export let tickSize
-  export let tickSizeInner
-  export let tickSizeOuter
-  export let tickPadding */
+  export let tickValues = (scale) => scale.ticks()
+  export let nice = false
 
   let _class
   export { _class as class }
-  export let accessor = $yAccessor
-  $yAccessor = accessor
-  export let scale = scaleIdentity()
+  export let scale = scaleLinear()
   export let position = 'bottom'
-
-  nice && scale.nice(ticks)
-  scale.unknown(unknown)
-  invert = scale.invert
-  let formatter = scale.tickFormat(ticks, tickFormat)
-
-  $: $yTicks = ticks
-  $: $yScale.range(range?.($innerWidth, $innerHeight) ?? range)
-  $: $yScale.domain(domain?.($data, $yAccessor) ?? domain)
 </script>
 
-<YAxis class={_class} {accessor} {position} let:index let:tick>
-  <slot coord={(scale(tick) * 100) / $innerHeight} {tick} {index} {formatter}>
-    <YTick
-      y={(scale(tick) * 100) / $innerHeight}
-      {tick}
-      {formatter}
-      inParams={{ duration: 100 * index, x: 0, y: 36 }}
-      outParams={{ duration: 50 * index, x: 0, y: 36 }}
-    />
-  </slot>
+<Continious {scale} {nice} {unknown} {clamp} {interpolate} {rangeRound}>
+  <YAxis
+    class={_class}
+    {id}
+    {scale}
+    {domain}
+    {range}
+    {position}
+    {tickValues}
+    let:index
+    let:tick
+    let:x
+    let:y
+    let:tickPosition
+  >
+    <Declare value={scale.tickFormat(ticks, tickFormat)} let:value={format}>
+      <slot {tick} {index} {x} {y} {tickPosition} {format}>
+        <span
+          use:tickPosition={{
+            y: (scale(tick) * 100) / max(range || rangeRound),
+            x: 0
+          }}
+          class="tick">{format(tick)}</span
+        >
+      </slot>
+    </Declare>
 
-  <slot name="label" slot="label" />
-</YAxis>
+    <slot name="label" slot="label" />
+  </YAxis>
+</Continious>

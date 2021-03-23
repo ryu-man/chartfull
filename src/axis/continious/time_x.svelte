@@ -2,7 +2,10 @@
   import XAxis from '../x_axis.svelte'
   import { scaleTime } from 'd3-scale'
   import { max } from 'd3-array'
+  import { Declare } from '../../components'
+  import Continious from './continious.svelte'
 
+  export let id = 'default'
   export let domain = [0, 1]
   export let range = [0, 1]
   export let rangeRound
@@ -18,36 +21,35 @@
   export { _class as class }
   export let scale = scaleTime()
   export let position = 'bottom'
-
-  nice && scale.nice(ticks)
-  unknown && scale.unknown(unknown)
-  clamp && scale.clamp(clamp)
-  interpolate && scale.interpolate(interpolate)
-
-  let formatter = scale.tickFormat(ticks, tickFormat)
-
-  $: rangeRound && scale.rangeRound(rangeRound)
 </script>
 
-<XAxis
-  class={_class}
-  {scale}
-  {domain}
-  {range}
-  {position}
-  {tickValues}
-  let:index
-  let:tick
-  let:x
-  let:y
-  let:tickPosition
->
-  <slot {tick} {index} {x} {y} {tickPosition} {formatter}>
-    <span
-      use:tickPosition={{ x: (scale(tick) * 100) / max(range), y: 0 }}
-      class="tick">{formatter(tick)}</span
-    >
-  </slot>
+<Continious {scale} {nice} {unknown} {clamp} {interpolate} {rangeRound}>
+  <XAxis
+    class={_class}
+    {id}
+    {scale}
+    {domain}
+    {range}
+    {position}
+    {tickValues}
+    let:index
+    let:tick
+    let:x
+    let:y
+    let:tickPosition
+  >
+    <Declare value={scale.tickFormat(ticks, tickFormat)} let:value={format}>
+      <slot {tick} {index} {x} {y} {tickPosition} {format}>
+        <span
+          use:tickPosition={{
+            x: (scale(tick) * 100) / max(range || rangeRound),
+            y: 0
+          }}
+          class="tick">{format(tick)}</span
+        >
+      </slot>
+    </Declare>
 
-  <slot name="label" slot="label" />
-</XAxis>
+    <slot name="label" slot="label" />
+  </XAxis>
+</Continious>

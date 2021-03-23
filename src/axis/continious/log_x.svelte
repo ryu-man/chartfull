@@ -1,74 +1,55 @@
 <script>
   import XAxis from '../x_axis.svelte'
   import { scaleLog } from 'd3-scale'
+  import { max } from 'd3-array'
+  import { Declare } from '../../components'
+  import Continious from './continious.svelte'
 
-  const {
-    innerWidth,
-    innerHeight,
-    xScale,
-    xAccessor,
-    xTicks,
-    defaultXDomain = (data, accessor, bins) => extent(data, accessor),
-    defaultRange = (innerWidth, innerHeight) => [0, innerWidth]
-  } = graficoContext()
-
-  export let invert
-  export let domain = defaultXDomain
-  export let range = defaultRange
+  export let id = 'default'
+  export let domain = [0, 1]
+  export let range = [0, 1]
   export let rangeRound
   export let clamp = false
   export let unknown
   export let interpolate
   export let ticks
   export let tickFormat
-  export let tickValues
+  export let tickValues = (scale) => scale.ticks()
   export let nice = false
 
   let _class
   export { _class as class }
   export let scale = scaleLog()
   export let position = 'bottom'
-  export let accessor = $xAccessor
-
-  nice && scale.nice(ticks)
-  scale.unknown(unknown)
-  scale.clamp(clamp)
-  scale.interpolate(interpolate)
-  invert = scale.invert
-
-  let formatter = scale.tickFormat(ticks, tickFormat)
-
-  $: _rangeRound =
-    typeof rangeRound !== 'function' ? () => rangeRound : rangeRound
-  $: _tickValues =
-    typeof tickValues !== 'function'
-      ? (scale) => tickValues || scale.ticks(ticks)
-      : tickValues
-
-  $: $xTicks = ticks
-  $: rangeRound && $xScale.rangeRound(_rangeRound($innerWidth, $innerHeight))
 </script>
 
-<XAxis
-  class={_class}
-  {scale}
-  {accessor}
-  {domain}
-  {range}
-  {position}
-  tickValues={_tickValues}
-  let:index
-  let:tick
-  let:x
-  let:y
-  let:tickPosition
->
-  <slot {tick} {index} {x} {y} {tickPosition} {formatter}>
-    <span
-      use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
-      class="tick">{formatter(tick)}</span
-    >
-  </slot>
+<Continious {scale} {nice} {unknown} {clamp} {interpolate} {rangeRound}>
+  <XAxis
+    class={_class}
+    {id}
+    {scale}
+    {domain}
+    {range}
+    {position}
+    {tickValues}
+    let:index
+    let:tick
+    let:x
+    let:y
+    let:tickPosition
+  >
+    <Declare value={scale.tickFormat(ticks, tickFormat)} let:value={format}>
+      <slot {tick} {index} {x} {y} {tickPosition} {format}>
+        <span
+          use:tickPosition={{
+            x: (scale(tick) * 100) / max(range || rangeRound),
+            y: 0
+          }}
+          class="tick">{format(tick)}</span
+        >
+      </slot>
+    </Declare>
 
-  <slot name="label" slot="label" />
-</XAxis>
+    <slot name="label" slot="label" />
+  </XAxis>
+</Continious>

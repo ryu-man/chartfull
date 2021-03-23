@@ -1,10 +1,9 @@
 <script>
   import XAxis from '../x_axis.svelte'
-  import { scaleBand } from 'd3-scale'
-  import { graficoContext } from '../../../context.svelte'
+  import { scalePoint } from 'd3-scale'
+  import { max } from 'd3-array'
 
-  const { innerWidthStore, innerHeightStore } = graficoContext()
-
+  export let id = 'default'
   export let domain = [0, 1]
   export let range = [0, 1]
   export let rangeRound
@@ -18,7 +17,7 @@
   let _class
   export { _class as class }
   export let position
-  let scale = scaleBand()
+  let scale = scalePoint()
 
   round && scale.round(round)
   padding && scale.padding(padding)
@@ -26,14 +25,13 @@
   paddingOuter && scale.paddingOuter(paddingOuter)
   align && scale.align(align)
 
-  let formatter = (d) => d
-  
-  $: rangeRound &&
-    scale.rangeRound(rangeRound)
+  $: rangeRound && scale.rangeRound(rangeRound)
+  $: maxRange = max(range || rangeRound)
 </script>
 
 <XAxis
   class={_class}
+  {id}
   {scale}
   {domain}
   {range}
@@ -45,10 +43,19 @@
   let:y
   let:tickPosition
 >
-  <slot {tick} {index} {x} {y} {tickPosition} bandmid={((scale?.bandwidth?.() ?? 0) * 100) / $innerWidthStore / 2}>
+  <slot
+    {tick}
+    {index}
+    {x}
+    {y}
+    {tickPosition}
+    bandmid={((scale.bandwidth() ?? 0) * 100) / maxRange / 2}
+  >
     <span
       use:tickPosition={{
-        x: (scale(tick) * 100) / $innerWidthStore + (((scale?.bandwidth?.() ?? 0) * 100) / $innerWidthStore / 2),
+        x:
+          (scale(tick) * 100) / maxRange +
+          ((scale.bandwidth() ?? 0) * 100) / maxRange / 2,
         y: 0
       }}
       class="tick">{tick}</span

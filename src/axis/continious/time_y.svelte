@@ -1,57 +1,55 @@
 <script>
   import YAxis from '../y_axis.svelte'
   import { scaleTime } from 'd3-scale'
-  import { graficoContext } from '../../../context.svelte'
+  import { max } from 'd3-array'
+  import { Declare } from '../../components'
+  import Continious from './continious.svelte'
 
-  const { innerHeight } = graficoContext()
-
-  export let invert
-  export let domain
-  export let range
+  export let id = 'default'
+  export let domain = [0, 1]
+  export let range = [0, 1]
   export let rangeRound
   export let clamp = false
   export let unknown
   export let interpolate
   export let ticks
   export let tickFormat
-  export let tickValues
+  export let tickValues = (scale) => scale.ticks()
   export let nice = false
 
   let _class
   export { _class as class }
   export let scale = scaleTime()
   export let position = 'bottom'
-
-  nice && $scale.nice(ticks)
-  unknown && $scale.unknown(unknown)
-  clamp && $scale.clamp(clamp)
-  interpolate && $scale.interpolate(interpolate)
-  invert = $scale.invert
-
-  let formatter = $scale.tickFormat(ticks, tickFormat)
-
-  $: rangeRound && $scale.rangeRound(rangeRound)
 </script>
 
-<YAxis
-  class={_class}
-  {scale}
-  {domain}
-  {range}
-  {tickValues}
-  {position}
-  let:index
-  let:tick
-  let:x
-  let:y
-  let:tickPosition
->
-  <slot {tick} {index} {x} {y} {tickPosition} {formatter}>
-    <span
-      use:tickPosition={{ y: (scale(tick) * 100) / $innerHeight, x: 0 }}
-      class="tick">{formatter(tick)}</span
-    >
-  </slot>
+<Continious {scale} {nice} {unknown} {clamp} {interpolate} {rangeRound}>
+  <YAxis
+    class={_class}
+    {id}
+    {scale}
+    {domain}
+    {range}
+    {position}
+    {tickValues}
+    let:index
+    let:tick
+    let:x
+    let:y
+    let:tickPosition
+  >
+    <Declare value={scale.tickFormat(ticks, tickFormat)} let:value={format}>
+      <slot {tick} {index} {x} {y} {tickPosition} {format}>
+        <span
+          use:tickPosition={{
+            y: (scale(tick) * 100) / max(range || rangeRound),
+            x: 0
+          }}
+          class="tick">{format(tick)}</span
+        >
+      </slot>
+    </Declare>
 
-  <slot name="label" slot="label" />
-</YAxis>
+    <slot name="label" slot="label" />
+  </YAxis>
+</Continious>

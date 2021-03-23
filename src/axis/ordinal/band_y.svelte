@@ -1,10 +1,9 @@
 <script>
   import YAxis from '../y_axis.svelte'
   import { scaleBand } from 'd3-scale'
-  import { graficoContext } from '../../../context.svelte'
+  import { max } from 'd3-array'
 
-  const { innerWidthStore, innerHeightStore } = graficoContext()
-
+  export let id = 'default'
   export let domain = [0, 1]
   export let range = [1, 0]
   export let rangeRound
@@ -31,12 +30,13 @@
   step = scale.step()
   bandwidth = scale.bandwidth()
 
-  $: rangeRound &&
-    scale.rangeRound(rangeRound)
+  $: rangeRound && scale.rangeRound(rangeRound)
+  $: maxRange = max(range || rangeRound)
 </script>
 
 <YAxis
   class={_class}
+  {id}
   {scale}
   {domain}
   {range}
@@ -54,13 +54,13 @@
     {x}
     {y}
     {tickPosition}
-    bandmid={((scale?.bandwidth?.() ?? 0) * 100) / $innerHeightStore / 2}
+    bandmid={((scale?.bandwidth?.() ?? 0) * 100) / maxRange / 2}
   >
     <span
       use:tickPosition={{
         y:
-          (scale(tick) * 100) / $innerHeightStore +
-          ((scale?.bandwidth?.() ?? 0) * 100) / $innerHeightStore / 2,
+          (scale(tick) * 100) / maxRange +
+          ((scale?.bandwidth?.() ?? 0) * 100) / maxRange / 2,
         x: 0
       }}
       class="tick">{tick}</span

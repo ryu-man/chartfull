@@ -19,11 +19,11 @@
 </script>
 
 <script>
-  import { graficoContext } from '../../context.svelte'
+  import { graficoContext } from '../context.svelte'
   import { tick as Tick } from 'svelte'
   import { scaleLinear } from 'd3-scale'
   import Axis from './axis.svelte'
-  import { storeScale } from '../../scale/store_scale'
+  import { storeScale } from '../scale/store_scale'
 
   const {
     innerWidthStore,

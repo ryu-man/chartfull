@@ -1,62 +1,42 @@
 <script>
   import XAxis from '../x_axis.svelte'
   import { scalePoint } from 'd3-scale'
-  import { graficoContext } from '../../../context.svelte'
+  import { max } from 'd3-array'
 
-  const {
-    innerWidth,
-    innerHeight,
-    xScale,
-    xAccessor,
-    xTicks,
-    data,
-    bins,
-    defaultXDomain = (data, accessor, bins) => data.map(accessor),
-    defaultRange = (innerWidth, innerHeight) => [0, innerWidth]
-  } = graficoContext()
-
-  export let domain = defaultXDomain
-  export let range = defaultRange
+  export let id = 'default'
+  export let domain = [0, 1]
+  export let range = [0, 1]
+  export let rangeRound
   export let round = false
   export let padding
   export let paddingInner
   export let paddingOuter
   export let align
-  export let step
-  export let bandwidth
-  export let tickValues
+  export let tickValues = (scale) => scale.domain()
 
   let _class
   export { _class as class }
   export let position
   let scale = scalePoint()
-  export let accessor = $xAccessor
-  // $xAccessor = accessor
 
   round && scale.round(round)
   padding && scale.padding(padding)
-  paddingInner && scale.padding(paddingInner)
-  paddingOuter && scale.padding(paddingOuter)
+  paddingInner && scale.paddingInner(paddingInner)
+  paddingOuter && scale.paddingOuter(paddingOuter)
   align && scale.align(align)
-  step = scale.step()
-  bandwidth = scale.bandwidth()
 
-  let _tickValues =
-    typeof tickValues !== 'function'
-      ? (scale) => tickValues || scale.domain()
-      : tickValues
-  let formatter = (d) => d
-
+  $: rangeRound && scale.rangeRound(rangeRound)
+  $: maxRange = max(range || rangeRound)
 </script>
 
 <XAxis
   class={_class}
+  {id}
   {scale}
-  {accessor}
   {domain}
   {range}
   {position}
-  tickValues={_tickValues}
+  {tickValues}
   let:index
   let:tick
   let:x
@@ -65,7 +45,7 @@
 >
   <slot {tick} {index} {x} {y} {tickPosition}>
     <span
-      use:tickPosition={{ x: (scale(tick) * 100) / $innerWidth, y: 0 }}
+      use:tickPosition={{ x: (scale(tick) * 100) / maxRange, y: 0 }}
       class="tick">{tick}</span
     >
   </slot>
