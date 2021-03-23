@@ -1,7 +1,9 @@
 <script>
   import { writable } from 'svelte/store'
-  import { scaleLinear } from 'd3-scale'
-  import { XAxis, YAxis, Grid, Line } from './components'
+  import { scaleLinear, scaleOrdinal } from 'd3-scale'
+  import { schemeCategory10 } from 'd3-scale-chromatic'
+  import { XAxis, YAxis } from './axis'
+  import { Grid } from './components'
   import Context, { graficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
@@ -9,35 +11,42 @@
   export let height = 400
   export let padding
   export let data = []
-  export let groupBy = () => ''
+  export let colorScale = scaleOrdinal().range(schemeCategory10)
   export let style = {}
 
   const {
-    xAccessor = writable((d) => d.x),
-    yAccessor = writable((d) => d.y),
-    xScale = writable(scaleLinear()),
-    yScale = writable(scaleLinear())
+    xAccessors = {
+      default: (d) => d.x
+    },
+    yAccessors = {
+      default: (d) => d.y
+    },
+    xScales = {
+      default: writable(scaleLinear())
+    },
+    yScales = {
+      default: writable(scaleLinear())
+    }
   } = graficoContext()
 </script>
 
-<Context value={{ xAccessor, yAccessor, xScale, yScale }}>
+<Context value={{ xAccessors, yAccessors, xScales, yScales, colorScale }}>
   <Grafico
     class="scatter"
     {width}
     {height}
     {padding}
     {data}
-    {groupBy}
     {style}
-    let:entries
-    let:colorScale
+    let:innerWidth
+    let:innerHeight
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} accessor={$xAccessor} />
+      <XAxis />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$yScale} accessor={$yAccessor} />
+      <YAxis />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -49,31 +58,15 @@
     <slot name="title" slot="title" />
 
     <g>
-      {#each entries as [key, data]}
-        <g>
-          <slot name="line" />
-          {#each data as item, i}
-            <slot
-              {key}
-              {data}
-              {item}
-              index={i}
-              color={colorScale(key)}
-              xScale={$xScale}
-              xAccessor={$xAccessor}
-              yScale={$yScale}
-              yAccessor={$yAccessor}
-            >
-              <circle
-                cx={$xScale($xAccessor(item))}
-                cy={$yScale($yAccessor(item))}
-                r={4}
-                fill={colorScale(key)}
-              />
-            </slot>
-          {/each}
-        </g>
-      {/each}
+      <slot
+        {data}
+        {innerWidth}
+        {innerHeight}
+        {xScales}
+        {xAccessors}
+        {yScales}
+        {yAccessors}
+      />
     </g>
   </Grafico>
 </Context>

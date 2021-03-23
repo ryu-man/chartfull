@@ -1,5 +1,6 @@
 <script>
-  import { XAxis, YAxis, Grid, Line, Circle } from './components'
+  import { XAxis, YAxis } from './axis'
+  import { Grid, Line, Circle  } from './components'
   import Grafico from './chartist.svelte'
 
   export let width = 600

@@ -1,70 +1,55 @@
 <script>
-  import { scaleLinear } from 'd3-scale'
-  import { extent } from 'd3-array'
-  import { XAxis, YAxis, Grid } from './components'
+  import { XAxis, YAxis } from './axis'
+  import { Grid } from './components'
   import Grafico from './grafico.svelte'
-  import Context, { graficoContext, key } from './context.svelte'
-  import { writable } from 'svelte/store'
+  import Context, { graficoContext } from './context.svelte'
 
   export let width
   export let height
   export let padding
-  export let groupBy
-  export let colorRange
-  export let style = {}
   export let data = []
+  export let style = {}
 
-  export let zAccessor = () => ''
-  export let zDomain
-  export let zRange
+  const {} = graficoContext()
 
-  const {
-    xAccessor = writable((d) => d.x),
-    yAccessor = writable((d) => d.y),
-    xScale = writable(scaleLinear()),
-    yScale = writable(scaleLinear()),
-    zScale = writable(scaleLinear()),
-    innerWidth = writable(48),
-    innerHeight = writable(48)
-  } = graficoContext()
-
-  $: $zScale.domain(zDomain || extent(data, zAccessor)), ($zScale = $zScale)
-
-  $: $zScale.range(zRange || [0, $innerHeight * 0.1]), ($zScale = $zScale)
-
-  $: $xScale.range([0, $innerWidth]), ($xScale = $xScale)
+  let resizeListener
+  const onMount = (node, data) => {
+    resizeListener = window.addEventListener('resize', (e) => {
+      /* $Width = node.offsetWidth
+      $innerWidth = $Width - padding.left - padding.right */
+    })
+  }
+  const onDestroy = () => window.removeEventListener('resize', resizeListener)
 </script>
 
-<Context
-  value={{
-    xAccessor,
-    yAccessor,
-    xScale,
-    yScale,
-    zScale,
-    innerWidth,
-    innerHeight
-  }}
->
+<Context value={{}}>
   <Grafico
     class="bubble"
     {width}
     {height}
     {padding}
     {data}
-    {groupBy}
-    {colorRange}
     {style}
-    updateOnResize
-    let:entries
-    let:colorScale
+    {onMount}
+    {onDestroy}
+    let:width
+    let:height
+    let:innerWidth
+    let:innerHeight
+    let:padding
+    let:xAxisId
+    let:yAxisId
+    let:xScales
+    let:yScales
+    let:xAccessors
+    let:yAccessors
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} accessor={$xAccessor} />
+      <XAxis />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$yScale} accessor={$yAccessor} />
+      <YAxis />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -75,32 +60,21 @@
 
     <slot name="title" slot="title" />
 
-    <g>
-      {#each entries as [key, data], i}
-        {#each data as item, j}
-          <slot
-            {key}
-            {data}
-            {item}
-            {i}
-            {j}
-            color={colorScale(key)}
-            xScale={$xScale}
-            xAccessor={$xAccessor}
-            yScale={$yScale}
-            yAccessor={$yAccessor}
-            zScale={$zScale}
-            {zAccessor}
-          >
-            <circle
-              cx={$xScale($xAccessor(item))}
-              cy={$yScale($yAccessor(item))}
-              r={$zScale(zAccessor(item))}
-              fill={colorScale(key)}
-            />
-          </slot>
-        {/each}
-      {/each}
+    <g class="data-bubbles">
+      <slot
+        {data}
+        {width}
+        {height}
+        {innerWidth}
+        {innerHeight}
+        {padding}
+        {xScales}
+        {xAccessors}
+        {yScales}
+        {yAccessors}
+        {xAxisId}
+        {yAxisId}
+      />
     </g>
   </Grafico>
 </Context>

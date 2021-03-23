@@ -1,7 +1,8 @@
 <script>
   import { writable } from 'svelte/store'
   import { scaleLinear } from 'd3-scale'
-  import { Grid, Area, XAxis, YAxis } from './components'
+  import { XAxis, YAxis } from './axis'
+  import { Grid } from './components'
   import Context, { graficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
@@ -15,14 +16,22 @@
   export let style = {}
 
   const {
-    xAccessor = writable((d) => d.x),
-    yAccessor = writable((d) => d.y),
-    xScale = writable(scaleLinear()),
-    yScale = writable(scaleLinear())
+    xAccessors = {
+      default: (d) => d.x
+    },
+    yAccessors = {
+      default: (d) => d.y
+    },
+    xScales = {
+      default: writable(scaleLinear())
+    },
+    yScales = {
+      default: writable(scaleLinear())
+    }
   } = graficoContext()
 </script>
 
-<Context value={{ xScale, xAccessor, yScale, yAccessor }}>
+<Context value={{ xScales, xAccessors, yScales, yAccessors }}>
   <Grafico
     class="area"
     {width}
@@ -32,15 +41,15 @@
     {groupBy}
     {colorRange}
     {style}
-    let:entries
-    let:colorScale
+    let:innerWidth
+    let:innerHeight
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} accessor={$xAccessor} />
+      <XAxis />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$xScale} accessor={$xAccessor} />
+      <YAxis />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -52,21 +61,17 @@
     <slot name="title" slot="title" />
 
     <g>
-      {#each entries as [key, data]}
-        <slot
-          {key}
-          {data}
-          color={colorScale(key)}
-          xScale={$xScale}
-          xAccessor={$xAccessor}
-          yScale={$yScale}
-          yAccessor={$yAccessor}
-        >
-          <Area {data} let:d>
-            <path {d} fill={colorScale(key)} />
-          </Area>
-        </slot>
-      {/each}
+      <slot
+        {data}
+        {width}
+        {height}
+        {innerWidth}
+        {innerHeight}
+        {xScales}
+        {xAccessors}
+        {yScales}
+        {yAccessors}
+      />
     </g>
   </Grafico>
 </Context>

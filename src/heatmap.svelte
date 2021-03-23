@@ -1,24 +1,32 @@
 <script>
-  import { XAxis, YAxis } from './components'
+  import { XAxis, YAxis } from './axis'
+  import { Grid } from './components'
   import Grafico from './grafico.svelte'
   import Context, { graficoContext } from './context.svelte'
   import { writable } from 'svelte/store'
-  import { scaleBand, scaleLinear } from 'd3-scale'
+  import { scaleBand } from 'd3-scale'
 
   export let width = 600
   export let height = 400
   export let padding = {}
   export let data = []
-  export let colorAccessor = () => ''
   export let colorDomain = [1, 100]
   export let colorRange = ['white', '#69b3a2']
   export let style = {}
 
   const {
-    xAccessor = writable((d) => d.x),
-    yAccessor = writable((d) => d.y),
-    xScale = writable(scaleBand()),
-    yScale = writable(scaleBand()),
+    xAccessors = {
+      default: (d) => d.x
+    },
+    yAccessors = {
+      default: (d) => d.y
+    },
+    xScales = {
+      default: writable(scaleBand())
+    },
+    yScales = {
+      default: writable(scaleBand())
+    },
     colorScale = writable(scaleLinear())
   } = graficoContext()
 
@@ -26,14 +34,24 @@
     ($colorScale = $colorScale)
 </script>
 
-<Context value={{ xAccessor, yAccessor, xScale, yScale }}>
-  <Grafico class="heat" {width} {height} {padding} {data} {colorRange} {style}>
+<Context value={{ xAccessors, yAccessors, xScales, yScales }}>
+  <Grafico
+    class="heat"
+    {width}
+    {height}
+    {padding}
+    {data}
+    {colorRange}
+    {style}
+    let:innerWidth
+    let:innerHeight
+  >
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} accessor={$xAccessor} />
+      <XAxis />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$yScale} accessor={$yAccessor} />
+      <YAxis />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -45,27 +63,17 @@
     <slot name="title" slot="title" />
 
     <g>
-      {#each data as item, i}
-        <slot
-          x={$xScale($xAccessor(item))}
-          y={$yScale($yAccessor(item))}
-          xBandwidth={$xScale.bandwidth()}
-          yBandwidth={$yScale.bandwidth()}
-          color={$colorScale(colorAccessor(item))}
-          xScale={$xScale}
-          xAccessor={$xAccessor}
-          yScale={$yScale}
-          yAccessor={$yAccessor}
-        >
-          <rect
-            x={$xScale($xAccessor(item))}
-            y={$yScale($yAccessor(item))}
-            width={$xScale.bandwidth()}
-            height={$yScale.bandwidth()}
-            fill={$colorScale(colorAccessor(item))}
-          />
-        </slot>
-      {/each}
+      <slot
+        {data}
+        {width}
+        {height}
+        {innerWidth}
+        {innerHeight}
+        {xScales}
+        {xAccessors}
+        {yScales}
+        {yAccessors}
+      />
     </g>
   </Grafico>
 </Context>

@@ -1,7 +1,6 @@
 <script>
-  import { writable } from 'svelte/store'
-  import { scaleLinear } from 'd3-scale'
-  import { XAxis, YAxis, Grid, Line } from './components'
+  import { XAxis, YAxis } from './axis'
+  import { Grid } from './components'
   import Context, { graficoContext } from './context.svelte'
   import Grafico from './grafico.svelte'
 
@@ -9,37 +8,34 @@
   export let height
   export let padding
   export let data = []
-  export let groupBy
-  export let curve
-  export let colorRange
   export let style = {}
-
-  const {
-    xAccessor = writable((d) => d.x),
-    yAccessor = writable((d) => d.y),
-    xScale = writable(scaleLinear()),
-    yScale = writable(scaleLinear())
-  } = graficoContext()
 </script>
 
-<Context value={{ xScale, yScale, xAccessor, yAccessor }}>
+<Context value={{}}>
   <Grafico
     {width}
     {height}
     {padding}
     {data}
-    {groupBy}
-    {colorRange}
     {style}
-    let:entries
-    let:colorScale
+    let:width
+    let:height
+    let:innerWidth
+    let:innerHeight
+    let:padding
+    let:xAxisId
+    let:yAxisId
+    let:xScales
+    let:yScales
+    let:xAccessors
+    let:yAccessors
   >
     <slot name="xaxis" slot="xaxis">
-      <XAxis scale={$xScale} accessor={$xAccessor} />
+      <XAxis />
     </slot>
 
     <slot name="yaxis" slot="yaxis">
-      <YAxis scale={$yScale} accessor={$xAccessor} />
+      <YAxis />
     </slot>
 
     <slot name="grid" slot="grid">
@@ -50,22 +46,21 @@
 
     <slot name="title" slot="title" />
 
-    <g>
-      {#each entries as [key, data]}
-        <slot
-          {key}
-          {data}
-          color={colorScale(key)}
-          xScale={$xScale}
-          xAccessor={$xAccessor}
-          yScale={$yScale}
-          yAccessor={$yAccessor}
-        >
-          <Line {data} {curve} let:d>
-            <path {d} fill="transparent" stroke={colorScale(key)} />
-          </Line>
-        </slot>
-      {/each}
+    <g class="data-lines">
+      <slot
+        {data}
+        {width}
+        {height}
+        {innerWidth}
+        {innerHeight}
+        {xScales}
+        {xAccessors}
+        {yScales}
+        {yAccessors}
+        {padding}
+        {xAxisId}
+        {yAxisId}
+      />
     </g>
   </Grafico>
 </Context>
