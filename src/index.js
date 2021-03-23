@@ -1,12 +1,18 @@
 export {
   Area,
+  Bubble,
+  Scatter,
   Circle,
   Grid,
   Legend,
   Line,
   Pie,
   Rect,
-  Slice
+  Slice,
+  Stack,
+  Bar,
+  Bin,
+  Declare
 } from './components'
 
 export {
@@ -29,8 +35,11 @@ export {
   SymlogYAxis,
   BandXAxis,
   BandYAxis
-} from './components'
+} from './axis'
 
+export { ScaleBand, ScaleOrdinal, ScaleLinear, storeScale } from './scale'
+
+export { default as Grafico } from './grafico.svelte'
 export { default as LineChart } from './line_chart.svelte'
 export { default as PieChart } from './pie_chart.svelte'
 export { default as BarChart } from './bar_chart.svelte'
