@@ -4,8 +4,8 @@
   const {
     xScales,
     yScales,
-    innerWidth,
-    innerHeight,
+    innerWidthStore,
+    innerHeightStore,
     xTickValues,
     yTickValues,
     xAxisId: xAxisID,
@@ -24,20 +24,20 @@
     class="vertical"
     transform="translate({($xScale?.bandwidth?.() ?? 0) / 2},0)"
   >
-    {#each $xTickValues($xScale) as tick, i (+tick || tick)}
+    {#each $xTickValues as tick, i (+tick || tick)}
       <slot
         name="vertical"
         x1={$xScale(tick)}
         y1={0}
         x2={$xScale(tick)}
-        y2={$innerHeight}
+        y2={$innerHeightStore}
         index={i}
       >
         <line
           x1={$xScale(tick)}
           y1={0}
           x2={$xScale(tick)}
-          y2={$innerHeight}
+          y2={$innerHeightStore}
           class="grid-line"
         />
       </slot>
@@ -47,19 +47,19 @@
     class="horizontal"
     transform="translate(0, {($yScale?.bandwidth?.() ?? 0) / 2})"
   >
-    {#each $yTickValues($yScale) as tick, i (+tick || tick)}
+    {#each $yTickValues as tick, i (+tick || tick)}
       <slot
         name="horizontal"
         x1={0}
         y1={$yScale(tick)}
-        x2={$innerWidth}
+        x2={$innerWidthStore}
         y2={$yScale(tick)}
         index={i}
       >
         <line
           x1={0}
           y1={$yScale(tick)}
-          x2={$innerWidth}
+          x2={$innerWidthStore}
           y2={$yScale(tick)}
           class="grid-line"
         />
