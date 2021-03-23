@@ -1,6 +1,6 @@
 <script>
   import XAxis from '../x_axis.svelte'
-  import { scalePoint } from 'd3-scale'
+  import { scaleBand } from 'd3-scale'
   import { max } from 'd3-array'
 
   export let id = 'default'
@@ -17,7 +17,7 @@
   let _class
   export { _class as class }
   export let position
-  let scale = scalePoint()
+  let scale = scaleBand()
 
   round && scale.round(round)
   padding && scale.padding(padding)
