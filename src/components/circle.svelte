@@ -9,17 +9,31 @@
   export let defaultCY = 0
   export let defaultR = 0
 
-  export let optionsCX = {
-    duration: 0,
-    delay: 0
+  export let optionsCX
+  optionsCX = {
+    ...{
+      duration: 0,
+      delay: 0
+    },
+    ...optionsCX
   }
-  export let optionsCY = {
-    duration: 0,
-    delay: 0
+
+  export let optionsCY
+  optionsCY = {
+    ...{
+      duration: 0,
+      delay: 0
+    },
+    ...optionsCY
   }
-  export let optionsR = {
-    duration: 0,
-    delay: 0
+
+  export let optionsR
+  optionsR = {
+    ...{
+      duration: 0,
+      delay: 0
+    },
+    ...optionsR
   }
 
   const _cx = tweened(defaultCX, optionsCX)
