@@ -15,4 +15,7 @@
   const yScale = yScales[yAxisId]
 </script>
 
-<slot xGet={(d) => $xScale(x(d))} yGet={(d) => $yScale(y(d))} />
+<slot
+  xGet={(d, ...args) => $xScale(x(d, ...args))}
+  yGet={(d, ...args) => $yScale(y(d, ...args))}
+/>

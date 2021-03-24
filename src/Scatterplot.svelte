@@ -1,17 +1,17 @@
 <script>
+  import { writable } from 'svelte/store'
+  import { scaleLinear, scaleOrdinal } from 'd3-scale'
+  import { schemeCategory10 } from 'd3-scale-chromatic'
   import { XAxis, YAxis } from './axis'
   import { Grid } from './components'
-  import Grafico from './Grafico.svelte'
   import Context, { graficoContext } from './Context.svelte'
-  import { writable } from 'svelte/store'
-  import { scaleBand } from 'd3-scale'
+  import Grafico from './Grafico.svelte'
 
   export let width = 600
   export let height = 400
-  export let padding = {}
+  export let padding
   export let data = []
-  export let colorDomain = [1, 100]
-  export let colorRange = ['white', '#69b3a2']
+  export let colorScale = scaleOrdinal().range(schemeCategory10)
   export let style = {}
 
   const {
@@ -22,26 +22,21 @@
       default: (d) => d.y
     },
     xScales = {
-      default: writable(scaleBand())
+      default: writable(scaleLinear())
     },
     yScales = {
-      default: writable(scaleBand())
-    },
-    colorScale = writable(scaleLinear())
+      default: writable(scaleLinear())
+    }
   } = graficoContext()
-
-  $: $colorScale.domain(colorDomain).range(colorRange),
-    ($colorScale = $colorScale)
 </script>
 
-<Context value={{ xAccessors, yAccessors, xScales, yScales }}>
+<Context value={{ xAccessors, yAccessors, xScales, yScales, colorScale }}>
   <Grafico
-    class="heat"
+    class="scatter"
     {width}
     {height}
     {padding}
     {data}
-    {colorRange}
     {style}
     let:innerWidth
     let:innerHeight
@@ -55,7 +50,7 @@
     </slot>
 
     <slot name="grid" slot="grid">
-      <!-- <Grid /> -->
+      <Grid />
     </slot>
 
     <slot name="legend" slot="legend" />
@@ -65,8 +60,6 @@
     <g>
       <slot
         {data}
-        {width}
-        {height}
         {innerWidth}
         {innerHeight}
         {xScales}

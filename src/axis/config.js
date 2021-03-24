@@ -1,13 +1,13 @@
-import XAxis from './x_axis.svelte'
-import YAxis from './y_axis.svelte'
-import Label from './label.svelte'
+import XAxis from './XAxis.svelte'
+import YAxis from './YAxis.svelte'
+import AxisLabel from './AxisLabel.svelte'
 import {
   LinearXAxis,
   LinearYAxis,
   TimeXAxis,
   TimeYAxis,
-  UTCXAxis,
-  UTCYAxis,
+  UtcXAxis,
+  UtcYAxis,
   LogXAxis,
   LogYAxis,
   PowXAxis,
@@ -25,11 +25,11 @@ YAxis.linear = LinearYAxis
 XAxis.time = TimeXAxis
 YAxis.time = TimeYAxis
 
-XAxis.utc = UTCXAxis
-YAxis.utc = UTCYAxis
+XAxis.utc = UtcXAxis
+YAxis.utc = UtcYAxis
 
-XAxis.utc = UTCXAxis
-YAxis.utc = UTCYAxis
+XAxis.utc = UtcXAxis
+YAxis.utc = UtcYAxis
 
 XAxis.log = LogXAxis
 YAxis.log = LogYAxis
@@ -46,5 +46,5 @@ YAxis.symlog = SymlogYAxis
 XAxis.band = BandXAxis
 YAxis.band = BandYAxis
 
-XAxis.label = Label
-YAxis.label = Label
+XAxis.label = AxisLabel
+YAxis.label = AxisLabel

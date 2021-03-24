@@ -1,2 +1,2 @@
-export {default as BandXAxis} from './band_x.svelte'
-export {default as BandYAxis} from './band_y.svelte'
+export {default as BandXAxis} from './BandXAxis.svelte'
+export {default as BandYAxis} from './BandYAxis.svelte'

@@ -3,48 +3,46 @@
   import { Grid } from './components'
   import Grafico from './Grafico.svelte'
   import Context, { graficoContext } from './Context.svelte'
-  import { writable } from 'svelte/store'
-  import { scaleBand } from 'd3-scale'
 
-  export let width = 600
-  export let height = 400
-  export let padding = {}
+  export let width
+  export let height
+  export let padding
   export let data = []
-  export let colorDomain = [1, 100]
-  export let colorRange = ['white', '#69b3a2']
   export let style = {}
 
-  const {
-    xAccessors = {
-      default: (d) => d.x
-    },
-    yAccessors = {
-      default: (d) => d.y
-    },
-    xScales = {
-      default: writable(scaleBand())
-    },
-    yScales = {
-      default: writable(scaleBand())
-    },
-    colorScale = writable(scaleLinear())
-  } = graficoContext()
+  const {} = graficoContext()
 
-  $: $colorScale.domain(colorDomain).range(colorRange),
-    ($colorScale = $colorScale)
+  let resizeListener
+  const onMount = (node, data) => {
+    resizeListener = window.addEventListener('resize', (e) => {
+      /* $Width = node.offsetWidth
+      $innerWidth = $Width - padding.left - padding.right */
+    })
+  }
+  const onDestroy = () => window.removeEventListener('resize', resizeListener)
 </script>
 
-<Context value={{ xAccessors, yAccessors, xScales, yScales }}>
+<Context value={{}}>
   <Grafico
-    class="heat"
+    class="bubble"
     {width}
     {height}
     {padding}
     {data}
-    {colorRange}
     {style}
+    {onMount}
+    {onDestroy}
+    let:width
+    let:height
     let:innerWidth
     let:innerHeight
+    let:padding
+    let:xAxisId
+    let:yAxisId
+    let:xScales
+    let:yScales
+    let:xAccessors
+    let:yAccessors
   >
     <slot name="xaxis" slot="xaxis">
       <XAxis />
@@ -55,24 +53,27 @@
     </slot>
 
     <slot name="grid" slot="grid">
-      <!-- <Grid /> -->
+      <Grid />
     </slot>
 
     <slot name="legend" slot="legend" />
 
     <slot name="title" slot="title" />
 
-    <g>
+    <g class="data-bubbles">
       <slot
         {data}
         {width}
         {height}
         {innerWidth}
         {innerHeight}
+        {padding}
         {xScales}
         {xAccessors}
         {yScales}
         {yAccessors}
+        {xAxisId}
+        {yAxisId}
       />
     </g>
   </Grafico>

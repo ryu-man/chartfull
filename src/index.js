@@ -23,8 +23,8 @@ export {
   LinearYAxis,
   TimeXAxis,
   TimeYAxis,
-  UTCXAxis,
-  UTCYAxis,
+  UtcXAxis,
+  UtcYAxis,
   LogXAxis,
   LogYAxis,
   PowXAxis,
@@ -37,14 +37,14 @@ export {
   BandYAxis
 } from './axis'
 
-export { ScaleBand, ScaleOrdinal, ScaleLinear, storeScale } from './scale'
+export { ScaleBand, ScaleOrdinal, ScaleLinear, scaleStore } from './scale'
 
-export { default as Grafico } from './grafico.svelte'
-export { default as LineChart } from './line_chart.svelte'
-export { default as PieChart } from './pie_chart.svelte'
-export { default as BarChart } from './bar_chart.svelte'
-export { default as Scatterplot } from './scatter_plot.svelte'
-export { default as AreaChart } from './area_chart.svelte'
-export { default as Histogram } from './histogram.svelte'
-export { default as Heatmap } from './heatmap.svelte'
-export { default as BubbleChart } from './bubble_chart.svelte'
+export { default as Grafico } from './Grafico.svelte'
+export { default as LineChart } from './LineChart.svelte'
+export { default as PieChart } from './PieChart.svelte'
+export { default as BarChart } from './BarChart.svelte'
+export { default as Scatterplot } from './Scatterplot.svelte'
+export { default as AreaChart } from './AreaChart.svelte'
+export { default as Histogram } from './Histogram.svelte'
+export { default as Heatmap } from './Heatmap.svelte'
+export { default as BubbleChart } from './BubbleChart.svelte'
