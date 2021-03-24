@@ -5,9 +5,9 @@
   import { graficoContext, key } from './Context.svelte'
   import { classNames, css } from './utils'
   import { sizeStore } from './utils/sizeStore'
-  import { scaleStore } from './scale'
+  import { scaleStore } from './scales'
 
-  export let init = basicConfiguration
+  export let init = initialize
   export let width = 300
   export let height = 300
   export let padding = {}
@@ -19,7 +19,7 @@
   let _class = ''
   export { _class as class }
 
-  padding = { top: 32, right: 32, bottom: 72, left: 72, ...padding }
+  padding = { top: 72, right: 72, bottom: 72, left: 72, ...padding }
 
   const {
     widthStore,
@@ -70,7 +70,7 @@
 
   setContext(key, context)
 
-  function basicConfiguration(node, data = []) {
+  function initialize(node, data = []) {
     $widthStore = node.offsetWidth
 
     onMount?.(node, data)
@@ -127,7 +127,7 @@
       <slot name="legend" />
     </div>
   </div>
-
+  <slot name="html" />
   <slot name="title" />
 </figure>
 
