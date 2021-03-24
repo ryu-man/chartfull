@@ -22,7 +22,6 @@ export function scaleStore(scale) {
       return this
     },
     copy: scale.copy,
-    once: scale.once,
     toString: scale.toString,
     get: scale
   }
