@@ -37,7 +37,7 @@ export {
   BandYAxis
 } from './axis'
 
-export { ScaleBand, ScaleOrdinal, ScaleLinear, scaleStore } from './scale'
+export { ScaleBand, ScaleOrdinal, ScaleLinear, scaleStore } from './scales'
 
 export { default as Grafico } from './Grafico.svelte'
 export { default as LineChart } from './LineChart.svelte'
