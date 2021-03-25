@@ -86,6 +86,8 @@
       }
     }
   }
+
+  $: $dataStore = data
 </script>
 
 <figure
@@ -108,6 +110,7 @@
         innerWidth={$innerWidthStore}
         innerHeight={$innerHeightStore}
         padding={$paddingStore}
+        data={$dataStore}
         {xScales}
         {yScales}
         {xAccessors}
