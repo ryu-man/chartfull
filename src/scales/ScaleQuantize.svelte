@@ -4,7 +4,6 @@
 
   export let domain = []
   export let range = [0, 1]
-  export let thresholds
   export let unknown
   export let ticks
   export let specifier
@@ -13,7 +12,6 @@
   
   $: scale.domain(domain)
   $: scale.range(range)
-  $: thresholds && $scale.thresholds(thresholds)
   $: unknown && $scale.unknown(unknown)
   $: nice && $scale.nice(nice)
   $: ticks && $scale.ticks(ticks)
