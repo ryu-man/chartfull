@@ -23,7 +23,7 @@
   import { tick as Tick } from 'svelte'
   import { scaleLinear } from 'd3-scale'
   import Axis from './Axis.svelte'
-  import { scaleStore } from '../scale'
+  import { scaleStore } from '../scales'
 
   const { innerWidthStore, xScales, xTickValues } = graficoContext()
   let { xAxisId } = graficoContext()

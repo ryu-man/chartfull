@@ -4,7 +4,7 @@
   import { scaleBand } from 'd3-scale'
   import Context, { graficoContext } from './Context.svelte'
   import Grafico from './Grafico.svelte'
-  import { scaleStore } from './scale'
+  import { scaleStore } from './scales'
 
   export let width
   export let height
