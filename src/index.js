@@ -13,6 +13,7 @@ export {
   Stack,
   Bar,
   Bin,
+  Square,
   Declare
 } from './components'
 
