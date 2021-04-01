@@ -7,6 +7,7 @@ export {
   Legend,
   Line,
   Pie,
+  Arc,
   Rect,
   Slice,
   Stack,
