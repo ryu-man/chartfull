@@ -147,6 +147,9 @@
     width: 100%;
     overflow: visible;
     box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: 2;
   }
   .elements {
