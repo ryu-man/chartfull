@@ -20,53 +20,30 @@ Coming soon !
 
 ```html
 <script>
-    import {Linechart, XAxis, YAxis, Line} from "graficos"
+    import {group} from 'd3-array'
+    import {Grafico, XAxis, YAxis, Line, Declare} from "graficos"
     let data = []
 </script>
 
-<!--> When using groupBy prop multi line will be generated <-->
-<Linechart {data} groupby="{(o)=>o.prop}" let:key let:data>
-    <Line class="{key}" {data} />
-    <XAxis slot="xaxis" accessor="{(o)=> o.xprop}" />
-    <YAxis slot="yaxis" accessor="{(o)=> o.xprop}" />
-</Linechart>
+<!--> Line chart<-->
+<Grafico data={group(data, (d)=>d.group)} let:data let:innerWidth let:innerHeight>
+    <Line class="{key}" {data} x="{(d)=> o.x}" y="{(o)=> o.xprop}"/>
+    <XAxis slot="xaxis" domain={extent(data, d=> d.x)} range={[0, innerWidth]}/>
+    <YAxis slot="yaxis" domain={extent(data, d=> d.y)} range={[innerHeight, 0]}/>
+</Grafico>
 
-{#await csv('./data_doubleHist.csv') then data}
-  <Histogram
-    height={700}
-    {data}
-  >
-    <XAxis
-      slot="xaxis"
-      nice
-      tickValues={(scale) => scale.ticks()}
-      accessor={(d) => +d.value}
-    />
-    <YAxis slot="yaxis" tickValues={(scale) => scale.ticks()} />
-    <Rect
-      x={xScale(bin.x0)}
-      y={0}
-      width={Math.abs(xScale(bin.x1) - xScale(bin.x0))}
-      height={innerHeight - yScale(bin.length)}
-      optionsHeight={{ duration: 600, delay: j * 200, easing: backOut }}
-      let:x
-      let:y
-      let:width
-      let:height
-    >
-      <rect
-        class={key}
-        {x}
-        {y}
-        {width}
-        {height}
-        fill={color}
-        transform="translate(0, {0})"
-      />
-    </Rect>
-    <figcaption slot="title">Histogram values...</figcaption>
-  </Histogram>
-{/await}
+
+<Declare value={d=> d.x} let:value={xAccessor}>
+  <Declare value={d=> d.y} let:value={yAccessor}>
+
+    <Grafico data={group(data, (d)=>d.group)} let:data let:innerWidth let:innerHeight>
+      <Line class="{key}" {data} x="{xAccessor}" y="{yAccessor}"/>
+      <XAxis slot="xaxis" domain={xAccessor} range={[0, innerWidth]}/>
+      <YAxis slot="yaxis" domain={yAccessor} range={[innerHeight, 0]}/>
+    </Grafico>
+
+  </Declare>
+</Declare>
 ```
 
 ## Components
