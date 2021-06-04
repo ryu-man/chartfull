@@ -20,77 +20,55 @@
 
 <script>
   import { graficoContext } from '../Context.svelte'
-  import { tick as Tick } from 'svelte'
-  import { scaleLinear } from 'd3-scale'
-  import Axis from './Axis.svelte'
   import { scaleStore } from '../scales'
+  import { Declare } from '../components'
+  import Axis from './Axis.svelte'
+  import YTickValuesUpdater from './YTickValuesUpdater.svelte'
 
-  const {
-    innerWidthStore,
-    innerHeightStore,
-    yScales,
-    yTickValues
-  } = graficoContext()
+  const { innerHeightStore, yScales } = graficoContext()
   let { yAxisId } = graficoContext()
 
   export let id = 'default'
-  export let domain = [0, 1]
-  export let range = [1, 0]
   export let scale
+  export let ticks
+  export let tickArguments
   export let tickValues
+  export let tickFormat
   export let position = 'left'
   let _class = ''
   export { _class as class }
 
   yAxisId = id
-  const Scale = yScales[id]
-
-  if (scale) {
-    $Scale = scale
-  } else if ($Scale) {
-    scale = $Scale
-  } else {
-    scale = scaleStore(scaleLinear())
-    $Scale = scale
-  }
-
-  $: $Scale.range(range)
-  $: $Scale.domain(Domain($Scale, domain))
-  $: $yTickValues = TickValues(tickValues, $Scale)
-
-  function Domain(scale, domain) {
-    return typeof domain === 'function' ? domain(scale) : domain || []
-  }
-  function TickValues(tickValues, scale) {
-    return typeof tickValues === 'function'
-      ? tickValues(scale)
-      : tickValues || []
-  }
+  yScales[id] = scaleStore(scale)
 </script>
 
-<Axis class={_class + ' y'} {position} {id}>
-  {#await Tick() then value}
-    {#each $yTickValues as tick, index (+tick || tick)}
-      <slot
-        {index}
-        {tick}
-        y={(scale(tick) * 100) / $innerHeightStore}
-        x={0}
-        {tickPosition}
-      >
-        <span
-          use:tickPosition={{
-            y: (scale(tick) * 100) / $innerHeightStore,
-            x: 0
-          }}
-          class="tick">{tick}</span
-        >
-      </slot>
+<Axis
+  class={_class + ' y'}
+  {scale}
+  {position}
+  {id}
+  {ticks}
+  {tickArguments}
+  {tickValues}
+  {tickFormat}
+  let:values
+  let:format
+>
+  <YTickValuesUpdater tickValues={values} {id}>
+    {#each values as tick, index (tick)}
+      <Declare value={(scale(tick) * 100) / $innerHeightStore} let:value={y}>
+        <slot {index} {tick} {y} x={0} {tickPosition}>
+          <span
+            use:tickPosition={{
+              y,
+              x: 0
+            }}
+            class="tick">{format(tick)}</span
+          >
+        </slot>
+      </Declare>
     {/each}
-  {/await}
+  </YTickValuesUpdater>
 
   <slot name="label" slot="label" />
 </Axis>
-
-<style>
-</style>

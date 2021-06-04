@@ -1,15 +1,44 @@
 <script>
+  import { tick } from 'svelte'
+
   import { classNames } from '../utils'
 
-  export let id = {}
   export let position
+  export let scale
+  export let tickArguments
+  export let tickValues
+  export let tickFormat
+  // export let tickSize
+  // export let tickSizeInner
+  // export let tickSizeOuter
+  // export let tickPadding
+  // export let offset
+
   let _class
   export { _class as class }
+
+  const identity = (d) => d
+
+  $: values =
+    tickValues == null
+      ? scale.ticks
+        ? scale.ticks.apply(scale, tickArguments)
+        : scale.domain()
+      : tickValues
+
+  $: format =
+    tickFormat == null
+      ? scale.tickFormat
+        ? scale.tickFormat.apply(scale, tickArguments)
+        : identity
+      : tickFormat
 </script>
 
 <div class={classNames(_class, position, 'axis')}>
   <div class="inner-axis">
-    <slot />
+    {#await tick() then _}
+      <slot {values} {format} />
+    {/await}
   </div>
 
   <slot name="label" />
@@ -19,7 +48,6 @@
   .axis {
     --border-width: 2px;
     position: absolute;
-    
   }
   .x.axis {
     height: 2em;
@@ -67,7 +95,7 @@
     width: inherit;
     height: inherit;
   }
-  .axis :global(.label){
+  .axis :global(.label) {
     position: absolute;
     white-space: nowrap;
   }
