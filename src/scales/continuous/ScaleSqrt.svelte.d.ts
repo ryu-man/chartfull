@@ -1,6 +1,6 @@
 import { SvelteComponentTyped } from 'svelte'
 import {
-  ScaleRadial as Scale,
+  ScalePower as Scale,
   NumberValue,
   UnknownReturnType,
   InterpolatorFactory
@@ -12,7 +12,7 @@ interface Props<Range, Output, Unknown> {
   range: Iterable<Range>
   unknown?: Unknown
   ticks?: number
-  specifier?: string
+  tickFormat?: [number, string] | [number, number, number, string]
   nice?: number
   exponent?: number
 }
@@ -26,16 +26,14 @@ interface Slots<Range, Output, Unknown> {
     unknown?: UnknownReturnType<Unknown, undefined>
     exponent: number
     interpolate?: InterpolatorFactory<any, any>
-    format?: (d: NumberValue) => string
-    invert?: Scale<Range, Output, Unknown>['invert']
+    tickFormat?: (d: NumberValue) => string
     copy?: Scale<Range, Output, Unknown>['copy']
-    toString?: Scale<Range, Output, Unknown>['toString']
   }
 }
 
-declare class ScaleRadial<Range, Output, Unknown> extends SvelteComponentTyped<
+declare class ScaleSqrt<Range, Output, Unknown> extends SvelteComponentTyped<
   Props<Range, Output, Unknown>,
   never,
   Slots<Range, Output, Unknown>
 > {}
-export default ScaleRadial
+export default ScaleSqrt

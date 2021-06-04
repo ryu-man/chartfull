@@ -1,6 +1,6 @@
 import { SvelteComponentTyped } from 'svelte'
 import {
-  ScaleLinear as Scale,
+  ScaleSymLog as Scale,
   NumberValue,
   UnknownReturnType,
   InterpolatorFactory
@@ -11,9 +11,11 @@ interface Props<Range, Output, Unknown> {
   domain: Iterable<NumberValue>
   range: Iterable<Range>
   unknown?: Unknown
+  clamp?: boolean
   ticks?: number
-  specifier?: string
+  tickFormat?: [number, string] | [number, number, number, string]
   nice?: number
+  constant?: number
 }
 
 interface Slots<Range, Output, Unknown> {
@@ -21,28 +23,20 @@ interface Slots<Range, Output, Unknown> {
     scale: Scale<Range, Output, Unknown>
     domain?: number[]
     range?: Range[]
+    unknown?: UnknownReturnType<Unknown, undefined>
+    clamp?: boolean
     ticks?: number[]
-    unknown(): UnknownReturnType<Unknown, undefined>
-    unknown<NewUnknown>(
-      value: NewUnknown
-    ): ScaleLinear<Range, Output, NewUnknown>
-    interpolate(
-      interpolate: InterpolatorFactory<Range, Output>
-    ): Scale<Range, Output, Unknown>
-    interpolate<NewOutput>(
-      interpolate: InterpolatorFactory<Range, NewOutput>
-    ): ScaleLinear<Range, NewOutput, Unknown>
-    format?: (d: NumberValue) => string
+    constant?: number
+    interpolate?: InterpolatorFactory<any, any>
+    tickFormat?: (d: NumberValue) => string
     invert?: Scale<Range, Output, Unknown>['invert']
     copy?: Scale<Range, Output, Unknown>['copy']
-    toString?: Scale<Range, Output, Unknown>['toString']
   }
 }
 
-declare class ScaleLinear<Range, Output, Unknown> extends SvelteComponentTyped<
+declare class ScaleSqrt<Range, Output, Unknown> extends SvelteComponentTyped<
   Props<Range, Output, Unknown>,
   never,
   Slots<Range, Output, Unknown>
 > {}
-
-export default ScaleLinear
+export default ScaleSqrt

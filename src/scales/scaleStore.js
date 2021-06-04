@@ -5,7 +5,6 @@ export function scaleStore(scale) {
 
   return {
     subscribe,
-    set,
     domain: function (domain) {
       scale.domain(domain)
       update((scale) => scale)

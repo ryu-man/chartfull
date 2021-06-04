@@ -1,10 +1,5 @@
 import { SvelteComponentTyped } from 'svelte'
-import {
-  ScaleTime as Scale,
-  NumberValue,
-  UnknownReturnType,
-  InterpolatorFactory
-} from 'd3-scale'
+import { ScaleTime as Scale, NumberValue, InterpolatorFactory } from 'd3-scale'
 import { TimeInterval, CountableTimeInterval } from 'd3-time'
 
 interface Props<Range, Output, Unknown> {
@@ -15,6 +10,7 @@ interface Props<Range, Output, Unknown> {
   unknown?: Unknown
   ticks?: number | TimeInterval
   specifier?: string
+  tickFormat?: [number | TimeInterval, string]
   nice?: number | CountableTimeInterval
   clamp?: boolean
 }
@@ -25,13 +21,12 @@ interface Slots<Range, Output, Unknown> {
     domain?: Date[]
     range?: Range[]
     ticks?: Date[]
-    unknown?: UnknownReturnType<Unknown, undefined>
+    unknown?: Scale<Range, Output, Unknown>['unknown']
     clamp?: boolean
-    interpolate?: InterpolatorFactory<any, any>
-    format?: (d: Date) => string
+    interpolate?: InterpolatorFactory<Range, Output>
+    tickFormat?: (d: Date) => string
     invert?: Scale<Range, Output, Unknown>['invert']
     copy?: Scale<Range, Output, Unknown>['copy']
-    toString?: Scale<Range, Output, Unknown>['toString']
   }
 }
 

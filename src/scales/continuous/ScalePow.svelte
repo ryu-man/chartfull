@@ -5,35 +5,33 @@
   export let domain = [0, 1]
   export let range = [0, 1]
   export let rangeRound
-  export let align
   export let clamp = false
   export let interpolate
   export let nice
   export let unknown
   export let ticks
-  export let specifier
+  export let tickFormat
 
   const scale = scaleStore(scalePow())
 
   $: scale.domain(domain)
   $: scale.range(range)
   $: rangeRound && scale.get.rangeRound(rangeRound)
-  $: unknown && scale.get.unknown(unknown)
-  $: clamp && scale.get.clamp(clamp)
+  $: scale.get.unknown(unknown)
+  $: scale.get.clamp(clamp)
   $: interpolate && scale.get.interpolate(interpolate)
-  $: nice && scale.get.nice(nice)
-  $: align && scale.get.align(align)
-  $: scale.get.ticks(ticks)
+  $: scale.get.nice(nice)
 </script>
 
 <slot
   scale={$scale}
   domain={$scale.domain()}
   range={$scale.range()}
-  ticks={$scale.ticks()}
-  format={scale.get.tickFormat(ticks, specifier)}
-  copy={scale.get.copy}
+  ticks={$scale.ticks(ticks)}
+  unknown={$scale.unknown()}
+  base={$scale.base()}
+  interpolate={$scale.interpolate()}
+  tickFormat={$scale.tickFormat(...tickFormat)}
   invert={scale.get.invert}
-  once={scale.get.once}
-  toString={scale.toString}
+  copy={scale.get.copy}
 />

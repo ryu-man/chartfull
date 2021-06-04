@@ -6,11 +6,11 @@ import {
 } from 'd3-scale'
 
 interface Props<Unknown> {
-  domain: number[]
-  range: number[]
+  domain: Iterable<NumberValue>
+  range: Iterable<NumberValue>
   unknown: Unknown
   ticks: number
-  specifier?: string
+  tickFormat?: [number, string]
   nice?: number
 }
 
@@ -21,10 +21,9 @@ interface Slots<Unknown> {
     range: number[]
     ticks: number[]
     unknown: UnknownReturnType<Unknown, undefined>
-    format?: (d: NumberValue) => string
+    tickFormat?: (d: NumberValue) => string
     invert?: Scale<Unknown>['invert']
     copy: Scale<Unknown>['copy']
-    toString: Scale<Unknown>['toString']
   }
 }
 

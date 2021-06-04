@@ -14,7 +14,7 @@ interface Props<Range, Output, Unknown> {
   rangeRound?: Iterable<NumberValue>
   unknown?: Unknown
   ticks?: number | TimeInterval
-  specifier?: string
+  tickFormat?: [number, string]
   nice?: number | CountableTimeInterval
   clamp?: boolean
 }
@@ -28,10 +28,9 @@ interface Slots<Range, Output, Unknown> {
     unknown?: UnknownReturnType<Unknown, undefined>
     clamp?: boolean
     interpolate?: InterpolatorFactory<any, any>
-    format?: (d: Date) => string
+    tickFormat?: (d: Date) => string
     invert?: Scale<Range, Output, Unknown>['invert']
     copy?: Scale<Range, Output, Unknown>['copy']
-    toString?: Scale<Range, Output, Unknown>['toString']
   }
 }
 
