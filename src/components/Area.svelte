@@ -2,16 +2,11 @@
   import { area as Area, curveMonotoneX } from 'd3-shape'
   import { graficoContext } from '../Context.svelte'
 
-  const {
-    xScales,
-    yScales,
-    xAccessors,
-    yAccessors,
-  } = graficoContext()
+  const { xScales, yScales, xAccessors, yAccessors } = graficoContext()
 
   export let xAxisId = 'default'
   export let yAxisId = 'default'
-  export let data
+
   export let curve = curveMonotoneX
   const xScale = xScales[xAxisId]
   const yScale = yScales[yAxisId]
@@ -28,17 +23,6 @@
     .y1((d) => $yScale(y1(d)))
     .curve(curve)
 
-  $: d = area(data)
 </script>
 
-<slot {d}>
-  <path {d} class="area" />
-</slot>
-
-<style>
-  path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    pointer-events: none;
-  }
-</style>
+<slot {area} />

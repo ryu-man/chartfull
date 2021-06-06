@@ -1,19 +1,18 @@
 import { SvelteComponentTyped } from 'svelte'
 
-interface Props<Datum,  XValue extends number | Date | undefined, YValue extends number | Date | undefined> {
-  xAxisId?: 'default' | string
-  yAxisId?: 'default' | string
-  x?: (d: Datum, ...args: any) => Datum[keyof Datum]
-  y?: (d: Datum, ...args: any) => Datum[keyof Datum]
+interface Props<T, XArgs extends any[], YArgs extends any[]> {
+  T?: T[]
 
-  Datum?: Datum
-  XValue?: XValue
-  YValue?: YValue
+  xAxisId?: 'default' | (string & {})
+  yAxisId?: 'default' | (string & {})
+
+  x?: (d: T, ...args: XArgs) => number | Date | string
+  y?: (d: T, ...args: YArgs) => number | Date | string
 }
-interface Slot<Datum,  XValue extends number | Date | undefined, YValue extends number | Date | undefined> {
+interface Slot<Datum, XArgs extends any[], YArgs extends any[]> {
   default: {
-    xGet?: (d: Datum, ...args: any) => XValue
-    yGet?: (d: Datum, ...args: any) => YValue
+    xGet?: (d: Datum, ...args: XArgs) => number
+    yGet?: (d: Datum, ...args: YArgs) => number
     bandwidth?: number
   }
 }
@@ -21,5 +20,13 @@ interface Slot<Datum,  XValue extends number | Date | undefined, YValue extends 
 /**
  * Grafico Bar Component
  */
-declare class Bar<Datum,  XValue extends number | Date | undefined, YValue extends number | Date | undefined> extends SvelteComponentTyped<Props<Datum, XValue, YValue>, never, Slot<Datum, XValue, YValue>> {}
+declare class Bar<
+  Datum,
+  XArgs extends any[],
+  YArgs extends any[]
+> extends SvelteComponentTyped<
+  Props<Datum, XArgs, YArgs>,
+  never,
+  Slot<Datum, XArgs, YArgs>
+> {}
 export default Bar

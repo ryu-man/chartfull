@@ -4,8 +4,6 @@
 
   let context = {}
   const {
-    widthStore,
-    heightStore,
     innerWidthStore,
     innerHeightStore
   } = (context = graficoContext())

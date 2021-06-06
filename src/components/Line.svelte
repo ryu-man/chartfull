@@ -6,7 +6,7 @@
 
   export let xAxisId = 'default'
   export let yAxisId = 'default'
-  export let data = []
+
   const xAccessor = xAccessors[xAxisId]
   const yAccessor = xAccessors[yAxisId]
   export let x = xAccessor
@@ -24,20 +24,6 @@
     .y((d) => $yScale(y(d)))
     .curve(curve)
 
-  $: d = line(data)
 </script>
 
-<slot {d}>
-  <path {d} fill="transparent" stroke="black" />
-</slot>
-
-<style>
-  path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    pointer-events: none;
-    vector-effect: non-scaling-stroke;
-    mix-blend-mode: multiply;
-    transition: 0.2s;
-  }
-</style>
+<slot {line} />

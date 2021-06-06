@@ -1,7 +1,6 @@
 <script>
   import { stack as Stack } from 'd3-shape'
 
-  export let data = []
   export let keys = []
   export let offset
   export let order
@@ -15,4 +14,4 @@
   $: value && stack.value(value)
 </script>
 
-<slot data={stack(data)} />
+<slot {stack}/>

@@ -1,21 +1,19 @@
-import { CurveFactory } from 'd3-shape'
+import { CurveFactory, Area as D3Area } from 'd3-shape'
 import { SvelteComponentTyped } from 'svelte'
 
-interface Props<Datum> {
+interface Props<T> {
+  T?: T[]
   xAxisId?: 'default' | string
   yAxisId?: 'default' | string
-  data?: ArrayLike<Datum>
   curve?: CurveFactory
-  x?: (d: Datum, ...args: any) => number
-  y0?: number | ((d: Datum, index: number, data: Datum[]) => number)
-  y1?: (d: Datum, ...args: any) => number
-
-  Datum?: Datum
+  x?: (d: T, index: number, data: T[]) => number
+  y0?: number | ((d: T, index: number, data: T[]) => number)
+  y1?: (d: T, index: number, data: T[]) => number
 }
 
-interface Slot<Datum> {
+interface Slot<T> {
   default: {
-    area?: (data: Iterable<Datum> | Datum[]) => string | null
+    area?: D3Area<T>
     d?: string
   }
 }
@@ -23,9 +21,5 @@ interface Slot<Datum> {
 /**
  * Grafico Area Component
  */
-declare class Area<Datum> extends SvelteComponentTyped<
-  Props<Datum>,
-  never,
-  Slot<Datum>
-> {}
+declare class Area<T> extends SvelteComponentTyped<Props<T>, never, Slot<T>> {}
 export default Area

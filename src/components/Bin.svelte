@@ -7,7 +7,7 @@
   export let xAxisId = 'default'
   export let yAxisId = 'default'
 
-  export let data = []
+  // export let data = []
   export let domain = []
   export let value
   export let thresholds
@@ -21,11 +21,10 @@
   $: value && bin.value(value)
   $: thresholds && bin.thresholds(thresholds)
 
-  $: bins = bin(data)
 </script>
 
 <slot
-  data={bins}
+  {bin}
   x0Get={(d) => $xScale(d.x0)}
   x1Get={(d) => $xScale(d.x1)}
   yGet={(d) => $yScale(d.length)}

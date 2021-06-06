@@ -88,6 +88,7 @@
   }
 
   $: $dataStore = data
+
 </script>
 
 <figure
@@ -97,41 +98,39 @@
   style={`--height:${height}px;`}
 >
   <svg
-    height={$innerHeightStore}
-    viewBox="0 0 {$innerWidthStore} {$innerHeightStore}"
+    height={$heightStore}
+    viewBox="0 0 {$widthStore} {$heightStore}"
     preserveAspectRatio="none"
-    style={`margin:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px; width: calc(100% - ${padding.left}px - ${padding.right}px);`}
   >
-    {#await tick() then value}
-      <slot name="grid" />
-      <slot
-        width={$widthStore}
-        height={$heightStore}
-        innerWidth={$innerWidthStore}
-        innerHeight={$innerHeightStore}
-        padding={$paddingStore}
-        data={$dataStore}
-        {xScales}
-        {yScales}
-        {xAccessors}
-        {yAccessors}
-        {xAxisId}
-        {yAxisId}
-      />
-    {/await}
-  </svg>
-  <div
-    class="elements"
-    style={`padding:${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;`}
-  >
-    <div class="inner">
+    <g transform={`translate(${padding.left}, ${padding.top})`}>
+      {#await tick() then _}
+        <slot name="grid" />
+        <slot
+          width={$widthStore}
+          height={$heightStore}
+          innerWidth={$innerWidthStore}
+          innerHeight={$innerHeightStore}
+          padding={$paddingStore}
+          data={$dataStore}
+          {xScales}
+          {yScales}
+          {xAccessors}
+          {yAccessors}
+          {xAxisId}
+          {yAxisId}
+        />
+      {/await}
       <slot name="xaxis" />
       <slot name="yaxis" />
-      <slot name="legend" />
-    </div>
-  </div>
+      <slot name="svg" />
+    </g>
+  </svg>
+
   <slot name="html" />
-  <slot name="title" />
+
+  <figcaption>
+    <slot name="title" />
+  </figcaption>
 </figure>
 
 <style>
@@ -172,4 +171,5 @@
     font-weight: 600;
     font-size: 1.2em;
   }
+
 </style>

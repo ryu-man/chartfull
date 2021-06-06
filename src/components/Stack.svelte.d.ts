@@ -2,7 +2,6 @@ import { Series } from 'd3-shape'
 import { SvelteComponentTyped } from 'svelte'
 
 interface Props<Datum, Key> {
-  data?: Datum[]
   keys?: ArrayLike<Key>
   offset?: (series: Series<Datum, Key>, order: number[]) => void
   order?: Iterable<number> | ((series: Series<Datum, Key>) => Iterable<number>)
@@ -16,7 +15,6 @@ interface Props<Datum, Key> {
 interface Slot<Datum, Key> {
   default: {
     stack?: (data: Iterable<Datum>, ...args: any[]) => Array<Series<Datum, Key>>
-    data?: Array<Series<Datum, Key>>
   }
 }
 

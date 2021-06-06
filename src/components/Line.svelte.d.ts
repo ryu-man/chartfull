@@ -1,18 +1,17 @@
 import { CurveFactory, CurveFactoryLineOnly, Line as D3Line } from 'd3-shape'
 import { SvelteComponentTyped } from 'svelte'
 
-interface Props<Datum> {
-  xAxisId?: 'default'
-  yAxisId?: 'default'
-  x?: (d: Datum, ...args: any) => Datum[keyof Datum]
-  y?: (d: Datum, ...args: any) => Datum[keyof Datum]
+interface Props<T> {
+  T?: T[]
+  xAxisId?: 'default' | (string & {})
+  yAxisId?: 'default' | (string & {})
+  x?: <D extends T>(d: D, index: number, data: T[]) => number
+  y?: <D extends T>(d: D, index: number, data: T[]) => number
   curve?: CurveFactory | CurveFactoryLineOnly
-  data?: Datum[]
-  typeof?: Datum
 }
-interface Slot<Datum> {
+interface Slot<T> {
   default: {
-    line: D3Line<[number, number]>
+    line: D3Line<T>
     d: string
   }
 }
@@ -20,9 +19,5 @@ interface Slot<Datum> {
 /**
  * Graficos Line Component
  */
-declare class Line<Datum> extends SvelteComponentTyped<
-  Props<Datum>,
-  never,
-  Slot<Datum>
-> {}
+declare class Line<T> extends SvelteComponentTyped<Props<T>, never, Slot<T>> {}
 export default Line

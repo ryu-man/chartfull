@@ -20,4 +20,4 @@
   startAngle && arc.startAngle(startAngle)
 </script>
 
-<slot {arc} centroid={arc.centroid} toString={arc.toString} />
+<slot {arc} />

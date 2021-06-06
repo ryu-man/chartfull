@@ -13,11 +13,13 @@ interface Props<Datum, XValue, YValue, Range> {
   Datum?: Datum
   XValue?: XValue
   YValue?: YValue
-  Range?: Range
+  Range?: Range[]
 }
 
 interface Slot<Datum, Range> {
   default: {
+    domain?: Datum[]
+    range?: Range[]
     xGet?: (d: Datum) => NumberValue
     yGet?: (d: Datum) => NumberValue
     zGet?: (d: Datum) => Range

@@ -5,7 +5,7 @@
   export let y = 0
   export let width = 0
   export let height = 0
-
+  
   export let defaultX = 0
   export let defaultY = 0
   export let defaultWidth = 0

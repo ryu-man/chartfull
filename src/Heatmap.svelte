@@ -10,8 +10,6 @@
   export let height = 400
   export let padding = {}
   export let data = []
-  export let colorDomain = [1, 100]
-  export let colorRange = ['white', '#69b3a2']
   export let style = {}
 
   const {
@@ -27,11 +25,7 @@
     yScales = {
       default: writable(scaleBand())
     },
-    colorScale = writable(scaleLinear())
   } = graficoContext()
-
-  $: $colorScale.domain(colorDomain).range(colorRange),
-    ($colorScale = $colorScale)
 </script>
 
 <Context value={{ xAccessors, yAccessors, xScales, yScales }}>
