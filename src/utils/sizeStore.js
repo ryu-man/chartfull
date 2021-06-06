@@ -13,7 +13,7 @@ export function sizeStore(width, height, padding) {
 
   return {
     widthStore: widthStore,
-    heightStore: widthStore,
+    heightStore: heightStore,
     paddingStore: _paddingStore,
     innerWidthStore: _innerWidthStore,
     innerHeightStore: _innerHeightStore
