@@ -1,75 +1,79 @@
-<script context="module">
-  export function tickPosition(node, { x = 0, y = 0, position = 'bottom' }) {
-    function setPos({ x = 0, y = 0, position = 'left' }) {
-      node.style.left = `${x}%`
-      if (position === 'bottom') {
-        node.style.top = `${y}%`
-      }
-      if (position === 'top') {
-        node.style.bottom = `${y}%`
-      }
-    }
-    setPos({ x, y, position })
-    return {
-      update({ x = 0, y = 0, position = 'left' }) {
-        setPos({ x, y, position })
-      }
-    }
-  }
-</script>
-
 <script>
   import { graficoContext } from '../Context.svelte'
   import { scaleStore } from '../scales'
   import { Declare } from '../components'
+  import { classNames } from '../utils'
   import Axis from './Axis.svelte'
-  import XTickValuesUpdater from './XTickValuesUpdater.svelte'
 
-  const { innerWidthStore, xScales } = graficoContext()
+  const { innerWidthStore, xScales, xTickValues } = graficoContext()
   let { xAxisId } = graficoContext()
 
   export let id = 'default'
-  export let position = 'bottom'
+  export let x = 0
+  export let y = 0
   export let scale
+  export let orient = 'top'
   export let ticks
   export let tickArguments
   export let tickValues
   export let tickFormat
+
+  export let tickSize = 6
+  export let tickPadding = 3
+  export let offset =
+    typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
 
   let _class = ''
   export { _class as class }
 
   xAxisId = id
   xScales[id] = scaleStore(scale)
+
+  $: $xTickValues = tickValues
+
 </script>
 
 <Axis
-  class={_class + ' x'}
+  class={classNames(_class, 'x')}
   {scale}
-  {position}
+  {x}
+  {y}
   {id}
   {ticks}
+  {orient}
   {tickArguments}
   {tickValues}
   {tickFormat}
+  {tickSize}
+  {tickPadding}
+  {offset}
   let:values
   let:format
 >
-  <XTickValuesUpdater tickValues={values} {id}>
-    {#each values as tick, index (tick)}
-      <Declare value={(scale(tick) * 100) / $innerWidthStore} let:value={x}>
-        <slot {index} {tick} {x} y={0} {tickPosition}>
-          <span
-            use:tickPosition={{
-              x,
-              y: 0
-            }}
-            class="tick">{format(tick)}</span
-          >
-        </slot>
-      </Declare>
-    {/each}
-  </XTickValuesUpdater>
+  {#each values as tick, index (tick)}
+    <Declare value={scale(tick)} let:value={x}>
+      <slot {index} {tick} {x} y={0} {format}>
+        <g class="tick" transform={`translate(${x},0)`}>
+          <line stroke="black" y2={tickSize} />
+          <text dy="20" text-anchor="middle">{format(tick)}</text>
+        </g>
+      </slot>
+    </Declare>
+  {/each}
+  <path
+    class="domain"
+    fill="none"
+    stroke="black"
+    strokeWidth={2}
+    d={`M0,6V0H${$innerWidthStore}V6`}
+  />
 
   <slot name="label" slot="label" />
 </Axis>
+
+<style>
+  text {
+    vector-effect: non-scaling-stroke;
+  }
+
+</style>
