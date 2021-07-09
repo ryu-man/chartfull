@@ -1,4 +1,5 @@
 import { SvelteComponentTyped } from 'svelte'
+import { Writable } from 'svelte/store'
 
 interface Prop<Datum, Value> {
   width?: number
@@ -40,3 +41,29 @@ declare class Grafico<Datum, Value> extends SvelteComponentTyped<
   Slot<Datum, Value>
 > {}
 export default Grafico
+
+export const key: any
+export const graficoContext: () => {
+  widthStore: Writable<number>
+  heightStore: Writable<number>
+  innerWidthStore: Writable<number>
+  innerHeightStore: Writable<number>
+  paddingStore: Writable<number>
+  dataStore: Writable<any[]>
+  xScales
+  yScales
+  xAccessors
+  yAccessors
+  xTickValues
+  yTickValues
+  xAxisId
+  yAxisId
+  scales: Writable<{
+    [key:string]: (domain: any) => any
+  }>
+  accessors: Writable<{
+    [key:string]: (d: any) => any
+  }>
+
+  [key: string]: any
+}

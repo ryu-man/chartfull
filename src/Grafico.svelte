@@ -1,11 +1,14 @@
+<script context="module">
+  export const key = {}
+
+  export const graficoContext = () => getContext(key) || {}
+</script>
+
 <script>
-  import { setContext, tick } from 'svelte'
+  import { getContext, setContext, tick } from 'svelte'
   import { writable } from 'svelte/store'
-  import { scaleLinear } from 'd3-scale'
-  import { graficoContext, key } from './Context.svelte'
   import { classNames, css } from './utils'
   import { sizeStore } from './utils/sizeStore'
-  import { scaleStore } from './scales'
 
   export let init = initialize
   export let width = 300
@@ -29,42 +32,20 @@
     paddingStore
   } = sizeStore(width, height, padding)
 
-  const {
-    xAccessors = {
-      default: (d) => d.x
-    },
-    yAccessors = {
-      default: (d) => d.y
-    },
-    xScales = {
-      default: scaleStore(scaleLinear())
-    },
-    yScales = {
-      default: scaleStore(scaleLinear())
-    },
-    dataStore = writable(data),
-    xTickValues = writable([]),
-    yTickValues = writable([]),
-    xAxisId = 'default',
-    yAxisId = 'default',
-    ...rest
-  } = graficoContext() ?? {}
+  const { dataStore = writable(data), ...rest } = graficoContext() ?? {}
 
-  let context = {
+  const scales = writable({})
+  const accessors = writable({})
+
+  const context = {
     widthStore,
     heightStore,
     innerWidthStore,
     innerHeightStore,
     paddingStore,
     dataStore,
-    xScales,
-    yScales,
-    xAccessors,
-    yAccessors,
-    xTickValues,
-    yTickValues,
-    xAxisId,
-    yAxisId,
+    scales,
+    accessors,
     ...rest
   }
 
@@ -88,7 +69,6 @@
   }
 
   $: $dataStore = data
-
 </script>
 
 <figure
@@ -104,7 +84,11 @@
   >
     <g transform={`translate(${padding.left}, ${padding.top})`}>
       {#await tick() then _}
-        <slot name="grid" />
+        <slot name="xaxis" />
+        <slot name="yaxis" />
+
+        <!-- <slot name="grid" /> -->
+
         <slot
           width={$widthStore}
           height={$heightStore}
@@ -112,16 +96,10 @@
           innerHeight={$innerHeightStore}
           padding={$paddingStore}
           data={$dataStore}
-          {xScales}
-          {yScales}
-          {xAccessors}
-          {yAccessors}
-          {xAxisId}
-          {yAxisId}
+          scales={$scales}
         />
       {/await}
-      <slot name="xaxis" />
-      <slot name="yaxis" />
+
       <slot name="svg" />
     </g>
   </svg>
@@ -166,10 +144,9 @@
   }
   .grafico :global(figcaption) {
     position: absolute;
-    bottom: 101%;
+    top: 0;
     right: 0;
     font-weight: 600;
     font-size: 1.2em;
   }
-
 </style>
