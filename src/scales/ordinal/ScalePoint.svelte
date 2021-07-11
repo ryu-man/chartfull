@@ -1,5 +1,4 @@
 <script>
-  import { scaleStore } from '../scaleStore'
   import { scalePoint } from 'd3-scale'
 
   export let domain = [0, 1]
@@ -11,23 +10,17 @@
   export let paddingOuter
   export let align
 
-  const scale = scaleStore(scalePoint())
+  const root = scalePoint()
+  let scale = root
 
-  $: scale.domain(domain)
-  $: scale.range(range)
-  $: scale.get.round(round)
-  $: rangeRound && scale.get.rangeRound(rangeRound)
-  $: align && scale.get.align(align)
-  $: padding && scale.get.padding(padding)
-  $: paddingInner && scale.get.paddingInner(paddingInner)
-  $: paddingOuter && scale.get.paddingOuter(paddingOuter)
+  $: scale = root.domain(domain)
+  $: scale = root.range(range)
+  $: scale = root.round(round)
+  $: rangeRound && (scale = root.rangeRound(rangeRound))
+  $: align && (scale = root.align(align))
+  $: padding && (scale = root.padding(padding))
+  $: paddingInner && (scale = root.paddingInner(paddingInner))
+  $: paddingOuter && (scale = root.paddingOuter(paddingOuter))
 </script>
 
-<slot
-  scale={$scale}
-  domain={$scale.domain()}
-  range={$scale.range()}
-  padding={$scale.padding()}
-  paddingInner={$scale.paddingInner()}
-  paddingOuter={$scale.paddingOuter()}
-/>
+<slot {scale} />
