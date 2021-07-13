@@ -1,31 +1,22 @@
 <script>
-  import { scaleStore } from '../scaleStore'
   import { scaleSequential } from 'd3-scale'
 
   export let domain = []
   export let range = [0, 1]
   export let rangeRound
-  export let round = false
-  export let padding
-  export let paddingInner
-  export let paddingOuter
-  export let align
+  export let interpolator
+  export let clamp
+  export let unknown
 
-  const scale = scaleStore(scaleSequential())
+  const root = scaleSequential()
+  let scale = root
 
-  $: scale.domain(domain)
-  $: scale.range(range)
-  $: scale.get.round(round)
-  $: rangeRound && scale.get.rangeRound(rangeRound)
-  $: align && scale.get.align(align)
-  $: padding && scale.get.padding(padding)
-  $: paddingInner && scale.get.paddingInner(paddingInner)
-  $: paddingOuter && scale.get.paddingOuter(paddingOuter)
+  $: scale = root.domain(domain)
+  $: scale = root.range(range)
+  $: rangeRound && (scale = root.rangeRound(rangeRound))
+  $: interpolator && (scale = root.interpolator(interpolator))
+  $: clamp && (scale = root.clamp(clamp))
+  $: unknown && (scale = root.unknown(unknown))
 </script>
 
-<slot
-  scale={$scale}
-  {domain}
-  step={$scale.step()}
-  bandwidth={$scale.bandwidth()}
-/>
+<slot {scale} />
