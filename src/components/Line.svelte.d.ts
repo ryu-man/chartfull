@@ -3,8 +3,8 @@ import { SvelteComponentTyped } from 'svelte'
 
 interface Props<T> {
   T?: T[]
-  xAxisId?: 'default' | (string & {})
-  yAxisId?: 'default' | (string & {})
+  xId?: 'x' | (string & {})
+  yId?: 'y' | (string & {})
   x?: <D extends T>(d: D, index: number, data: T[]) => number
   y?: <D extends T>(d: D, index: number, data: T[]) => number
   curve?: CurveFactory | CurveFactoryLineOnly

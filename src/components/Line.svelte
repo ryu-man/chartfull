@@ -1,29 +1,26 @@
 <script>
   import { curveMonotoneX, line as Line } from 'd3-shape'
-  import { graficoContext } from '../Context.svelte'
+  import { graficoContext } from '../Grafico.svelte'
 
-  const { xAccessors, yAccessors, xScales, yScales } = graficoContext()
+  const { scales, accessors } = graficoContext()
 
-  export let xAxisId = 'default'
-  export let yAxisId = 'default'
+  export let xId = 'x'
+  export let yId = 'y'
 
-  const xAccessor = xAccessors[xAxisId]
-  const yAccessor = xAccessors[yAxisId]
-  export let x = xAccessor
-  export let y = yAccessor
+  export let x = $accessors[xId]
+  export let y = $accessors[yId]
   export let curve = curveMonotoneX
 
-  const xScale = xScales[xAxisId]
-  const yScale = yScales[yAxisId]
+  const xScale = $scales[xId]
+  const yScale = $scales[yId]
 
-  xAccessors[xAxisId] = x
-  yAccessors[yAxisId] = y
+  $accessors[xId] = x
+  $accessors[yId] = y
 
   const line = Line()
-    .x((d) => $xScale(x(d)))
-    .y((d) => $yScale(y(d)))
+    .x((d) => xScale(x(d)))
+    .y((d) => yScale(y(d)))
     .curve(curve)
-
 </script>
 
 <slot {line} />
