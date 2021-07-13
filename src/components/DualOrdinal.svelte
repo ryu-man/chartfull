@@ -11,8 +11,14 @@
   $accessors[xId] = x
   $accessors[yId] = y
 
-  export let xScale = $scales[xId]
-  export let yScale = $scales[yId]
+  export let xScale
+  export let yScale
+
+  let isXInteriour = !xScale
+  let isYInteriour = !yScale
+
+  $: isXInteriour && (xScale = $scales[xId])
+  $: isYInteriour && (yScale = $scales[yId])
 </script>
 
 <slot
@@ -20,6 +26,8 @@
   yGet={(d, ...args) => yScale(typeof d === 'object' ? y(d, ...args) : d)}
   xBandwidth={xScale?.bandwidth?.()}
   yBandwidth={yScale?.bandwidth?.()}
+  xStep={xScale?.step?.()}
+  yStep={yScale?.step?.()}
   {xScale}
   {yScale}
 />

@@ -14,14 +14,16 @@ interface Slot<Datum, XArgs extends any[], YArgs extends any[]> {
     xGet?: (d: Datum, ...args: XArgs) => number
     yGet?: (d: Datum, ...args: YArgs) => number
     xBandwidth?: number
+    xStep?: number
     yBandwidth?: number
+    yStep?: number
   }
 }
 
 /**
  * Grafico Bar Component
  */
-declare class DualBand<
+declare class DualOrdinal<
   Datum,
   XArgs extends any[],
   YArgs extends any[]
@@ -30,4 +32,4 @@ declare class DualBand<
   never,
   Slot<Datum, XArgs, YArgs>
 > {}
-export default DualBand
+export default DualOrdinal
