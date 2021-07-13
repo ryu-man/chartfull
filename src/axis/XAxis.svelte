@@ -1,14 +1,13 @@
 <script>
-  import { graficoContext } from '../Context.svelte'
-  import { scaleStore } from '../scales'
+  import { graficoContext } from '../Grafico.svelte'
   import { Declare } from '../components'
   import { classNames } from '../utils'
   import Axis from './Axis.svelte'
+  import Tick from './Tick.svelte'
 
-  const { innerWidthStore, xScales, xTickValues } = graficoContext()
-  let { xAxisId } = graficoContext()
+  const { innerWidthStore, scales } = graficoContext()
 
-  export let id = 'default'
+  export let id = 'x'
   export let x = 0
   export let y = 0
   export let scale
@@ -26,11 +25,7 @@
   let _class = ''
   export { _class as class }
 
-  xAxisId = id
-  xScales[id] = scaleStore(scale)
-
-  $: $xTickValues = tickValues
-
+  $scales[id] = scale
 </script>
 
 <Axis
@@ -53,27 +48,20 @@
   {#each values as tick, index (tick)}
     <Declare value={scale(tick)} let:value={x}>
       <slot {index} {tick} {x} y={0} {format}>
-        <g class="tick" transform={`translate(${x},0)`}>
-          <line stroke="black" y2={tickSize} />
-          <text dy="20" text-anchor="middle">{format(tick)}</text>
-        </g>
+        <Tick {x} value={format(tick)} />
       </slot>
     </Declare>
   {/each}
-  <path
-    class="domain"
-    fill="none"
-    stroke="black"
-    strokeWidth={2}
-    d={`M0,6V0H${$innerWidthStore}V6`}
-  />
 
-  <slot name="label" slot="label" />
+  <slot name="path" d={`M0,6V0H${$innerWidthStore}V6`}>
+    <path
+      class="domain"
+      fill="none"
+      stroke="black"
+      strokeWidth={2}
+      d={`M0,6V0H${$innerWidthStore}V6`}
+    />
+  </slot>
+
+  <slot name="label" />
 </Axis>
-
-<style>
-  text {
-    vector-effect: non-scaling-stroke;
-  }
-
-</style>

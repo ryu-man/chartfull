@@ -4,46 +4,53 @@
   // https://github.com/d3/d3-axis/blob/master/src/axis.js
 
   import { context } from './Axis.svelte'
-  const store = context()
   const {
     orient,
     tickSize: _tickSize,
     tickPadding: _tickPadding,
     offset: _offset
-  } = $store
+  } = context()
 
   export let x = 0
   export let y = 0
   export let value = ''
 
-  export let tickSize = _tickSize
-  export let tickPadding = _tickPadding
-  export let offset = _offset
+  export let tickSize
+  export let tickPadding
+  export let offset
 
   export let style = {}
 
-  $: isXOrY = ['top', 'bottom'].includes(orient) ? true : false
+  $: tickSize = $_tickSize
+  $: tickPadding = $_tickPadding
+  $: offset = $_offset
+
+  $: isXOrY = ['top', 'bottom'].includes($orient) ? true : false
   $: offsetX = !isXOrY ? offset : 0
   $: offsetY = isXOrY ? offset : 0
 
-  $: spacing = Math.max(tickSize, 0) + tickPadding
-  $: k = ['top', 'left'].includes(orient) ? -1 : 1
+  $: k = ['top', 'left'].includes($orient) ? -1 : 1
+  $: spacing = Math.max(tickSize * k, 0) + tickPadding
   $: xy = isXOrY ? 'y' : 'x'
-  $: textAnchor = xy === 'y' ? 'middle' : orient === 'left' ? 'end' : 'start'
+  $: textAnchor = xy === 'y' ? 'middle' : $orient === 'left' ? 'end' : 'start'
 
   $: props = {
     [xy]: k * spacing,
-    ['d' + xy]:
-      orient === 'top' ? '0em' : orient === 'bottom' ? '0.71em' : '0.32em',
+    /* ['dy']:
+      $orient === 'top' ? '0em' : $orient === 'bottom' ? '0.71em' : '0.32em', */
     'text-anchor': textAnchor
   }
-
 </script>
 
 <g class="tick" transform={`translate(${x + offsetX},${y + offsetY})`}>
-  <slot>
-    <line stroke="black" {...{ [xy + '2']: tickSize * k }} />
+  <slot {k} {tickSize} {props}>
+    <line stroke="black" {...{ [xy + '2']: tickSize }} />
+    <text alignment-baseline="middle" use:css={style} {...props}>{value}</text>
   </slot>
-
-  <text use:css={style} {...props}>{value}</text>
 </g>
+
+<style>
+  text {
+    vector-effect: non-scaling-stroke;
+  }
+</style>

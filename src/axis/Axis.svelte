@@ -4,7 +4,6 @@
 
   export const Key = {}
   export const context = () => getContext(Key)
-
 </script>
 
 <script>
@@ -25,7 +24,12 @@
   let _class
   export { _class as class }
 
-  setContext(Key, writable({ orient, tickSize, tickPadding, offset }))
+  setContext(Key, {
+    orient: writable(orient),
+    tickSize: writable(tickSize),
+    tickPadding: writable(tickPadding),
+    offset: writable(offset)
+  })
 
   const identity = (d) => d
 
@@ -42,7 +46,6 @@
         ? scale.tickFormat.apply(scale, tickArguments)
         : identity
       : tickFormat
-
 </script>
 
 <g class={classNames(_class, 'axis')} transform={`translate(${x}, ${y})`}>
