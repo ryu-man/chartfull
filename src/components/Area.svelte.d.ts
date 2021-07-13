@@ -6,15 +6,22 @@ interface Props<T> {
   xId?: 'x' | (string & {})
   yId?: 'y' | (string & {})
   curve?: CurveFactory
-  x?: (d: T, index: number, data: T[]) => number
-  y0?: number | ((d: T, index: number, data: T[]) => number)
-  y1?: (d: T, index: number, data: T[]) => number
+  context?: CanvasRenderingContext2D | null
+
+  x?: (d: T, index: number, data: T[]) => number | number
+  x0?: (d: T, index: number, data: T[]) => number | number
+  x1?: (d: T, index: number, data: T[]) => number | number | null
+
+  y?: (d: T, index: number, data: T[]) => number | number
+  y0?: number | ((d: T, index: number, data: T[]) => number) | number
+  y1?: (d: T, index: number, data: T[]) => number | number | null
+
+  defined?:  (d: T, index: number, data: T[]) => boolean | boolean
 }
 
 interface Slot<T> {
   default: {
     area?: D3Area<T>
-    d?: string
   }
 }
 
