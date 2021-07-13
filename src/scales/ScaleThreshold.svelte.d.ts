@@ -1,22 +1,15 @@
 import { SvelteComponentTyped } from 'svelte'
-import type { ScaleThreshold as ScaleThresholdType } from 'd3-scale'
+import { ScaleThreshold as Scale } from 'd3-scale'
 
-interface Props<
-  Domain extends number | string | Date,
-  Range,
-  Unknown
-> {
-  domain: Iterable<Domain>
-  range: Iterable<Range>
+interface Props<Domain extends number | string | Date, Range, Unknown> {
+  domain: Parameters<Scale<Domain, Range, Unknown>['domain']>[0]
+  range: Parameters<Scale<Domain, Range, Unknown>['range']>[0]
+  invertExtent: Parameters<Scale<Domain, Range, Unknown>['invertExtent']>[0]
   unknown: Unknown
 }
 interface Slots<Domain extends number | string | Date> {
   default: {
-    scale: ScaleThresholdType<Domain, never>
-    domain: Iterable<Domain>
-    copy: ScaleThresholdType<Domain, never>['copy']
-    invertExtent: ScaleThresholdType<Domain, never>['invertExtent']
-    toString: ScaleThresholdType<Domain, never>['toString']
+    scale: Scale<Domain, never>
   }
 }
 

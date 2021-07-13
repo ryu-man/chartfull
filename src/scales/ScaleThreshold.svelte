@@ -1,22 +1,18 @@
 <script>
-  import { scaleStore } from './scaleStore'
   import { scaleThreshold } from 'd3-scale'
 
   export let domain = []
   export let range = [0, 1]
+  export let invertExtent
   export let unknown
 
-  const scale = scaleStore(scaleThreshold())
+  const root = scaleThreshold()
+  let scale = root
 
-  $: scale.domain(domain)
-  $: scale.range(range)
-  $: unknown && $scale.unknown(unknown)
+  $: scale = root.domain(domain)
+  $: scale = root.range(range)
+  $: scale = root.invertExtent(invertExtent)
+  $: unknown && (scale = root.unknown(unknown))
 </script>
 
-<slot
-  scale={$scale}
-  {domain}
-  copy={scale.copy}
-  invertExtent={scale.get.invertExtent}
-  toString={scale.toString}
-/>
+<slot {scale} />

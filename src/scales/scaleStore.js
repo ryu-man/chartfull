@@ -7,17 +7,17 @@ export function scaleStore(scale) {
     subscribe,
     domain: function (domain) {
       scale.domain(domain)
-      update((scale) => scale)
+      update(() => scale)
       return this
     },
     range: function (range) {
       scale.range(range)
-      update((scale) => scale)
+      update(() => scale)
       return this
     },
     unknown: function (value) {
       scale.unknown(value)
-      update((scale) => scale)
+      update(() => scale)
       return this
     },
     copy: scale.copy,

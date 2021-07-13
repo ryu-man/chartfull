@@ -11,12 +11,6 @@ interface Props<Range, Unknown> {
 interface Slots<Range, Unknown> {
   default: {
     scale?: Scale<Range, Unknown>
-    domain?: Iterable<NumberValue>
-    range?: Iterable<Range>
-    quantiles?: number[]
-    copy?: Scale<Range, Unknown>['copy']
-    invertExtent?: Scale<Range, Unknown>['invertExtent']
-    toString?: Scale<Range, Unknown>['toString']
   }
 }
 

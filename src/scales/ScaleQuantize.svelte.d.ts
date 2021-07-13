@@ -1,28 +1,18 @@
 import { SvelteComponentTyped } from 'svelte'
 import { ScaleQuantize as Scale } from 'd3-scale'
-import { NumberValue } from 'd3-scale'
 
 interface Props<Range, Unknown> {
-  domain?: Iterable<NumberValue>
-  range?: Iterable<Range>
+  domain?: Parameters<Scale<Range, Unknown>['domain']>[0]
+  range?: Parameters<Scale<Range, Unknown>['range']>[0]
+  invertExtent?: Parameters<Scale<Range, Unknown>['invertExtent']>[0]
   unknown?: Unknown
-  ticks?: number
-  specifier?: string
-  nice?: number
+  ticks?: Parameters<Scale<Range, Unknown>['ticks']>[0]
+  nice?: Parameters<Scale<Range, Unknown>['nice']>[0]
 }
 
 interface Slots<Range, Unknown> {
   default: {
     scale?: Scale<Range, Unknown>
-    domain?: [number, number]
-    range?: Range[]
-    quantiles?: number[]
-    thresholds?: number[]
-    ticks?: number[]
-    format?: (d: NumberValue) => string
-    copy?: Scale<NumberValue, never>['copy']
-    invertExtent?: Scale<NumberValue, never>['invertExtent']
-    toString?: Scale<NumberValue, never>['toString']
   }
 }
 
