@@ -5,14 +5,15 @@ interface Props<T> {
   T?: T[]
   xId?: 'x' | (string & {})
   yId?: 'y' | (string & {})
-  x?: <D extends T>(d: D, index: number, data: T[]) => number
-  y?: <D extends T>(d: D, index: number, data: T[]) => number
+  context?: CanvasRenderingContext2D | null
   curve?: CurveFactory | CurveFactoryLineOnly
+  x?: <D extends T>(d: D, index: number, data: T[]) => number | number
+  y?: <D extends T>(d: D, index: number, data: T[]) => number | number
+  defined?: (d: T, index: number, data: T[]) => boolean | boolean
 }
 interface Slot<T> {
   default: {
     line: D3Line<T>
-    d: string
   }
 }
 
