@@ -70,8 +70,11 @@
             let:x
             let:d
           >
-            <Tick {x} y={0} value={format(tick)} let:tickSize>
+            <Tick {x} y={0} let:tickSize let:props>
               <line stroke="#e8e8e8" y2={tickSize} />
+              <text {...props} fill="gray" font-family="Brandon Grotesque"
+                >{format(tick)}</text
+              >
             </Tick>
             <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
             <text
@@ -112,9 +115,16 @@
               % Unemployment
             </text>
             <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
-            
-            <Tick {y} value={format(tick)} let:tickSize>
+
+            <Tick {y} let:tickSize let:props>
               <line stroke="#e8e8e8" x2={tickSize} />
+              <text
+                {...props}
+                fill="gray"
+                alignment-baseline="middle"
+                font-size="14pt"
+                font-family="Brandon Grotesque">{format(tick)}</text
+              >
             </Tick>
           </YAxis>
         </ScaleLinear>
