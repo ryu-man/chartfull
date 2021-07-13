@@ -10,14 +10,17 @@
   export let padRadius
   export let startAngle
 
-  let arc = Arc().innerRadius(innerRadius).outerRadius(outerRadius)
+  const root = Arc()
+  let arc = root
 
-  cornerRadius && arc.cornerRadius(cornerRadius)
-  context && arc.context(context)
-  endAngle && arc.endAngle(endAngle)
-  padAngle && arc.padAngle(padAngle)
-  padRadius && arc.padRadius(padRadius)
-  startAngle && arc.startAngle(startAngle)
+  $: arc = root.innerRadius(innerRadius)
+  $: arc = root.outerRadius(outerRadius)
+  $: cornerRadius && (arc = root.cornerRadius(cornerRadius))
+  $: context && (arc = root.context(context))
+  $: endAngle && (arc = root.endAngle(endAngle))
+  $: padAngle && (arc = root.padAngle(padAngle))
+  $: padRadius && (arc = root.padRadius(padRadius))
+  $: startAngle && (arc = root.startAngle(startAngle))
 </script>
 
 <slot {arc} />
