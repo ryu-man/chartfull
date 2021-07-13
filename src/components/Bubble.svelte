@@ -1,25 +1,41 @@
 <script>
-  import { graficoContext } from '../Context.svelte'
-  import { scaleLinear } from 'd3-scale'
-  const { xScales, yScales, xAccessors, yAccessors } = graficoContext()
+  import { graficoContext } from '../Grafico.svelte'
+  import { ScaleLinear } from '../scales'
+  const { scales, accessors } = graficoContext()
 
-  export let xAxisId = 'default'
-  export let yAxisId = 'default'
-  export let x = xAccessors[xAxisId]
-  export let y = yAccessors[yAxisId]
+  export let xId = 'x'
+  export let yId = 'y'
+  export let x = $accessors[xId]
+  export let y = $accessors[yId]
+
+  $accessors[xId] = x
+  $accessors[yId] = y
+
   export let domain = [0, 1]
   export let range = [0, 1]
+  export let rangeRound
+  export let clamp = false
+  export let interpolator
+  export let nice
+  export let unknown
 
-  xAccessors[xAxisId] = x
-  yAccessors[yAxisId] = y
-
-  const xScale = xScales[xAxisId]
-  const yScale = yScales[yAxisId]
-  const zScale = scaleLinear(domain, range)
+  const xScale = $scales[xId]
+  const yScale = $scales[yId]
 </script>
 
-<slot
-  xGet={(d) => $xScale(x(d))}
-  yGet={(d) => $yScale(y(d))}
-  zGet={(d) => zScale(d)}
-/>
+<ScaleLinear
+  {domain}
+  {range}
+  {rangeRound}
+  {clamp}
+  {interpolator}
+  {nice}
+  {unknown}
+  let:scale={zScale}
+>
+  <slot
+    xGet={(d) => $xScale(x(d))}
+    yGet={(d) => $yScale(y(d))}
+    zGet={(d) => zScale(d)}
+  />
+</ScaleLinear>
