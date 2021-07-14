@@ -1,5 +1,4 @@
 <script>
-  import { scaleStore } from '../scaleStore'
   import { scaleTime } from 'd3-scale'
 
   export let domain = [0, 1]
@@ -9,28 +8,17 @@
   export let interpolate
   export let nice
   export let unknown
-  export let ticks
-  export let tickFormat
 
-  const scale = scaleStore(scaleTime())
+  const root = scaleTime()
+  let scale = root
 
-  $: scale.domain(domain)
-  $: scale.range(range)
-  $: rangeRound && scale.get.rangeRound(rangeRound)
-  $: scale.get.unknown(unknown)
-  $: scale.get.clamp(clamp)
-  $: interpolate && scale.get.interpolate(interpolate)
-  $: scale.get.nice(nice)
+  $: scale = root.domain(domain)
+  $: scale = root.range(range)
+  $: clamp && (scale = root.clamp(clamp))
+  $: nice && (scale = root.nice(nice))
+  $: rangeRound && (scale = root.rangeRound(rangeRound))
+  $: unknown && (scale = root.unknown(unknown))
+  $: interpolate && (scale = root.interpolate(interpolate))
 </script>
 
-<slot
-  scale={$scale}
-  domain={$scale.domain()}
-  range={$scale.range()}
-  ticks={$scale.ticks()}
-  unknown={$scale.unknown()}
-  interpolate={$scale.interpolate()}
-  tickFormat={$scale.tickFormat(tickFormat)}
-  invert={scale.get.invert}
-  copy={scale.get.copy}
-/>
+<slot {scale} />

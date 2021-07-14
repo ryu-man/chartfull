@@ -1,28 +1,18 @@
 import { SvelteComponentTyped } from 'svelte'
-import { ScaleRadial as Scale, NumberValue, UnknownReturnType } from 'd3-scale'
+import { ScaleRadial as Scale } from 'd3-scale'
 
 interface Props<Range, Output, Unknown> {
-  domain: Iterable<NumberValue>
-  range: Iterable<Range>
-  rangeRound?: Iterable<NumberValue>
-  clamp?: boolean
-  unknown?: Unknown
-  ticks?: number
-  tickFormat?: [number, string] | [number, number, number, string]
-  nice?: number
+  domain: Parameters<Scale<Range, Output, Unknown>['domain']>[0]
+  range: Parameters<Scale<Range, Output, Unknown>['range']>[0]
+  rangeRound?: Parameters<Scale<Range, Output, Unknown>['rangeRound']>[0]
+  unknown?: Parameters<Scale<Range, Output, Unknown>['unknown']>[0]
+  clamp?: Parameters<Scale<Range, Output, Unknown>['clamp']>[0]
+  nice?: Parameters<Scale<Range, Output, Unknown>['nice']>[0]
 }
 
 interface Slots<Range, Output, Unknown> {
   default: {
     scale: Scale<Range, Output, Unknown>
-    domain?: number[]
-    range?: Range[]
-    clamp?: boolean
-    ticks?: number[]
-    unknown?: UnknownReturnType<Unknown, undefined>
-    tickFormat?: (d: NumberValue) => string
-    invert?: Scale<Range, Output, Unknown>['invert']
-    copy?: Scale<Range, Output, Unknown>['copy']
   }
 }
 
@@ -34,5 +24,10 @@ declare class ScaleRadial<
   Props<Range, Output, Unknown>,
   never,
   Slots<Range, Output, Unknown>
-> {}
+> {
+  ticks: Scale<Range, Output, Unknown>['ticks']
+  tickFormat: Scale<Range, Output, Unknown>['tickFormat']
+  copy: Scale<Range, Output, Unknown>['copy']
+  invert: Scale<Range, Output, Unknown>['invert']
+}
 export default ScaleRadial
