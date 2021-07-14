@@ -1,24 +1,20 @@
 import { SvelteComponentTyped } from 'svelte'
 
-interface Props<Datum> {
-  value?: Datum
-
-  //These properties are used for typing manners
-  Datum?: Datum
+type Props<T> = {
+  T?: T
+  value?: T
 }
-
-interface Slot<Datum> {
+type Slots<T> = {
   default: {
-    value?: Props<Datum>['value']
+    value?: T
   }
 }
 
 /**
- * Grafico Circle Component
+ * Declare Component
  */
-declare class Declare<Datum> extends SvelteComponentTyped<
-  Props<Datum>,
+export default class Declare<T> extends SvelteComponentTyped<
+  Props<T>,
   never,
-  Slot<Datum>
+  Slots<T>
 > {}
-export default Declare
