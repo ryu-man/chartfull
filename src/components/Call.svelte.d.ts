@@ -5,7 +5,7 @@ type Params<T> = {
 }
 
 type Props<T, R> = Params<T> & {
-  call?: <U extends Omit<T, 'call'>>(params?: U) => R
+  func?: <U extends Omit<T, 'func'>>(params?: U) => R
 }
 
 interface Slots< R> {

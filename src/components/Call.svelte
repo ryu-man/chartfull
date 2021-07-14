@@ -1,7 +1,5 @@
 <script>
-  export let call
-
-  
+  export let func
 </script>
 
-<slot value={call($$restProps)} />
+<slot value={func($$restProps)} />
