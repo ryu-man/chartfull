@@ -1,6 +1,5 @@
 <script context="module">
-  import { getContext, setContext } from 'svelte'
-  import { writable } from 'svelte/store'
+  import { getContext } from 'svelte'
 
   export const Key = {}
   export const context = () => getContext(Key)
@@ -12,24 +11,12 @@
   export let x = 0
   export let y = 0
   export let scale
-  export let orient = 'top'
   export let tickArguments
   export let tickValues
   export let tickFormat
-  export let tickSize = 6
-  export let tickPadding = 3
-  export let offset =
-    typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
 
   let _class
   export { _class as class }
-
-  setContext(Key, {
-    orient: writable(orient),
-    tickSize: writable(tickSize),
-    tickPadding: writable(tickPadding),
-    offset: writable(offset)
-  })
 
   const identity = (d) => d
 

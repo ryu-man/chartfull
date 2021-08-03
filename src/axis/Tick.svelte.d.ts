@@ -1,13 +1,21 @@
 import { SvelteComponentTyped } from 'svelte'
 
-interface Props {
+type Props = {
   x?: number
   y?: number
   value?: string
-  tickSize?: number
-  tickPadding?: number
+  size?: number
+  padding?: number
   offset?: number
   style?: CSSStyleDeclaration
 }
 
-export default class Tick extends SvelteComponentTyped<Props> {}
+type Slots = {
+  default: {
+    k?: 1 | -1
+    size?: number
+    props?: any
+  }
+}
+
+export default class Tick extends SvelteComponentTyped<Props, never, Slots> {}

@@ -4,6 +4,8 @@
   import { classNames } from '../utils'
   import Axis from './Axis.svelte'
   import Tick from './Tick.svelte'
+  import TickContext from './TickContext.svelte'
+  import { writable } from 'svelte/store'
 
   const { innerWidthStore, scales } = graficoContext()
 
@@ -18,50 +20,60 @@
   export let tickFormat
 
   export let tickSize = 6
-  export let tickPadding = 3
+  export let tickPadding = 4
   export let offset =
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
+  export let tickColor
 
   let _class = ''
   export { _class as class }
 
-  $scales[id] = scale
+  $: $scales[id] = scale
+
+  const k = orient === 'top' ? -1 : 1
+
+  const context = writable({
+    xy: 'y',
+    k,
+    offsetX: 0,
+    offsetY: offset,
+    size: tickSize,
+    padding: tickPadding,
+    textAnchor: 'middle',
+    tickColor
+  })
+
+  $: d = `M0,${k * 6}V0H${$innerWidthStore}V${k * 6}`
+
+  $: console.log(scale?.domain())
 </script>
 
-<Axis
-  class={classNames(_class, 'x')}
-  {scale}
-  {x}
-  {y}
-  {id}
-  {ticks}
-  {orient}
-  {tickArguments}
-  {tickValues}
-  {tickFormat}
-  {tickSize}
-  {tickPadding}
-  {offset}
-  let:values
-  let:format
->
-  {#each values as tick, index (tick)}
-    <Declare value={scale(tick)} let:value={x}>
-      <slot {index} {tick} {x} y={0} {format}>
-        <Tick {x} value={format(tick)} />
-      </slot>
-    </Declare>
-  {/each}
+<TickContext value={context}>
+  <Axis
+    class={classNames(_class, 'x')}
+    {scale}
+    {x}
+    {y}
+    {id}
+    {ticks}
+    {tickArguments}
+    {tickValues}
+    {tickFormat}
+    let:values
+    let:format
+  >
+    {#each values as tick, index (tick)}
+      <Declare value={scale(tick)} let:value={x}>
+        <slot {index} {tick} {x} y={0} {format}>
+          <Tick {x} value={format(tick)} />
+        </slot>
+      </Declare>
+    {/each}
 
-  <slot name="path" d={`M0,6V0H${$innerWidthStore}V6`}>
-    <path
-      class="domain"
-      fill="none"
-      stroke="black"
-      strokeWidth={2}
-      d={`M0,6V0H${$innerWidthStore}V6`}
-    />
-  </slot>
+    <slot name="path" {d}>
+      <path class="domain" fill="none" stroke="#545863" stroke-width={2} {d} />
+    </slot>
 
-  <slot name="label" />
-</Axis>
+    <slot name="label" />
+  </Axis>
+</TickContext>
