@@ -7,6 +7,7 @@
   export let yId = 'y'
   export let x = $accessors[xId]
   export let y = $accessors[yId]
+  export let z
 
   $accessors[xId] = x
   $accessors[yId] = y
@@ -19,8 +20,8 @@
   export let nice
   export let unknown
 
-  const xScale = $scales[xId]
-  const yScale = $scales[yId]
+  $: xScale = $scales[xId]
+  $: yScale = $scales[yId]
 </script>
 
 <ScaleLinear
@@ -34,8 +35,8 @@
   let:scale={zScale}
 >
   <slot
-    xGet={(d) => $xScale(x(d))}
-    yGet={(d) => $yScale(y(d))}
-    zGet={(d) => zScale(d)}
+    xGet={(d) => xScale(x(d))}
+    yGet={(d) => yScale(y(d))}
+    zGet={(d) => zScale(z?.(d))}
   />
 </ScaleLinear>
