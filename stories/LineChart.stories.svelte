@@ -11,19 +11,32 @@
     ScaleLinear,
     Tick
   } from '../src'
-  import { csv, extent, schemeCategory10, timeParse } from 'd3'
+  import {
+    csv,
+    extent,
+    scaleLinear,
+    scaleTime,
+    schemeCategory10,
+    timeParse
+  } from 'd3'
 
   const timeParser = timeParse('%Y%m%d')
 
-  let data = []
+  let multiLineData = []
 
   csv('./multi_line.csv', (d) => ({
     date: timeParser(d['date']),
     'New York_1': +d['New York_1'],
     'San Francisco_1': +d['San Francisco_1'],
     Austin_1: +d['Austin_1']
-  })).then((res) => (data = res))
+  })).then((res) => (multiLineData = res))
 
+  let oneLineData = []
+  const timeParse_2 = timeParse('%Y-%m-%d')
+  csv('./3_TwoNumOrdered_comma.csv', (d) => ({
+    date: timeParse_2(d.date),
+    value: +d.value
+  })).then((res) => (oneLineData = res))
 </script>
 
 <Meta
@@ -32,35 +45,34 @@
   argTypes={{ height: { control: { type: 'number' } } }}
 />
 
-<Template let:args>
-  <Declare value={(d) => d.date} let:value={accessor}>
-    <Grafico {...args} {data} let:data let:innerWidth let:innerHeight>
-      <ScaleOrdinal
-        domain={['ny', 'sf', 'au']}
-        range={schemeCategory10}
-        let:scale
+<Story
+  name="One line"
+  args={{
+    height: 600
+  }}
+  let:args
+>
+  <Declare
+    value={[(d) => d.date, (d) => d.value]}
+    let:value={[xAccessor, yAccessor]}
+  >
+    <Declare value={[scaleTime(), scaleLinear()]} let:value={[xScale, yScale]}>
+      <Grafico
+        {...args}
+        data={oneLineData}
+        let:data
+        let:innerWidth
+        let:innerHeight
       >
-        <g>
-          <Line T={data} y={(d) => d['New York_1']} x={accessor} let:line>
-            <path d={line(data)} fill="transparent" stroke={scale('ny')} />
-          </Line>
-          <Line T={data} y={(d) => d['San Francisco_1']} x={accessor} let:line>
-            <path d={line(data)} fill="transparent" stroke={scale('sf')} />
-          </Line>
-          <Line T={data} y={(d) => d['Austin_1']} x={accessor} let:line>
-            <path d={line(data)} fill="transparent" stroke={scale('au')} />
-          </Line>
-        </g>
-      </ScaleOrdinal>
-
-      <svelte:fragment slot="xaxis">
-        <ScaleTime
-          domain={extent(data.map(accessor))}
-          range={[0, innerWidth]}
-          let:scale
+        <Declare
+          value={[
+            xScale.domain(extent(data.map(xAccessor))).range([0, innerWidth]),
+            yScale.domain(extent(data.map(yAccessor))).range([innerHeight, 0])
+          ]}
+          let:value={[xScale, yScale]}
         >
           <XAxis
-            {scale}
+            scale={xScale}
             y={innerHeight}
             orient="bottom"
             tickSize={-innerHeight}
@@ -70,8 +82,8 @@
             let:x
             let:d
           >
-            <Tick {x} y={0} let:tickSize let:props>
-              <line stroke="#e8e8e8" y2={tickSize} />
+            <Tick {x} y={0} let:size let:props>
+              <line stroke="#e8e8e8" y2={size} />
               <text {...props} fill="gray" font-family="Brandon Grotesque"
                 >{format(tick)}</text
               >
@@ -79,31 +91,17 @@
             <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
             <text
               slot="label"
-              text-anchor="middle"
-              x={innerWidth / 2}
-              dy="64"
-              font-size="24">Years</text
+              text-anchor="end"
+              x={innerWidth}
+              dy="-8"
+              font-size="16"
+              fill="gray"
+              font-family="Brandon Grotesque">Years</text
             >
           </XAxis>
-        </ScaleTime>
-      </svelte:fragment>
 
-      <svelte:fragment slot="yaxis">
-        <ScaleLinear
-          domain={extent(
-            data
-              .map((d) => [
-                +d['New York_1'],
-                +d['San Francisco_1'],
-                +d['Austin_1']
-              ])
-              .reduce((acc, c) => (acc.push(...c), acc), [])
-          )}
-          range={[innerHeight, 0]}
-          let:scale
-        >
           <YAxis
-            {scale}
+            scale={yScale}
             tickSize={innerWidth}
             tickPadding={16}
             let:y
@@ -111,13 +109,19 @@
             let:format
             let:d
           >
-            <text slot="label" transform="rotate(90)" dy="64" fonts-size="24">
+            <text
+              slot="label"
+              dy="-8"
+              fonts-size="24"
+              fill="gray"
+              font-family="Brandon Grotesque"
+            >
               % Unemployment
             </text>
             <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
 
-            <Tick {y} let:tickSize let:props>
-              <line stroke="#e8e8e8" x2={tickSize} />
+            <Tick {y} let:size let:props>
+              <line stroke="#e8e8e8" x2={size} />
               <text
                 {...props}
                 fill="gray"
@@ -127,17 +131,144 @@
               >
             </Tick>
           </YAxis>
-        </ScaleLinear>
-      </svelte:fragment>
 
-      <div slot="title">Bureau of Labor Statistics</div>
-    </Grafico>
+          <Line {data} y={yAccessor} x={xAccessor} let:d>
+            <path {d} fill="transparent" stroke="black" stroke-width="1" />
+          </Line>
+        </Declare>
+
+        <div slot="title" style={'font-family:"Brandon Grotesque"'}>
+          Bureau of Labor Statistics
+        </div>
+      </Grafico>
+    </Declare>
   </Declare>
-</Template>
+</Story>
 
 <Story
-  name="Normal"
+  name="Multi-line"
   args={{
     height: 600
   }}
-/>
+  let:args
+>
+  <Declare value={(d) => d.date} let:value={accessor}>
+    <Grafico
+      {...args}
+      data={multiLineData}
+      let:data
+      let:innerWidth
+      let:innerHeight
+    >
+      <ScaleTime
+        domain={extent(data.map(accessor))}
+        range={[0, innerWidth]}
+        let:scale
+      >
+        <XAxis
+          {scale}
+          y={innerHeight}
+          orient="bottom"
+          tickSize={-innerHeight}
+          tickPadding={24}
+          let:tick
+          let:format
+          let:x
+          let:d
+        >
+          <Tick {x} y={0} let:size let:props>
+            <line stroke="#e8e8e8" y2={size} />
+            <text {...props} fill="gray" font-family="Brandon Grotesque"
+              >{format(tick)}</text
+            >
+          </Tick>
+          <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
+          <text
+            slot="label"
+            text-anchor="end"
+            x={innerWidth}
+            dy="64"
+            font-size="24"
+            fill="gray"
+            font-family="Brandon Grotesque">Years</text
+          >
+        </XAxis>
+      </ScaleTime>
+
+      <ScaleLinear
+        domain={extent(
+          data
+            .map((d) => [
+              +d['New York_1'],
+              +d['San Francisco_1'],
+              +d['Austin_1']
+            ])
+            .reduce((acc, c) => (acc.push(...c), acc), [])
+        )}
+        range={[innerHeight, 0]}
+        let:scale
+      >
+        <YAxis
+          {scale}
+          tickSize={innerWidth}
+          tickPadding={16}
+          let:y
+          let:tick
+          let:format
+          let:d
+        >
+          <text
+            slot="label"
+            transform="rotate(90)"
+            dy="64"
+            fonts-size="24"
+            fill="gray"
+            font-family="Brandon Grotesque"
+          >
+            % Unemployment
+          </text>
+          <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
+
+          <Tick {y} let:size let:props>
+            <line stroke="#e8e8e8" x2={size} />
+            <text
+              {...props}
+              fill="gray"
+              alignment-baseline="middle"
+              font-size="14pt"
+              font-family="Brandon Grotesque">{format(tick)}</text
+            >
+          </Tick>
+        </YAxis>
+      </ScaleLinear>
+
+      <ScaleOrdinal
+        domain={['ny', 'sf', 'au']}
+        range={schemeCategory10}
+        let:scale
+      >
+        <g>
+          <Line {data} y={(d) => d['New York_1']} x={accessor} let:d>
+            <path {d} fill="transparent" stroke={scale('ny')} />
+          </Line>
+          <Line {data} y={(d) => d['San Francisco_1']} x={accessor} let:d>
+            <path {d} fill="transparent" stroke={scale('sf')} />
+          </Line>
+          <Line {data} y={(d) => d['Austin_1']} x={accessor} let:d>
+            <path {d} fill="transparent" stroke={scale('au')} />
+          </Line>
+        </g>
+      </ScaleOrdinal>
+
+      <!-- <svelte:fragment slot="xaxis">
+    </svelte:fragment> -->
+
+      <!--  <svelte:fragment slot="yaxis">
+    </svelte:fragment> -->
+
+      <div slot="title" style={'font-family:"Brandon Grotesque"'}>
+        Bureau of Labor Statistics
+      </div>
+    </Grafico>
+  </Declare>
+</Story>

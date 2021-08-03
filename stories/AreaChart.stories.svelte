@@ -23,7 +23,11 @@
 <Meta
   title="Elements/Area chart"
   component={Grafico}
-  argTypes={{ height: { control: { type: 'number' } } }}
+  argTypes={{
+    height: { control: { type: 'number' } },
+    xScale: { control: { type: 'object' } },
+    yScale: { control: { type: 'object' } }
+  }}
 />
 
 <Template let:args>
@@ -32,29 +36,26 @@
     let:value={[dateAcc, valueAcc]}
   >
     <Grafico {...args} {data} let:innerWidth let:innerHeight>
+      <ScaleTime
+        domain={extent(data, dateAcc)}
+        range={[0, innerWidth]}
+        {...args.xScale}
+        let:scale
+      >
+        <XAxis {scale} tickPadding={16} />
+      </ScaleTime>
+      <ScaleLinear
+        domain={[0, max(data, valueAcc)]}
+        range={[innerHeight, 0]}
+        {...args.yScale}
+        let:scale
+      >
+        <YAxis {scale} tickPadding={8} />
+      </ScaleLinear>
+
       <Area x={dateAcc} y0={innerHeight} y1={valueAcc} let:area>
         <path d={area(data)} />
       </Area>
-
-      <svelte:fragment slot="xaxis">
-        <ScaleTime
-          domain={extent(data, dateAcc)}
-          range={[0, innerWidth]}
-          let:scale
-        >
-          <XAxis {scale} tickPadding={16} />
-        </ScaleTime>
-      </svelte:fragment>
-
-      <svelte:fragment slot="yaxis">
-        <ScaleLinear
-          domain={[0, max(data, valueAcc)]}
-          range={[innerHeight, 0]}
-          let:scale
-        >
-          <YAxis {scale} tickPadding={8} />
-        </ScaleLinear>
-      </svelte:fragment>
     </Grafico>
   </Declare>
 </Template>
@@ -62,6 +63,8 @@
 <Story
   name="Normal"
   args={{
-    height: 600
+    height: 600,
+    xScale: {},
+    yScale: {}
   }}
 />
