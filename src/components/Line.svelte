@@ -16,6 +16,8 @@
   const xScale = $scales[xId]
   const yScale = $scales[yId]
 
+  export let data = []
+
   $accessors[xId] = x
   $accessors[yId] = y
 
@@ -29,4 +31,4 @@
   $: context && (line = root.context(context))
 </script>
 
-<slot {line} />
+<slot {line} d={line(data)}/>
