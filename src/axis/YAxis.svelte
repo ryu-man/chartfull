@@ -24,6 +24,17 @@
   export let offset =
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
 
+  export let stroke = '#545863'
+  export let strokeWidth
+  export let strokeOpacity
+  export let strokeLinecap
+  export let strokeLinejoin
+  export let strokeDasharray
+  export let strokeDashoffset
+  export let strokeMiterlimit
+  export let fill = 'none'
+  export let d
+
   let _class = ''
   export { _class as class }
 
@@ -41,7 +52,7 @@
     textAnchor: orient === 'left' ? 'end' : 'start'
   })
 
-  $: d = `M${k * 6},0H0V${$innerHeightStore}H${k * 6}`
+  $: !d && (d = `M${k * 6},0H0V${$innerHeightStore}H${k * 6}`)
 </script>
 
 <TickContext value={context}>
@@ -66,9 +77,19 @@
       </Declare>
     {/each}
 
-    <slot name="path" {d}>
-      <path class="domain" fill="none" stroke="#545863" stroke-width={2} {d} />
-    </slot>
+    <path
+      class="domain"
+      {fill}
+      {stroke}
+      stroke-width={strokeWidth}
+      stroke-dasharray={strokeDasharray}
+      stroke-dashoffset={strokeDashoffset}
+      stroke-opacity={strokeOpacity}
+      stroke-linecap={strokeLinecap}
+      stroke-linejoin={strokeLinejoin}
+      stroke-miterlimit={strokeMiterlimit}
+      {d}
+    />
 
     <slot name="label" />
   </Axis>

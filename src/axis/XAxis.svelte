@@ -25,6 +25,17 @@
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
   export let tickColor
 
+  export let stroke = '#545863'
+  export let strokeWidth
+  export let strokeOpacity
+  export let strokeLinecap
+  export let strokeLinejoin
+  export let strokeDasharray
+  export let strokeDashoffset
+  export let strokeMiterlimit
+  export let fill = 'none'
+  export let d
+
   let _class = ''
   export { _class as class }
 
@@ -43,9 +54,8 @@
     tickColor
   })
 
-  $: d = `M0,${k * 6}V0H${$innerWidthStore}V${k * 6}`
+  $: !d && (d = `M0,${k * 6}V0H${$innerWidthStore}V${k * 6}`)
 
-  $: console.log(scale?.domain())
 </script>
 
 <TickContext value={context}>
@@ -70,9 +80,19 @@
       </Declare>
     {/each}
 
-    <slot name="path" {d}>
-      <path class="domain" fill="none" stroke="#545863" stroke-width={2} {d} />
-    </slot>
+    <path
+      class="domain"
+      {fill}
+      {stroke}
+      stroke-width={strokeWidth}
+      stroke-dasharray={strokeDasharray}
+      stroke-dashoffset={strokeDashoffset}
+      stroke-opacity={strokeOpacity}
+      stroke-linecap={strokeLinecap}
+      stroke-linejoin={strokeLinejoin}
+      stroke-miterlimit={strokeMiterlimit}
+      {d}
+    />
 
     <slot name="label" />
   </Axis>

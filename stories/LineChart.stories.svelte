@@ -77,6 +77,8 @@
             orient="bottom"
             tickSize={-innerHeight}
             tickPadding={24}
+            stroke="gray"
+            strokeWidth="2"
             let:tick
             let:format
             let:x
@@ -88,7 +90,6 @@
                 >{format(tick)}</text
               >
             </Tick>
-            <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
             <text
               slot="label"
               text-anchor="end"
@@ -104,6 +105,8 @@
             scale={yScale}
             tickSize={innerWidth}
             tickPadding={16}
+            stroke="gray"
+            strokeWidth="2"
             let:y
             let:tick
             let:format
@@ -118,7 +121,6 @@
             >
               % Unemployment
             </text>
-            <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
 
             <Tick {y} let:size let:props>
               <line stroke="#e8e8e8" x2={size} />
@@ -132,9 +134,13 @@
             </Tick>
           </YAxis>
 
-          <Line {data} y={yAccessor} x={xAccessor} let:d>
-            <path {d} fill="transparent" stroke="black" stroke-width="1" />
-          </Line>
+          <Line
+            {data}
+            y={yAccessor}
+            x={xAccessor}
+            stroke="black"
+            strokeWidth="1"
+          />
         </Declare>
 
         <div slot="title" style={'font-family:"Brandon Grotesque"'}>
@@ -171,6 +177,8 @@
           orient="bottom"
           tickSize={-innerHeight}
           tickPadding={24}
+          stroke="gray"
+          stroke-width="2"
           let:tick
           let:format
           let:x
@@ -182,7 +190,6 @@
               >{format(tick)}</text
             >
           </Tick>
-          <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
           <text
             slot="label"
             text-anchor="end"
@@ -212,6 +219,8 @@
           {scale}
           tickSize={innerWidth}
           tickPadding={16}
+          stroke="gray"
+          stroke-width="2"
           let:y
           let:tick
           let:format
@@ -227,7 +236,6 @@
           >
             % Unemployment
           </text>
-          <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
 
           <Tick {y} let:size let:props>
             <line stroke="#e8e8e8" x2={size} />
@@ -248,23 +256,26 @@
         let:scale
       >
         <g>
-          <Line {data} y={(d) => d['New York_1']} x={accessor} let:d>
-            <path {d} fill="transparent" stroke={scale('ny')} />
-          </Line>
-          <Line {data} y={(d) => d['San Francisco_1']} x={accessor} let:d>
-            <path {d} fill="transparent" stroke={scale('sf')} />
-          </Line>
-          <Line {data} y={(d) => d['Austin_1']} x={accessor} let:d>
-            <path {d} fill="transparent" stroke={scale('au')} />
-          </Line>
+          <Line
+            {data}
+            y={(d) => d['New York_1']}
+            x={accessor}
+            stroke={scale('ny')}
+          />
+          <Line
+            {data}
+            y={(d) => d['San Francisco_1']}
+            x={accessor}
+            stroke={scale('sf')}
+          />
+          <Line
+            {data}
+            y={(d) => d['Austin_1']}
+            x={accessor}
+            stroke={scale('au')}
+          />
         </g>
       </ScaleOrdinal>
-
-      <!-- <svelte:fragment slot="xaxis">
-    </svelte:fragment> -->
-
-      <!--  <svelte:fragment slot="yaxis">
-    </svelte:fragment> -->
 
       <div slot="title" style={'font-family:"Brandon Grotesque"'}>
         Bureau of Labor Statistics
