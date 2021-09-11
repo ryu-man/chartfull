@@ -14,8 +14,7 @@
     padding: _padding,
     offsetX: _offsetX,
     offsetY: _offsetY,
-    textAnchor,
-    tickColor = '#D8D8D8'
+    textAnchor
   } = $context
 
   export let x = 0
@@ -29,18 +28,45 @@
 
   export let style = {}
 
+  export let stroke = '#545863'
+  export let strokeWidth
+  export let strokeOpacity
+  export let strokeLinecap
+  export let strokeLinejoin
+  export let strokeDasharray
+  export let strokeDashoffset
+  export let strokeMiterlimit
+  export let fill = '#545863'
+  export let x2
+  export let y2
+
   $: props = {
     [xy]: k * padding,
-    fill: '#545863',
     'text-anchor': textAnchor,
     'font-family': 'system-ui'
   }
+
+  let sl
 </script>
 
 <g class="tick" transform={`translate(${x + offsetX},${y + offsetY})`} on:click>
+  <line
+    {...{ [xy + '2']: size * k }}
+    {x2}
+    {y2}
+    {stroke}
+    stroke-width={strokeWidth}
+    stroke-opacity={strokeOpacity}
+    stroke-linecap={strokeLinecap}
+    stroke-linejoin={strokeLinejoin}
+    stroke-dasharray={strokeDasharray}
+    stroke-dashoffset={strokeDashoffset}
+    stroke-miterlimit={strokeMiterlimit}
+    {fill}
+    use:css={style}
+  />
   <slot {k} {size} {props}>
-    <line stroke={tickColor} {...{ [xy + '2']: size * k }} />
-    <text alignment-baseline="middle" use:css={style} {...props}>{value}</text>
+    <text alignment-baseline="middle" {...props}>{value}</text>
   </slot>
 </g>
 
