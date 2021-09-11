@@ -26,12 +26,7 @@ interface Slot<Datum, Value> {
     innerHeight?: number
     padding?: {}
     data?: Datum[]
-    xScales?: (value: Value) => Value
-    yScales?: (value: Value) => Value
-    xAccessors?: (value: Datum) => Value
-    yAccessors?: (value: Datum) => Value
-    xAxisId?: string
-    yAxisId?: string
+    scales?: (value: Value) => any
   }
 }
 

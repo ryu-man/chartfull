@@ -84,11 +84,6 @@
   >
     <g transform={`translate(${padding.left}, ${padding.top})`}>
       {#await tick() then _}
-        <slot name="xaxis" />
-        <slot name="yaxis" />
-
-        <!-- <slot name="grid" /> -->
-
         <slot
           width={$widthStore}
           height={$heightStore}
@@ -96,7 +91,7 @@
           innerHeight={$innerHeightStore}
           padding={$paddingStore}
           data={$dataStore}
-          scales={$scales}
+          
         />
       {/await}
 
@@ -119,6 +114,9 @@
     min-height: 300px;
     position: relative;
     margin: 0;
+  }
+  figcaption {
+    font-family: 'Brandon Grotesque';
   }
   svg {
     width: 100%;
