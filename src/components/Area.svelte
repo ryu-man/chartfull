@@ -19,6 +19,20 @@
   const xScale = $scales[xId]
   const yScale = $scales[yId]
 
+  export let data = []
+
+  export let stroke
+  export let strokeWidth
+  export let strokeOpacity
+  export let strokeLinecap
+  export let strokeLinejoin
+  export let strokeDasharray
+  export let strokeDashoffset
+  export let strokeMiterlimit
+  export let fill = 'transparent'
+  export let fillOpacity
+  export let fillRule
+
   $accessors[xId] = x
   $accessors[yId] = y1
 
@@ -35,4 +49,20 @@
   $: curve && (area = root.curve(curve))
 </script>
 
-<slot {area} />
+<path
+  d={area(data)}
+  {fill}
+  {stroke}
+  stroke-width={strokeWidth}
+  stroke-opacity={strokeOpacity}
+  stroke-linecap={strokeLinecap}
+  stroke-linejoin={strokeLinejoin}
+  stroke-dasharray={strokeDasharray}
+  stroke-dashoffset={strokeDashoffset}
+  stroke-miterlimit={strokeMiterlimit}
+  fill-opacity={fillOpacity}
+  fill-rule={fillRule}
+  on:click
+  on:mouseenter
+  on:mouseleave
+/>

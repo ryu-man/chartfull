@@ -18,6 +18,18 @@
 
   export let data = []
 
+  export let stroke
+  export let strokeWidth
+  export let strokeOpacity
+  export let strokeLinecap
+  export let strokeLinejoin
+  export let strokeDasharray
+  export let strokeDashoffset
+  export let strokeMiterlimit
+  export let fill = 'transparent'
+  export let fillOpacity
+  export let fillRule
+
   $accessors[xId] = x
   $accessors[yId] = y
 
@@ -31,4 +43,20 @@
   $: context && (line = root.context(context))
 </script>
 
-<slot {line} d={line(data)}/>
+<path
+  d={line(data)}
+  {fill}
+  {stroke}
+  stroke-width={strokeWidth}
+  stroke-opacity={strokeOpacity}
+  stroke-linecap={strokeLinecap}
+  stroke-linejoin={strokeLinejoin}
+  stroke-dasharray={strokeDasharray}
+  stroke-dashoffset={strokeDashoffset}
+  stroke-miterlimit={strokeMiterlimit}
+  fill-opacity={fillOpacity}
+  fill-rule={fillRule}
+  on:click
+  on:mouseenter
+  on:mouseleave
+/>
