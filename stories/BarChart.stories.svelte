@@ -68,13 +68,14 @@
             orient="top"
             tickPadding={16}
             tickSize={innerHeight - 6}
+            stroke="gray"
+            stroke-width="2"
             let:tick
             let:format
             let:x
             let:d
           >
-            <Tick {x} y={-6} value={format(tick)} let:tickSize let:props>
-              <line y2={innerHeight} stroke="#e8e8e8" />
+            <Tick {x} y={-6} y2={innerHeight} stroke="#e8e8e8" let:props>
               <text
                 text-anchor="middle"
                 fonts-size="24"
@@ -83,7 +84,6 @@
                 {...props}>{format(tick)}</text
               >
             </Tick>
-            <path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
           </XAxis>
         </ScaleLinear>
 
@@ -127,8 +127,7 @@
                       text-anchor="end"
                       fonts-size="24"
                       fill="gray"
-                      font-family="Brandon Grotesque"
-                      >{xAccessor(item)}</text
+                      font-family="Brandon Grotesque">{xAccessor(item)}</text
                     >
                     <rect
                       {width}
