@@ -22,15 +22,19 @@
   let _class = ''
   export { _class as class }
 
-  padding = { top: 72, right: 72, bottom: 72, left: 72, ...padding }
-
   const {
     widthStore,
     heightStore,
     innerWidthStore,
     innerHeightStore,
     paddingStore
-  } = sizeStore(width, height, padding)
+  } = sizeStore(width, height, {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    ...padding
+  })
 
   const { dataStore = writable(data), ...rest } = graficoContext() ?? {}
 
@@ -82,7 +86,7 @@
     viewBox="0 0 {$widthStore} {$heightStore}"
     preserveAspectRatio="none"
   >
-    <g transform={`translate(${padding.left}, ${padding.top})`}>
+    <g transform={`translate(${$paddingStore.left}, ${$paddingStore.top})`}>
       {#await tick() then _}
         <slot
           width={$widthStore}
@@ -91,7 +95,6 @@
           innerHeight={$innerHeightStore}
           padding={$paddingStore}
           data={$dataStore}
-          
         />
       {/await}
 
