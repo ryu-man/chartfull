@@ -23,4 +23,4 @@
   $: startAngle && (arc = root.startAngle(startAngle))
 </script>
 
-<slot {arc} />
+<slot {arc} {innerRadius} {outerRadius} />

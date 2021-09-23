@@ -1,12 +1,5 @@
 <script>
-  import { pie } from 'd3-shape'
-  import Context, { graficoContext } from '../Context.svelte'
-
-  let context = {}
-  const {
-    innerWidthStore,
-    innerHeightStore
-  } = (context = graficoContext())
+  import { pie as Pie } from 'd3-shape'
 
   export let data = []
   export let value = (d) => d.value
@@ -16,22 +9,15 @@
   export let sort
   export let sortValues
 
-  context.value = value
+  const root = Pie().value(value)
+  let pie = root
 
-  const pies = pie().value(value)
-  startAngle && pies.startAngle(startAngle)
-  endAngle && pies.endAngle(endAngle)
-  padAngle && pies.padAngle(padAngle)
-  sort && pies.sort(sort)
-  sortValues && pies.sortValues(sortValues)
+  $: startAngle && (pie = root.startAngle(startAngle))
+  $: endAngle && (pie = root.endAngle(endAngle))
+  $: padAngle && (pie = root.padAngle(padAngle))
+  $: sort && (pie = root.sort(sort))
+  $: sortValues && (pie = root.sortValues(sortValues))
 </script>
 
-<Context value={context}>
-  <g
-    transform={`translate(${($innerWidthStore || 0) / 2},${
-      ($innerHeightStore || 0) / 2
-    })`}
-  >
-    <slot data={pies(data)} {value} />
-  </g>
-</Context>
+<slot data={pie(data)} {value} />
+
