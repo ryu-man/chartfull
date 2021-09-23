@@ -13,12 +13,11 @@
   export let init = initialize
   export let width = 300
   export let height = 300
+  export let innerWidth = 0
+  export let innerHeight = 0
   export let padding = {}
   export let data = []
   export let style = {}
-  export let onMount
-  export let onUpdate
-  export let onDestroy
   let _class = ''
   export { _class as class }
 
@@ -63,16 +62,14 @@
     return {
       update(data) {
         $widthStore = node.offsetWidth
-
-        onUpdate?.(node, data)
-      },
-      destroy() {
-        onDestroy?.()
       }
     }
   }
 
   $: $dataStore = data
+
+  $: innerWidth = $innerWidthStore
+  $: innerHeight = $innerHeightStore
 </script>
 
 <figure
@@ -86,7 +83,10 @@
     viewBox="0 0 {$widthStore} {$heightStore}"
     preserveAspectRatio="none"
   >
-    <g transform={`translate(${$paddingStore.left}, ${$paddingStore.top})`}>
+    <g
+      transform={`translate(${$paddingStore.left}, ${$paddingStore.top})`}
+      font-family="system-ui"
+    >
       {#await tick() then _}
         <slot
           width={$widthStore}

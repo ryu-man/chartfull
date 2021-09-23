@@ -4,6 +4,8 @@ import { Writable } from 'svelte/store'
 interface Prop<Datum, Value> {
   width?: number
   height?: number
+  innerWidth?: number
+  innerHeight?: number
   padding?: { top?: number; right?: number; bottom?: number; left?: number }
   data?: Datum[]
   style?: CSSStyleDeclaration
