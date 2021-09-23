@@ -1,9 +1,10 @@
 import { SvelteComponentTyped } from 'svelte'
+import { SharedProps } from './Axis.svelte'
 
 type Domain<T extends (...args: any) => any> = T extends (value: infer G) => any
   ? G
   : any
-interface Props<Scale extends (value: any) => any> {
+interface Props<Scale extends (value: any) => any> extends SharedProps {
   id?: 'default' | (string & {})
   x?: number
   y?: number

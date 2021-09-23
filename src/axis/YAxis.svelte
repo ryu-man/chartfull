@@ -24,6 +24,14 @@
   export let offset =
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
 
+  export let fontFamily
+  export let fontSize
+  export let fontSizeAdjust
+  export let fontStretch
+  export let fontStyle
+  export let fontVariant
+  export let fontWeight
+
   export let stroke = '#545863'
   export let strokeWidth
   export let strokeOpacity
@@ -66,6 +74,13 @@
     {tickArguments}
     {tickValues}
     {tickFormat}
+    {fontFamily}
+    {fontWeight}
+    {fontSize}
+    {fontSizeAdjust}
+    {fontVariant}
+    {fontStyle}
+    {fontStretch}
     let:values
     let:format
   >

@@ -1,6 +1,7 @@
 import { SvelteComponentTyped } from 'svelte'
+import { SharedProps } from './Axis.svelte'
 
-type Props = {
+interface Props extends SharedProps {
   x?: number
   y?: number
   value?: string
@@ -14,7 +15,8 @@ type Slots = {
   default: {
     k?: 1 | -1
     size?: number
-    props?: any
+    x?: number
+    y?: number
   }
 }
 

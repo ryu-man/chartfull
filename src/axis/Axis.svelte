@@ -15,6 +15,14 @@
   export let tickValues
   export let tickFormat
 
+  export let fontFamily
+  export let fontSize
+  export let fontSizeAdjust
+  export let fontStretch
+  export let fontStyle
+  export let fontVariant
+  export let fontWeight
+
   let _class
   export { _class as class }
 
@@ -35,6 +43,16 @@
       : tickFormat
 </script>
 
-<g class={classNames(_class, 'axis')} transform={`translate(${x}, ${y})`}>
+<g
+  class={classNames(_class, 'axis')}
+  transform={`translate(${x}, ${y})`}
+  font-family={fontFamily}
+  font-size={fontSize}
+  font-weight={fontWeight}
+  font-size-adjust={fontSizeAdjust}
+  font-stretch={fontStretch}
+  font-style={fontStyle}
+  font-variant={fontVariant}
+>
   <slot {values} {format} />
 </g>

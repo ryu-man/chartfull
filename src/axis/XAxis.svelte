@@ -25,6 +25,14 @@
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
   export let tickColor
 
+  export let fontFamily
+  export let fontSize
+  export let fontSizeAdjust
+  export let fontStretch
+  export let fontStyle
+  export let fontVariant
+  export let fontWeight
+
   export let stroke = '#545863'
   export let strokeWidth
   export let strokeOpacity
@@ -55,7 +63,6 @@
   })
 
   $: !d && (d = `M0,${k * 6}V0H${$innerWidthStore}V${k * 6}`)
-
 </script>
 
 <TickContext value={context}>
@@ -69,6 +76,13 @@
     {tickArguments}
     {tickValues}
     {tickFormat}
+    {fontFamily}
+    {fontWeight}
+    {fontSize}
+    {fontSizeAdjust}
+    {fontVariant}
+    {fontStyle}
+    {fontStretch}
     let:values
     let:format
   >
