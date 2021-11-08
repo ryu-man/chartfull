@@ -1,6 +1,6 @@
 # Graficos
 
-Declarative, reactive and customizable redefined [D3.js](https://www.d3.org) for [Svelte](https://www.svelte.dev).
+Declarative, reactive and customizable redefined [D3.js](https://d3js.org/) for [Svelte](https://www.svelte.dev).
 
 ## Get started
 
