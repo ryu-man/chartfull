@@ -20,27 +20,27 @@
   export let tickFormat
 
   export let tickSize = 6
-  export let tickPadding = 4
+  export let tickPadding = 8
   export let offset =
     typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
 
   export let fontFamily
-  export let fontSize
+  export let fontSize = '12pt'
   export let fontSizeAdjust
   export let fontStretch
   export let fontStyle
   export let fontVariant
   export let fontWeight
 
-  export let stroke = '#545863'
-  export let strokeWidth
+  export let stroke = '#9b9b9b'
+  export let strokeWidth = 2
   export let strokeOpacity
   export let strokeLinecap
   export let strokeLinejoin
   export let strokeDasharray
   export let strokeDashoffset
   export let strokeMiterlimit
-  export let fill = 'none'
+  export let fill = '#9b9b9b'
   export let d
 
   let _class = ''
@@ -49,6 +49,8 @@
   $: $scales[id] = scale
 
   const k = orient === 'left' ? -1 : 1
+
+  const isPathDataSet = !!d
 
   const context = writable({
     xy: 'x',
@@ -60,12 +62,11 @@
     textAnchor: orient === 'left' ? 'end' : 'start'
   })
 
-  $: !d && (d = `M${k * 6},0H0V${$innerHeightStore}H${k * 6}`)
+  $: !isPathDataSet && (d = `M${k * 6},0H0V${$innerHeightStore}H${k * 6}`)
 </script>
 
 <TickContext value={context}>
   <Axis
-    class={classNames(_class, 'y')}
     {scale}
     {x}
     {y}
@@ -81,20 +82,32 @@
     {fontVariant}
     {fontStyle}
     {fontStretch}
-    let:values
+    class={classNames(_class, 'y', orient)}
+    style="--axis-fill: {fill};"
+    let:ticks
     let:format
   >
-    {#each values as tick, index (tick)}
+    {#each ticks as tick, index (+tick || tick)}
       <Declare value={scale(tick)} let:value={y}>
-        <slot {index} {tick} x={0} {y} {format}>
-          <Tick {y} value={format(tick)} />
+        <slot
+          {index}
+          {tick}
+          x={0}
+          {y}
+          {format}
+          formatedTick={format(tick)}
+          text={format(tick)}
+        >
+          <Tick {y}>
+            <text>{format(tick)}</text>
+          </Tick>
         </slot>
       </Declare>
     {/each}
 
     <path
       class="domain"
-      {fill}
+      fill="none"
       {stroke}
       stroke-width={strokeWidth}
       stroke-dasharray={strokeDasharray}
@@ -106,9 +119,8 @@
       {d}
     />
 
-    <slot name="label" />
+    <g class="label">
+      <slot name="label" />
+    </g>
   </Axis>
 </TickContext>
-
-<style>
-</style>

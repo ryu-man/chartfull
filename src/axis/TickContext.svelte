@@ -1,5 +1,5 @@
 <script context="module">
-  const key = {}
+  const key = Symbol()
   export const get = () => getContext(key)
 </script>
 

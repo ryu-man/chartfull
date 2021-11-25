@@ -23,24 +23,18 @@
   export let fontVariant
   export let fontWeight
 
+  export let style
+
   let _class
   export { _class as class }
 
   const identity = (d) => d
 
-  $: values =
-    tickValues == null
-      ? scale.ticks
-        ? scale.ticks.apply(scale, tickArguments)
-        : scale.domain()
-      : tickValues
+  $: ticks =
+    tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain()
 
   $: format =
-    tickFormat == null
-      ? scale.tickFormat
-        ? scale.tickFormat.apply(scale, tickArguments)
-        : identity
-      : tickFormat
+    tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity
 </script>
 
 <g
@@ -53,6 +47,38 @@
   font-stretch={fontStretch}
   font-style={fontStyle}
   font-variant={fontVariant}
+  {style}
 >
-  <slot {values} {format} />
+  <slot {ticks} {format} />
 </g>
+
+<style>
+  .x.top.axis :global(.tick text) {
+    dominant-baseline: text-after-edge;
+  }
+  .x.bottom.axis :global(.tick text) {
+    dominant-baseline: hanging;
+  }
+  .x.axis :global(.label > :not(.raw)) {
+    transform: translateY(-8px);
+  }
+  .x.axis :global(.label text:not(.raw)) {
+    font-size: 10pt;
+    font-weight: 700;
+    text-anchor: end;
+    fill: gray;
+  }
+
+  .y.axis :global(.tick text) {
+    dominant-baseline: central;
+  }
+  .y.axis :global(.label > :not(.raw)) {
+    transform: translateX(8px);
+  }
+  .y.axis :global(.label text:not(.raw)) {
+    font-size: 10pt;
+    font-weight: 700;
+    fill: gray;
+    dominant-baseline: hanging;
+  }
+</style>

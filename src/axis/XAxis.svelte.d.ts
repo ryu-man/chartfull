@@ -26,6 +26,8 @@ interface Slots<Scale extends (value: any) => any> {
     x?: number
     y?: number
     format?: (d: Domain<Scale>) => string
+    formatedTick?: string
+    text?: string
     tick?: Domain<Scale>
   }
 }

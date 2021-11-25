@@ -1,7 +1,6 @@
 <script>
   // https://github.com/d3/d3-axis/blob/master/src/axis.js
 
-  // import { context } from './Axis.svelte'
   import { get } from './TickContext.svelte'
   const context = get()
 
@@ -25,14 +24,14 @@
   export let offsetY = _offsetY
 
   export let fontFamily
-  export let fontSize
+  export let fontSize = '12pt'
   export let fontSizeAdjust
   export let fontStretch
   export let fontStyle
   export let fontVariant
   export let fontWeight
 
-  export let stroke = '#545863'
+  export let stroke = '#e8e8e8'
   export let strokeWidth
   export let strokeOpacity
   export let strokeLinecap
@@ -40,7 +39,7 @@
   export let strokeDasharray
   export let strokeDashoffset
   export let strokeMiterlimit
-  export let fill = '#545863'
+  export let fill = 'var(--axis-fill)'
   export let x2
   export let y2
 
@@ -52,7 +51,7 @@
 </script>
 
 <g
-  class="tick"
+  class="tick {xy}"
   transform={`translate(${x + offsetX},${y + offsetY})`}
   font-family={fontFamily}
   font-size={fontSize}
@@ -61,10 +60,10 @@
   font-stretch={fontStretch}
   font-style={fontStyle}
   font-variant={fontVariant}
-  {fill}
   text-anchor={textAnchor}
   alignment-baseline="middle"
   {...props}
+  style="--fill:{fill}; --padding:{k * padding}px;"
   on:click
 >
   <line
@@ -86,7 +85,16 @@
 </g>
 
 <style>
-  text {
+  .tick :global(text:not(.raw)) {
     vector-effect: non-scaling-stroke;
+    fill: var(--fill);
+  }
+  .tick.x :global(text:not(.raw)) {
+    transform: translateX(var(--padding));
+  }
+  .tick.y :global(text:not(.raw)) {
+    transform: translateY(var(--padding));
+  }
+  .tick :global(line) {
   }
 </style>
