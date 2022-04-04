@@ -32,7 +32,7 @@ Coming soon !
     <YAxis slot="yaxis" domain={extent(data, d=> d.y)} range={[innerHeight, 0]}/>
 </Grafico>
 
-
+<!-- Declare global values -->
 <Declare value={d=> d.x} let:value={xAccessor}>
   <Declare value={d=> d.y} let:value={yAccessor}>
 

@@ -1,0 +1,114 @@
+date, time, author, email, id, description
+14/03/2021, 23:25:38 +0100, ryu-man,           <rioman19@gmail.com>, 2b88bea, refactor-Set-axises-scale-accessor
+14/03/2021, 23:24:36 +0100, ryu-man,           <rioman19@gmail.com>, 68240f9, refactor-Set-axises-scale-accessor-export-them
+15/03/2021, 21:52:44 +0100, ryu-man,           <rioman19@gmail.com>, 827fe58, Fix-placement-order
+15/03/2021, 19:52:30 +0100, ryu-man,           <rioman19@gmail.com>, 74e01e2, Delete-unsued-component
+15/03/2021, 19:52:04 +0100, ryu-man,           <rioman19@gmail.com>, 7a2f746, refactor-Use-d3-scale-package
+16/03/2021, 10:20:43 +0100, ryu-man,           <rioman19@gmail.com>, 118f8a3, refactor-Fix-colorScale-initialization
+16/03/2021, 00:27:59 +0100, ryu-man,           <rioman19@gmail.com>, 46273fc, refactor-Export-r-prop-refactor-tweened-store-options
+16/03/2021, 00:26:12 +0100, ryu-man,           <rioman19@gmail.com>, 2f3e6f1, refactor-Expose-slot-props-i-j-item-zScale-zAccessor
+16/03/2021, 00:24:38 +0100, ryu-man,           <rioman19@gmail.com>, a644093, refactor-Expose-slot-prop-i-j-indexes
+18/03/2021, 19:05:06 +0100, ryu-man,           <rioman19@gmail.com>, 4c92894, feat-Add-grouped-and-stacked-bar-series
+20/03/2021, 19:19:17 +0100, ryu-man,           <rioman19@gmail.com>, ba174e3, refactor-Support-multiple-axises
+20/03/2021, 11:10:49 +0100, ryu-man,           <rioman19@gmail.com>, 605c511, feat-Add-bar-component
+20/03/2021, 11:09:12 +0100, ryu-man,           <rioman19@gmail.com>, 2f89c7f, refactor-Add-accessors-and-axises-s-IDs
+20/03/2021, 11:08:13 +0100, ryu-man,           <rioman19@gmail.com>, 1455d17, refactor-Add-accessors-and-ids-of-axises
+20/03/2021, 11:05:00 +0100, ryu-man,           <rioman19@gmail.com>, 785d202, feat-Add-scatter-component
+20/03/2021, 11:04:17 +0100, ryu-man,           <rioman19@gmail.com>, 43692ae, feat-Add-bubble-component
+20/03/2021, 11:02:40 +0100, ryu-man,           <rioman19@gmail.com>, 6e979ea, feat-Add-Stack-component
+20/03/2021, 10:33:19 +0100, ryu-man,           <rioman19@gmail.com>, 9a9fa88, feat-Support-multiple-axises
+23/03/2021, 21:29:05 +0100, ryu-man,           <rioman19@gmail.com>, b9177bc, Initialize-size-store
+23/03/2021, 21:28:24 +0100, ryu-man,           <rioman19@gmail.com>, 5f72dde, Update-exports
+23/03/2021, 21:27:39 +0100, ryu-man,           <rioman19@gmail.com>, 938be06, Add-d3-types
+23/03/2021, 21:24:34 +0100, ryu-man,           <rioman19@gmail.com>, 5d0b0b3, refactor-Add-id-for-x-y-axis
+23/03/2021, 20:50:17 +0100, ryu-man,           <rioman19@gmail.com>, 1933cfc, refactor-Use-scaleBand-instead-of-scalePoint
+23/03/2021, 20:46:44 +0100, ryu-man,           <rioman19@gmail.com>, 1ae5053, refactor-Add-reactivity-for-range-domain-tick-values
+23/03/2021, 20:42:34 +0100, ryu-man,           <rioman19@gmail.com>, 5e6ee03, refactor-Support-multiple-axises
+23/03/2021, 16:08:28 +0100, ryu-man,           <rioman19@gmail.com>, 9f02d5f, feat-Initialize-scale-components
+23/03/2021, 15:24:26 +0100, ryu-man,           <rioman19@gmail.com>,9.46E+293, refactor-Update-c-x-y-default-options
+23/03/2021, 15:23:13 +0100, ryu-man,           <rioman19@gmail.com>, 9bd3c71, refactor-Remove-colorScale
+23/03/2021, 15:20:43 +0100, ryu-man,           <rioman19@gmail.com>,3744184, refactor-Add-support-for-multi-axies
+23/03/2021, 11:49:53 +0100, ryu-man,           <rioman19@gmail.com>, a2f7839, refactor-Remove-coloScale
+23/03/2021, 11:49:00 +0100, ryu-man,           <rioman19@gmail.com>, d040634, refactor-Update-x-y-width-height-default-configurations
+23/03/2021, 10:31:13 +0100, ryu-man,           <rioman19@gmail.com>, 6fae892, feat-Use-custom-store-for-scales
+23/03/2021, 10:29:02 +0100, ryu-man,           <rioman19@gmail.com>, 7dc8b5a, feat-Add-support-for-multiple-axises
+23/03/2021, 10:04:58 +0100, ryu-man,           <rioman19@gmail.com>, daa000a, feat-Initialize-Declare-component
+23/03/2021, 10:03:21 +0100, ryu-man,           <rioman19@gmail.com>,3.26E+65, refactor-Update-default-configurations
+23/03/2021, 10:03:14 +0100, ryu-man,           <rioman19@gmail.com>, 796dc94, feat-Use-as-a-wrapper-of-d3-bin-generator
+23/03/2021, 09:50:30 +0100, ryu-man,           <rioman19@gmail.com>, 69c80bc, refactor-Ensure-Compatibility
+23/03/2021, 09:45:19 +0100, ryu-man,           <rioman19@gmail.com>, f268ea0, refactor-Check-undefined-props
+23/03/2021, 09:37:20 +0100, ryu-man,           <rioman19@gmail.com>, 16e7988, refactor-Use-0-as-default-value-of-y0-prop
+23/03/2021, 09:32:32 +0100, ryu-man,           <rioman19@gmail.com>, d0252d8, Delete-unused-components
+23/03/2021, 09:31:50 +0100, ryu-man,           <rioman19@gmail.com>,8335028, refactor-Move-axis-folder-outside-components-folder
+24/03/2021, 19:42:49 +0100, ryu-man,           <rioman19@gmail.com>, c6a4d68, git-cache-cleared
+24/03/2021, 19:23:59 +0100, ryu-man,           <rioman19@gmail.com>, 079c8bc, feat-Create-scales-module
+24/03/2021, 09:59:52 +0100, ryu-man,           <rioman19@gmail.com>,1952459, refactor-Change-files-naming-convention
+25/03/2021, 23:46:57 +0100, ryu-man,           <rioman19@gmail.com>, 4d7902a, Add-type-definitions
+25/03/2021, 23:43:34 +0100, ryu-man,           <rioman19@gmail.com>, bfac311, refactor-Remove-unused-props
+25/03/2021, 23:42:20 +0100, ryu-man,           <rioman19@gmail.com>, 6bcf383, Fix-import-path
+25/03/2021, 23:36:16 +0100, ryu-man,           <rioman19@gmail.com>, ba99bb4, refactor-Update-the-store-when-data-get-changed
+25/03/2021, 23:35:22 +0100, ryu-man,           <rioman19@gmail.com>, b50554b, fix-Fix-import-path
+01/04/2021, 23:17:26 +0100, ryu-man,           <rioman19@gmail.com>, f908548, feat-Initialize-Square-component
+01/04/2021, 12:07:24 +0100, ryu-man,           <rioman19@gmail.com>, 4acb749, refactor-Remove-unused-code-modify-props
+01/04/2021, 11:49:02 +0100, ryu-man,           <rioman19@gmail.com>, f47b527, Fix-svg-position
+01/04/2021, 11:48:35 +0100, ryu-man,           <rioman19@gmail.com>, 8ebd052, feat-Initialize-Arc-component
+03/04/2021, 22:59:15 +0100, ryu-man,           <rioman19@gmail.com>, 790c620, Initialize-components-definitions-type
+03/04/2021, 22:58:31 +0100, ryu-man,           <rioman19@gmail.com>, 2e84ea4, Update-types-entry-file
+04/04/2021, 22:33:47 +0100, ryu-man,           <rioman19@gmail.com>, 0bb831a, Update-content
+11/04/2021, 23:34:11 +0100, ryu-man,           <rioman19@gmail.com>, 9b3b99b, refactor-Remove-color-scale
+11/04/2021, 23:33:33 +0100, ryu-man,           <rioman19@gmail.com>, ac74785, feat-Add-z-scale
+04/06/2021, 08:52:46 +0100, ryuman ,           <rioman19@gmail.com>, d87c28e, Refactor-axis-components
+04/06/2021, 08:50:43 +0100, ryuman ,           <rioman19@gmail.com>, 93a887e, Introduce-scales-components
+06/06/2021, 18:32:28 +0100, ryuman ,           <rioman19@gmail.com>, 9725ca1, fix-Correct-value-assignment
+06/06/2021, 18:31:50 +0100, ryuman ,           <rioman19@gmail.com>, c3535ac, Cleanup-code
+08/06/2021, 22:36:17 +0100, ryuman ,           <rioman19@gmail.com>, 2d54c9b, Update-exports
+08/06/2021, 22:36:04 +0100, ryuman ,           <rioman19@gmail.com>, 255b31a, Refactor-axis-components
+13/06/2021, 23:35:44 +0100, ryuman ,           <rioman19@gmail.com>, 1dbbbd6, Integrate-storybook
+22/06/2021, 21:07:16 +0100, ryuman ,           <rioman19@gmail.com>, a8b10ce, Update-packages
+09/07/2021, 22:30:59 +0100, ryuman ,           <rioman19@gmail.com>, da42d22, Initialize-scale-dual-band-accessor
+09/07/2021, 22:30:27 +0100, ryuman ,           <rioman19@gmail.com>, f3fc000, Initialize-scale-band-accessor
+09/07/2021, 22:27:54 +0100, ryuman ,           <rioman19@gmail.com>, 2c67400, Export-context
+10/07/2021, 22:37:43 +0100, ryuman ,           <rioman19@gmail.com>, 144f7ab, Clean-up-code-Init-types
+11/07/2021, 17:57:57 +0100, ryuman ,           <rioman19@gmail.com>, 8b8ec90, Use-Band-instead-of-Bar
+11/07/2021, 17:54:34 +0100, ryuman ,           <rioman19@gmail.com>, d2e7330, Init-depth-chart
+11/07/2021, 17:49:01 +0100, ryuman ,           <rioman19@gmail.com>, 5ea0ad8, Enhance-reactivity-type-definition
+13/07/2021, 18:48:56 +0100, ryuman ,           <rioman19@gmail.com>, fb8a89f, Delete-grid-component
+13/07/2021, 18:48:35 +0100, ryuman ,           <rioman19@gmail.com>, 6d5b893, Use-dual-ordinal-instead
+13/07/2021, 18:43:15 +0100, ryuman ,           <rioman19@gmail.com>, f798d00, Init-path-generator
+13/07/2021, 18:42:54 +0100, ryuman ,           <rioman19@gmail.com>, 1fc1eb9, Use-ordinal-instead
+13/07/2021, 18:42:39 +0100, ryuman ,           <rioman19@gmail.com>, f17a83e, Refactor-component
+13/07/2021, 18:42:01 +0100, ryuman ,           <rioman19@gmail.com>, 4ea3143, Refactor-add-z-scale-props
+13/07/2021, 18:41:14 +0100, ryuman ,           <rioman19@gmail.com>, 48111ee, Init-stories
+13/07/2021, 18:40:48 +0100, ryuman ,           <rioman19@gmail.com>, 56b45c5, Used-with-double-ordinal-scales
+13/07/2021, 18:37:17 +0100, ryuman ,           <rioman19@gmail.com>, 8ceb7a6, Access-ordinal-scale-s-bandwidth-and-step
+13/07/2021, 18:20:42 +0100, ryuman ,           <rioman19@gmail.com>, 6a11c01, Add-type-definition-for-scale-sequential
+13/07/2021, 18:19:52 +0100, ryuman ,           <rioman19@gmail.com>, b6843d8, Update-axis-module
+13/07/2021, 11:16:42 +0100, ryuman ,           <rioman19@gmail.com>, f4b2e9c, Add-area-props-enhance-reactivity
+13/07/2021, 09:42:22 +0100, ryuman ,           <rioman19@gmail.com>, 04006d3, Better-reactivity
+13/07/2021, 09:26:16 +0100, ryuman ,           <rioman19@gmail.com>, 47d75eb, Add-d3-line-props-enhance-reactivity
+13/07/2021, 06:39:19 +0100, ryuman ,           <rioman19@gmail.com>, 990236f, Enhance-reactivity-cleanup-code
+13/07/2021, 06:30:02 +0100, ryuman ,           <rioman19@gmail.com>, 53a2249, Use-spring-store-as-component
+13/07/2021, 06:29:27 +0100, ryuman ,           <rioman19@gmail.com>, c60b930, Get-scale-by-id-from-context
+13/07/2021, 06:28:47 +0100, ryuman ,           <rioman19@gmail.com>, 79337c7, Call-function-and-provide-args-as-attributes
+13/07/2021, 06:27:15 +0100, ryuman ,           <rioman19@gmail.com>, 1ad2224, Update-axis-IDs-props
+14/07/2021, 22:56:08 +0100, ryuman ,           <rioman19@gmail.com>, 3222af5, Update-type-definition
+14/07/2021, 22:55:31 +0100, ryuman ,           <rioman19@gmail.com>,6827039, Refactor-continuous-scales
+14/07/2021, 10:56:45 +0100, ryuman ,           <rioman19@gmail.com>, 07b19b7, Rename-prop
+03/08/2021, 22:39:55 +0100, ryuman ,           <rioman19@gmail.com>, 2f70a68, update-stories
+03/08/2021, 22:39:15 +0100, ryuman ,           <rioman19@gmail.com>, cd72c37, export-data-array
+03/08/2021, 22:38:47 +0100, ryuman ,           <rioman19@gmail.com>, 93ca653, export-z-accessor
+03/08/2021, 22:35:34 +0100, ryuman ,           <rioman19@gmail.com>, aa43751, Init-tick-context
+06/09/2021, 21:47:27 +0100, ryuman ,           <rioman19@gmail.com>,8.51E+05, Export-props-for-axis-line-customization
+11/09/2021, 13:58:58 +0100, ryuman ,           <rioman19@gmail.com>, b1722e6, Remove-named-slots-and-update-type-def
+11/09/2021, 13:57:38 +0100, ryuman ,           <rioman19@gmail.com>, b9e4d5d, Move-line-out-of-slot-and-export-new-props
+11/09/2021, 13:56:36 +0100, ryuman ,           <rioman19@gmail.com>, 2f49d32, Add-stroke-and-fill-properties
+12/09/2021, 21:32:18 +0100, ryuman ,           <rioman19@gmail.com>, b8396d9, Update-Axis-Tick-props
+13/09/2021, 22:22:19 +0100, ryuman ,           <rioman19@gmail.com>, 8b113db, Update-paddings
+23/09/2021, 22:51:24 +0100, ryuman ,           <rioman19@gmail.com>, 648bc1e, Add-bin-scale
+23/09/2021, 22:51:02 +0100, ryuman ,           <rioman19@gmail.com>, e7f4251, Enhance-pie-chart-comps
+23/09/2021, 22:35:10 +0100, ryuman ,           <rioman19@gmail.com>, 860773a, Export-innerWidth-innerHeight-for-binding-purposes
+23/09/2021, 22:32:44 +0100, ryuman ,           <rioman19@gmail.com>, c5316b4, Export-new-props
+08/11/2021, 19:59:30 +0100, Abdelhalim Riache, <rioman19@gmail.com>, 54c9ae5, Merge-pull-request-1-from-ibilux-patch-1
+08/11/2021, 19:45:36 +0100, Bilux  ,           <i.bilux@gmail.com> , 23b2077, Correcting-D3.js-website-link
+25/11/2021, 21:39:45 +0100, Abdelhalim Riache, <rioman19@gmail.com>, 4a30a40, Cleanup-code
+25/11/2021, 21:35:19 +0100, Abdelhalim Riache, <rioman19@gmail.com>, 872e10a, Optimize-axis-module
