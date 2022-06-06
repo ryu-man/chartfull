@@ -10,8 +10,10 @@
   export let padRadius
   export let startAngle
 
+  export let arc
+  
   const root = Arc()
-  let arc = root
+  arc = root
 
   $: arc = root.innerRadius(innerRadius)
   $: arc = root.outerRadius(outerRadius)
