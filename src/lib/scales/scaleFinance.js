@@ -59,8 +59,8 @@ export const scaleFinance = (domain = [0, 1], range = [0, 1]) => {
 
     scale.range = function (...args) {
         if (args.length) {
-            r0 = args[0]
-            r1 = args[1]
+            r0 = args[0] + scale.band()/2
+            r1 = args[1] - scale.band()/2
 
             return financeRange(sequence(this.domain().length).map((i) => r0 + this.step() * i))
         }
