@@ -15,7 +15,8 @@ module.exports = {
 
   async viteFinal(config) {
     config.resolve.alias = {
-      graficos: path.resolve('./src/lib')
+      "$lib": path.resolve('./src/lib'),
+      "graficos": path.resolve('./src/lib')
     }
 
     return config
