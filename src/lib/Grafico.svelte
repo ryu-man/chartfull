@@ -6,61 +6,59 @@
 	export const GETTERS_KEY = Symbol();
 </script>
 
-<script>
+<script lang="ts">
 	import { getContext, setContext, tick } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { accessible } from 'svelte-tools';
 	import { classNames, css } from './utils';
-	import { sizeStore } from './utils/sizeStore';
+	import { sizeStore } from './stores';
+	import type { Padding } from './types';
+	import type { Properties } from 'csstype';
 
-	export let width;
-	export let height;
+	export let width: number;
+	export let height: number;
 	export let innerWidth = 0;
 	export let innerHeight = 0;
-	export let padding = {};
+	export let padding: Padding = {};
 	export let data = [];
-	export let style = {};
+	export let style: string | Properties = '';
 	let _class = '';
 	export { _class as class };
 
-	export let fontFamily = 'system-ui';
-	export let fontSize;
-	export let fontSizeAdjust;
-	export let fontStretch;
-	export let fontStyle;
-	export let fontVariant;
-	export let fontWeight;
+	export let fontFamily: Properties['fontFamily'] = 'system-ui';
+	export let fontSize: Properties['fontSize'] = undefined;
+	export let fontSizeAdjust: Properties['fontSizeAdjust'] = undefined;
+	export let fontStretch: Properties['fontStretch'] = undefined;
+	export let fontStyle: Properties['fontStyle'] = undefined;
+	export let fontVariant: Properties['fontVariant'] = undefined;
+	export let fontWeight: Properties['fontWeight'] = undefined;
 
-	const { widthStore, heightStore, innerWidthStore, innerHeightStore, paddingStore } = sizeStore(
-		width,
-		height,
-		{
-			top: 0,
-			right: 0,
-			bottom: 0,
-			left: 0,
-			...padding
-		}
-	);
+	const { width$, height$, innerWidth$, innerHeight$, padding$ } = sizeStore(width, height, {
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0,
+		...padding
+	});
 
-	const dataStore = writable(data);
+	const data$ = accessible(data);
 	const scales = writable({});
 
 	const context = {
-		widthStore,
-		heightStore,
-		innerWidthStore,
-		innerHeightStore,
-		paddingStore,
-		dataStore,
+		width$,
+		height$,
+		innerWidth$,
+		innerHeight$,
+		padding$,
+		dataStore: data$,
 		scales
 	};
 
 	setContext(key, context);
 
-	$: $dataStore = data;
-
-	$: innerWidth = $innerWidthStore;
-	$: innerHeight = $innerHeightStore;
+	$: $data$ = data;
+	$: innerWidth = $innerWidth$;
+	$: innerHeight = $innerHeight$;
 
 	function paddingToCssVars(padding) {
 		return Object.entries(padding)
@@ -70,16 +68,16 @@
 </script>
 
 <div
-	bind:clientWidth={$widthStore}
-	bind:clientHeight={$heightStore}
+	bind:clientWidth={$width$}
+	bind:clientHeight={$height$}
 	use:css={style}
 	class={classNames(_class, 'grafico')}
-	style="--height: {+height ? height + 'px' : '100%'}; {paddingToCssVars($paddingStore)}"
+	style="--height: {height ? height + 'px' : '100%'}; {paddingToCssVars($padding$)}"
 >
-	{#await tick() then value}
-		<svg viewBox="0 0 {$widthStore} {$heightStore}" preserveAspectRatio="none">
+	{#await tick() then _}
+		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
 			<g
-				transform={`translate(${$paddingStore.left}, ${$paddingStore.top})`}
+				transform={`translate(${$padding$.left}, ${$padding$.top})`}
 				font-family={fontFamily}
 				font-size={fontSize}
 				font-weight={fontWeight}
@@ -90,17 +88,18 @@
 			>
 				{#await tick() then _}
 					<slot
-						width={$widthStore}
-						height={$heightStore}
-						innerWidth={$innerWidthStore}
-						innerHeight={$innerHeightStore}
-						padding={$paddingStore}
-						data={$dataStore}
+						width={$width$}
+						height={$height$}
+						innerWidth={$innerWidth$}
+						innerHeight={$innerHeight$}
+						padding={$padding$}
+						data={$data$}
 					/>
 				{/await}
 
 				<slot name="svg" />
 			</g>
+
 		</svg>
 	{/await}
 
