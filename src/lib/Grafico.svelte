@@ -73,6 +73,16 @@
 	use:css={style}
 	class={classNames(_class, 'grafico')}
 	style="--height: {height ? height + 'px' : '100%'}; {paddingToCssVars($padding$)}"
+	on:mouseenter
+	on:mouseleave
+	on:mousemove
+	on:mouseout
+	on:mouseover
+	on:focus
+	on:blur
+	on:mousedown
+	on:mouseup
+	on:click
 >
 	{#await tick() then _}
 		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
@@ -99,7 +109,6 @@
 
 				<slot name="svg" />
 			</g>
-
 		</svg>
 	{/await}
 
