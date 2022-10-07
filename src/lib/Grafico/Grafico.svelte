@@ -8,11 +8,11 @@
 
 <script lang="ts">
 	import { getContext, setContext, tick } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { accessible } from 'svelte-tools';
-	import { classNames, css } from './utils';
-	import { sizeStore } from './stores';
-	import type { Padding } from './types';
+	import { writable } from 'svelte-tools';
+	import { setGraficoContext, type GraficoContext } from './context';
+	import { classNames, css } from '../utils';
+	import { sizeStore } from '../stores';
+	import type { Padding } from '../types';
 	import type { Properties } from 'csstype';
 
 	export let width: number;
@@ -33,7 +33,16 @@
 	export let fontVariant: Properties['fontVariant'] = undefined;
 	export let fontWeight: Properties['fontWeight'] = undefined;
 
-	const { width$, height$, innerWidth$, innerHeight$, padding$ } = sizeStore(width, height, {
+	const {
+		width$,
+		height$,
+		innerWidth$,
+		innerHeight$,
+		paddingBottom$,
+		paddingLeft$,
+		paddingRight$,
+		paddingTop$
+	} = sizeStore(width, height, {
 		top: 0,
 		right: 0,
 		bottom: 0,
@@ -41,30 +50,25 @@
 		...padding
 	});
 
-	const data$ = accessible(data);
-	const scales = writable({});
+	const data$ = writable(data);
 
-	const context = {
+	const context: GraficoContext<any> = {
 		width$,
 		height$,
 		innerWidth$,
 		innerHeight$,
-		padding$,
-		dataStore: data$,
-		scales
+		paddingBottom$,
+		paddingLeft$,
+		paddingRight$,
+		paddingTop$,
+		data$
 	};
 
-	setContext(key, context);
+	setGraficoContext(context);
 
 	$: $data$ = data;
 	$: innerWidth = $innerWidth$;
 	$: innerHeight = $innerHeight$;
-
-	function paddingToCssVars(padding) {
-		return Object.entries(padding)
-			.map(([key, value]) => `--padding-${key}: ${value}px;`)
-			.join('');
-	}
 </script>
 
 <div
@@ -72,7 +76,9 @@
 	bind:clientHeight={$height$}
 	use:css={style}
 	class={classNames(_class, 'grafico')}
-	style="--height: {height ? height + 'px' : '100%'}; {paddingToCssVars($padding$)}"
+	style="--height: {height
+		? height + 'px'
+		: '100%'}; --padding-top: {$paddingTop$}px;--padding-bottom: {$paddingBottom$}px;--padding-left: {$paddingLeft$}px;--padding-right: {$paddingRight$}px;"
 	on:mouseenter
 	on:mouseleave
 	on:mousemove
@@ -87,7 +93,7 @@
 	{#await tick() then _}
 		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
 			<g
-				transform={`translate(${$padding$.left}, ${$padding$.top})`}
+				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
 				font-family={fontFamily}
 				font-size={fontSize}
 				font-weight={fontWeight}
@@ -102,7 +108,10 @@
 						height={$height$}
 						innerWidth={$innerWidth$}
 						innerHeight={$innerHeight$}
-						padding={$padding$}
+						paddingTop={$paddingTop$}
+						paddingBottom={$paddingBottom$}
+						paddingLeft={$paddingLeft$}
+						paddingRight={$paddingRight$}
 						data={$data$}
 					/>
 				{/await}

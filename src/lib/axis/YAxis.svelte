@@ -1,12 +1,12 @@
 <script>
 	import { writable } from 'svelte-tools';
-	import { graficoContext } from '$lib/Grafico.svelte';
+	import { getGraficoContext } from '$lib/Grafico';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
 	import TickContext from './TickContext.svelte';
 
-	const { innerHeight$, scales } = graficoContext();
+	const { innerHeight$ } = getGraficoContext();
 
 	export let id = 'y';
 	export let x = 0;
@@ -44,8 +44,6 @@
 
 	let _class = '';
 	export { _class as class };
-
-	$: $scales[id] = scale;
 
 	const k = orient === 'left' ? -1 : 1;
 

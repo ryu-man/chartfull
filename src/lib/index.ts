@@ -45,6 +45,6 @@ export {
   scaleFinance
 } from './scales'
 
-export { default as Grafico } from './Grafico.svelte'
+export { default as Grafico } from './Grafico'
 
 export { get } from './utils'

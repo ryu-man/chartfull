@@ -1,12 +1,12 @@
 <script>
 	import { writable } from 'svelte-tools';
-	import { graficoContext } from '$lib/Grafico.svelte';
+	import { getGraficoContext } from '$lib/Grafico';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
 	import TickContext from './TickContext.svelte';
 
-	const { innerWidth$, scales } = graficoContext();
+	const { innerWidth$ } = getGraficoContext()
 
 	export let id = 'x';
 	export let x = 0;
@@ -67,7 +67,6 @@
 
 	let ticks = [];
 
-	$: $scales[id] = scale;
 	$: !isPathDataSet && (d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
 </script>
 
