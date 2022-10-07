@@ -182,9 +182,16 @@
 
 <style>
 	.tick {
-		pointer-events: bounding-box;
+		pointer-events: visibleFill;
 		backface-visibility: hidden;
 		perspective: 1000px;
+		pointer-events: none;
+	}
+	.tick > line {
+		/* pointer-events: none; */
+	}
+	.tick > :global(text){
+		pointer-events: all;
 	}
 	.tick :global(text:not(.raw)) {
 		vector-effect: non-scaling-stroke;
