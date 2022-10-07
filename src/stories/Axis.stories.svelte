@@ -1,59 +1,54 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, Declare, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
-	import { csv, extent, timeParse } from 'd3';
+	import { Grafico, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
+	import { csv, extent, timeParse, timeMonths, scaleTime } from 'd3';
+	import { startOfYear, endOfYear } from 'date-fns';
 	import MarginDecorator from './MarginDecorator.svelte';
 
 	const timeParser = timeParse('%Y%m%d');
 
+	const today = new Date();
 	let data = [];
+	const duration = 1000;
 
-	csv('./multi_line.csv', (d) => ({
-		date: timeParser(d['date']),
-		'New York_1': +d['New York_1'],
-		'San Francisco_1': +d['San Francisco_1'],
-		Austin_1: +d['Austin_1']
-	})).then((res) => (data = res));
+	const delay = (delay = 1000) => new Promise((res) => setTimeout(res, delay));
+
+	Promise.resolve(timeMonths(startOfYear(today), endOfYear(today))).then(async (array) => {
+		for (const d of array) {
+			data = [...data, d];
+			await delay(duration);
+		}
+	});
+
+	let innerWidth = 0;
+	let innerHeight = 0;
+
+	$: xScale = scaleTime(extent(data), [0, innerWidth]);
+	$: yScale = scaleTime(extent(data), [innerHeight, 0]);
 </script>
 
-<Meta
-	title="Components/Axis"
-	component={Grafico}
-	argTypes={{
-		height: { control: { type: 'number' } },
-		width: { control: { type: 'number' } }
-	}}
-/>
+<Meta title="Components/Axis" component={Grafico} />
 
 <MarginDecorator>
 	<Story
 		id="xaxis"
 		name="XAxis"
 		args={{
-			width: 100,
-			top: false
+			top: false,
+			duration: 1000
 		}}
-		let:args
+		let:args={{ top, duration }}
 	>
-		<Grafico {...args} data={data.map((d) => d.date)} let:data let:innerWidth let:innerHeight>
-			<ScaleTime domain={extent(data)} range={[0, innerWidth]} let:scale>
-				<XAxis
-					{scale}
-					y={innerHeight/2}
-					orient={args.top ? 'top' : 'bottom'}
-					tickSize={6}
-					let:tick
-					let:format
-					let:x
-					let:d
-				>
-					<Tick {x} y={0} let:tickSize let:props>
-						<line stroke="#e8e8e8" y2={tickSize} />
-						<text {...props} fill="gray" font-family="Arial">{format(tick)}</text>
-					</Tick>
-					<path slot="path" {d} stroke="gray" stroke-width="2" fill="none" />
-				</XAxis>
-			</ScaleTime>
+		<Grafico bind:innerWidth bind:innerHeight>
+			<XAxis
+				scale={xScale}
+				y={innerHeight / 2}
+				orient={top ? 'top' : 'bottom'}
+				tickSize={6}
+				let:tick
+			>
+				<Tick {tick} {duration} />
+			</XAxis>
 		</Grafico>
 	</Story>
 
@@ -61,30 +56,24 @@
 		id="yaxis"
 		name="YAxis"
 		args={{
-			height: 400,
-			left: true
+			left: true,
+			duration: 1000
 		}}
-		let:args
+		let:args={{ left, duration }}
 	>
-		<Grafico {...args} data={data.map((d) => d.date)} let:data let:innerWidth let:innerHeight>
-			<ScaleTime domain={extent(data)} range={[0, innerHeight]} let:scale>
-				<YAxis
-					{scale}
-					x={innerWidth / 2}
-					y={0}
-					orient={args.left ? 'left' : 'right'}
-					tickSize={6}
-					stroke="gray"
-					strokeWidth="2"
-					let:tick
-					let:format
-					let:y
-				>
-					<Tick x={0} {y} x2={6} stroke="#e8e8e8" let:props>
-						<text {...props} fill="gray" font-family="Arial">{format(tick)}</text>
-					</Tick>
-				</YAxis>
-			</ScaleTime>
+		<Grafico bind:innerWidth bind:innerHeight>
+			<YAxis
+				scale={yScale}
+				x={innerWidth / 2}
+				y={0}
+				orient={left ? 'left' : 'right'}
+				tickSize={6}
+				stroke="gray"
+				strokeWidth="2"
+				let:tick
+			>
+				<Tick {tick} {duration} />
+			</YAxis>
 		</Grafico>
 	</Story>
 </MarginDecorator>

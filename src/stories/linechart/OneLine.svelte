@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Line, XAxis, YAxis, Tick, access } from 'graficos';
+	import { Grafico, Line, XAxis, YAxis, Tick, get } from 'graficos';
 	import { csv, extent, scaleLinear, scaleTime, timeParse } from 'd3';
 
 	export let args = {};
@@ -22,8 +22,8 @@
 	$: xScale = scaleTime(extent(data.map(xAccessor)), [0, innerWidth]);
 	$: yScale = scaleLinear(extent(data.map(yAccessor)), [innerHeight, 0]);
 
-	$: xGet = access(xScale, xAccessor);
-	$: yGet = access(yScale, yAccessor);
+	$: xGet = get(xScale, xAccessor);
+	$: yGet = get(yScale, yAccessor);
 </script>
 
 <Grafico
@@ -34,24 +34,26 @@
 	bind:innerWidth
 	bind:innerHeight
 >
-	<YAxis scale={yScale} let:y let:text>
+	<YAxis scale={yScale} let:tick>
+		<Tick {tick} x2={-innerWidth} />
 		<text slot="label">Daily close (<tspan>$</tspan>)</text>
-
-		<Tick {y} x2={-innerWidth}>
-			<text>{text}</text>
-		</Tick>
 	</YAxis>
 
-	<XAxis scale={xScale} y={innerHeight} orient="bottom" stroke="gray" let:text let:x>
-		<Tick {x} y={0} y2={-innerHeight}>
-			<text>{text}</text>
-		</Tick>
-		<!-- <text slot="label" x={innerWidth}>Years</text> -->
+	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
+		<Tick {tick} y2={-innerHeight} />
+		<text slot="label" x={innerWidth}>Years</text>
 	</XAxis>
 
-	<Line {data} y={yGet} x={xGet} stroke="black" strokeWidth="1" />
-
-	<text x={innerWidth} dy="-16" text-anchor="end" font-size="24pt" fill="gray">
+	<text
+		x={innerWidth}
+		text-anchor="end"
+		dominant-baseline="text-before-edge"
+		font-size="24pt"
+		font-weight="600"
+		fill="rgba(0,0,0, .1)"
+	>
 		Daily close of Apple stock
 	</text>
+
+	<Line {data} y={yGet} x={xGet} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
 </Grafico>

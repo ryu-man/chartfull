@@ -16,6 +16,7 @@
 
 	let innerWidth;
 	let innerHeight;
+	let boxWidth = 24
 
 	const xAccessor = (d) => d.carat;
 	const yAccessor = (d) => d.price;
@@ -45,28 +46,27 @@
 				quartiles: [q1, q2, q3],
 				range: [r0, r1],
 				outliers: y.filter((dd) => dd < r0 || dd > r1),
-				get width(){
-					return Math.abs(d.x0 - d.x1)
+				get width() {
+					return Math.abs(d.x0 - d.x1);
 				},
 				get quartileHeight() {
 					return Math.abs(q1 - q3);
 				},
-				get extremHeight(){
-					return Math.abs(r0 - r1)
+				get extremHeight() {
+					return Math.abs(r0 - r1);
 				},
 				...d
 			};
 		})
 		.filter(Boolean);
 
-	$: xScale = scaleLinear(extent(data, xAccessor), [0, innerWidth]);
+	$: xScale = scaleLinear(extent(data, xAccessor), [0+boxWidth/2, innerWidth- boxWidth/2]);
 	$: yScale = scaleLinear(extent(data, yAccessor), [innerHeight, 0]);
 </script>
 
 <Meta
 	title="Charts/Box chart"
 	argTypes={{
-		width: { control: { type: 'number' } },
 		height: { control: { type: 'number' } }
 	}}
 />
@@ -84,18 +84,13 @@
 		bind:innerWidth
 		bind:innerHeight
 	>
-		<YAxis scale={yScale} let:text let:y>
-			<Tick {y} x2={-innerWidth} let:x>
-				<text {x}>{text}</text>
-			</Tick>
+		<YAxis scale={yScale} let:tick>
+			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price</text>
-
 		</YAxis>
 
-		<XAxis scale={xScale} orient="bottom" y={innerHeight} let:text let:x>
-			<Tick {x} y2={-innerHeight} let:y>
-				<text {y}>{text}</text>
-			</Tick>
+		<XAxis scale={xScale} orient="bottom" y={innerHeight} let:tick>
+			<Tick {tick} y2={-innerHeight} />
 
 			<text slot="label" x={innerWidth}>Carat</text>
 		</XAxis>
@@ -107,11 +102,12 @@
 				x2={xScale(box.x1)}
 				{y1}
 				{y2}
+				width={24}
 				quartiles={box.quartiles.map(yScale)}
 				outliers={box.outliers}
 			>
 				{#each box.outliers as outlier}
-					<circle cx="0" cy={yScale(outlier)} r={2} fill="black" fill-opacity=".1" stroke="none" />
+					<circle cx="0" cy={yScale(outlier)} r={3} fill="black" fill-opacity=".03" stroke="none" />
 				{/each}
 			</Box>
 		{/each}

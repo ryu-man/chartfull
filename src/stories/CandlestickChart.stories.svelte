@@ -36,7 +36,6 @@
 <Meta
 	title="Charts/Candlestick chart"
 	argTypes={{
-		width: { control: { type: 'number' } },
 		height: { control: { type: 'number' } }
 	}}
 />
@@ -44,30 +43,31 @@
 <Story
 	name="Candlestick chart"
 	args={{
+		height:0,
 		padding: {
 			left: 48,
 			bottom: 48,
-      top: 48,
-      right: 48
+			top: 48,
+			right: 48
 		}
 	}}
 	let:args
 >
 	<Grafico bind:innerWidth bind:innerHeight {...args}>
-		<XAxis scale={xScale} y={innerHeight} orient="bottom" />
-		<YAxis scale={yScale} tickSize={-innerWidth} />
+		<text fill-opacity=".1" font-size="24pt" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge" x={innerWidth}>Daily stock status of Apple stock</text>
+		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
+			<Tick {tick} y2={-innerHeight} />
+			<text slot="label" x={innerWidth}>Time</text>
+		</XAxis>
+		<YAxis scale={yScale} let:tick>
+			<Tick {tick} x2={-innerWidth} />
+			<text slot="label">Price ($)</text>
+			
+		</YAxis>
 
 		<g class="data">
 			{#each data as candle}
-				<Candle
-					data={candle}
-					x={xScale(xAccessor(candle))}
-					low={yScale(candle.low)}
-					high={yScale(candle.high)}
-					open={yScale(candle.open)}
-					close={yScale(candle.close)}
-					width={xScale.band()}
-				/>
+				<Candle {candle} x={xScale(xAccessor(candle))} scale={yScale} width={xScale.band()} fillOpacity={.5} strokeOpacity={.9} />
 			{/each}
 		</g>
 	</Grafico>

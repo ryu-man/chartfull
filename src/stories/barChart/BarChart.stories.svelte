@@ -8,6 +8,7 @@
 	import HorizontalStory from './Horizontal.svelte';
 	import AnimatedStory from './Animated.svelte';
 	import VerticalStory from './Vertical.svelte';
+	import PopulationBarChart from './PopulationBarChart.svelte'
 
 	let data = [];
 
@@ -42,7 +43,7 @@
 	<Story
 		name="Horizontal"
 		args={{
-			height: 600,
+			height: 0,
 			horizontal: true
 		}}
 		let:args
@@ -53,18 +54,30 @@
 	<Story
 		name="Vertical"
 		args={{
-			height: 600,
+			height: 0,
 			padding: { bottom: 0, left: 48, top: 0, right: 0 }
 		}}
 		let:args
 	>
 		<VerticalStory {args} />
 	</Story>
+	<Story
+		name="Population"
+		args={{
+			height: 0,
+			padding: { bottom: 0, left: 48, top: 0, right: 0 }
+		}}
+		let:args
+	>
+		<PopulationBarChart {args} />
+	</Story>
+
+
 
 	<Story
 		name="Animated"
 		args={{
-			height: 600,
+			height: 0,
 			horizontal: true
 		}}
 		let:args
