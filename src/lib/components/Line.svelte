@@ -54,3 +54,9 @@
 	on:mouseenter
 	on:mouseleave
 />
+
+<style>
+	path {
+		pointer-events: visibleStroke;
+	}
+</style>
