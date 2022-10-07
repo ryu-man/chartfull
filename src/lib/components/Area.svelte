@@ -1,8 +1,5 @@
 <script>
   import { area as Area } from 'd3-shape'
-  import { graficoContext } from '../Grafico.svelte'
-
-  const { scales, accessors } = graficoContext()
 
   export let x
   export let y0 = 0
