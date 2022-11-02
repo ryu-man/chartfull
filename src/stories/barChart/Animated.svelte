@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, XAxis, Tick } from 'graficos';
+	import { Grafico, XAxis, Tick, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
 
 	import { csv, schemeCategory10, max } from 'd3';
@@ -44,7 +44,7 @@
 	$: [xGet, yGet] = [(d) => xScale(xAccessor(d)), (d) => yScale(yAccessor(d))];
 </script>
 
-<Grafico bind:innerWidth bind:innerHeight data={samples} padding={{ left: 96 }} {...args}>
+<Grafico bind:innerWidth bind:innerHeight data={samples} padding={{ left: 196 }} {...args}>
 	<XAxis scale={xScale} orient="bottom" y={innerHeight} let:tick>
 		<Tick {tick} y2={-innerHeight} />
 	</XAxis>
@@ -53,8 +53,8 @@
 		<Spring
 			from={[0, 0, 0]}
 			to={[yGet(item), xGet(item), 1]}
-			damping={1.2}
-			stiffness={0.01}
+			damping={1}
+			stiffness={0.2}
 			let:value={[y, width, opacity]}
 		>
 			<g transform={`translate(${0},${y})`} {opacity}>
@@ -62,10 +62,19 @@
 					dx={72 * (1 - opacity) - 16}
 					dy={yScale.bandwidth() / 2}
 					text-anchor="end"
-					fonts-size="24"
-					fill="gray">{yAccessor(item)}</text
+					ominant-baseline="middle"
+					font-size="24"
+					font-weight="400"
+					fill={scaleOrdinale(yAccessor(item))}>{yAccessor(item)}</text
 				>
-				<rect {width} height={yScale.bandwidth()} fill={scaleOrdinale(yAccessor(item))} />
+				<Rect
+					{width}
+					height={yScale.bandwidth()}
+					fill={scaleOrdinale(yAccessor(item))}
+					fill-opacity=".3"
+					stroke={scaleOrdinale(yAccessor(item))}
+					r="0 2 2 0"
+				/>
 			</g>
 		</Spring>
 	{/each}

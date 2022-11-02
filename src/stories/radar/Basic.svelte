@@ -1,7 +1,7 @@
 <script>
-	import { Grafico } from 'graficos';
-	import Line from 'graficos/components/LineRadial.svelte';
+	import { Grafico, Line, Area } from 'graficos';
 	import { scaleBand, scaleLinear, scaleRadial } from 'd3-scale';
+	import { lineRadial, curveCardinalClosed, curveCardinal } from 'd3';
 	import { onMount } from 'svelte';
 
 	export let args = {};
@@ -40,6 +40,11 @@
 		.range([100, Math.min(innerWidth, innerHeight) / 2 - 6]);
 
 	$: fontScale = scaleLinear().domain(yScale.range()).range([1, 0.4]);
+
+	$: gen = lineRadial()
+		.radius((d) => yScale(d.value))
+		.angle((d, i) => xScale(d.feature))
+		.curve(curveCardinalClosed.tension(.4));
 </script>
 
 <Grafico
@@ -70,13 +75,12 @@
 				transform="rotate({(xScale(tick) * 180) / Math.PI - 90})translate({r}, 0)"
 			>
 				<line
-					x1={-r + Math.min(...yScale.range())}
+					x1={-r }
 					y1={0}
 					x2={0}
 					y2={0}
-					stroke="rgba(0 0 0 / .3)"
+					stroke="rgba(0 0 0 / .09)"
 				/>
-				<line x2="-5" stroke="rgba(0 0 0 / .3)" />
 				<text
 					font-size="24pt"
 					fill="rgba(0 0 0 / .3)"
@@ -88,13 +92,7 @@
 		{/each}
 
 		{#each data as item}
-			<Line
-				data={item}
-				radius={(d) => yScale(d.value)}
-				angle={(d, i) => xScale(d.feature)}
-				fill="rgba(0 0 0 / .3)"
-				stroke="rgba(0 0 0 / .2)"
-			/>
+			<Area d={gen(item)} />
 		{/each}
 	</g>
 </Grafico>

@@ -1,10 +1,7 @@
 <script>
 	import { Grafico } from 'graficos';
-	import { Grid } from 'graficos/components/radar';
-	import Line from 'graficos/components/LineRadial.svelte';
 	import { scaleLinear, csv, timeParse, scaleRadial, scaleTime, extent, lineRadial } from 'd3';
 	import { format } from 'date-fns';
-	import { onMount } from 'svelte';
 
 	export let args = {};
 

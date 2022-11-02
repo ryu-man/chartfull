@@ -1,6 +1,8 @@
 <script>
-	import { Grafico, Line, XAxis, YAxis, Tick, get } from 'graficos';
+	import { Grafico, XAxis, YAxis, Tick, get, Line } from 'graficos';
+	import { lineStore } from 'graficos/stores/line';
 	import { csv, extent, scaleLinear, scaleTime, timeParse } from 'd3';
+	import { line } from 'd3-shape';
 
 	export let args = {};
 
@@ -24,6 +26,13 @@
 
 	$: xGet = get(xScale, xAccessor);
 	$: yGet = get(yScale, yAccessor);
+
+	const line$ = lineStore(xGet, yGet);
+	$: line$.x(xGet);
+	$: line$.y(yGet);
+	$: line$.data(data);
+
+	$: console.log($line$)
 </script>
 
 <Grafico
@@ -55,5 +64,5 @@
 		Daily close of Apple stock
 	</text>
 
-	<Line {data} y={yGet} x={xGet} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
+	<Line d={$line$} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
 </Grafico>

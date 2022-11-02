@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Declare, ScaleOrdinal, XAxis, Tick, get } from 'graficos';
+	import { Grafico, ScaleOrdinal, XAxis, Tick, get, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
 	import { csv, schemeCategory10, max } from 'd3';
 	import { scaleLinear, scaleBand } from 'd3-scale';
@@ -18,17 +18,15 @@
 
 	const [xAccessor, yAccessor] = [(d) => +d.Value, (d) => d.Country];
 
-	let xScale = scaleLinear([0, max(data, xAccessor)], [0, innerWidth]);
-	$: xScale = xScale.domain([0, max(data, xAccessor)]).range([0, innerWidth]);
+	$: xScale = scaleLinear([0, max(data, xAccessor)], [0, innerWidth]);
 
-	let yScale = scaleBand(data.map(yAccessor), [innerHeight, 0]).padding(0.2);
-	$: yScale = yScale.domain(data.map(yAccessor)).range([innerHeight, 0]).padding(0.2);
+	$: yScale = scaleBand(data.map(yAccessor), [innerHeight, 0]).padding(0.2);
 
 	$: xGet = get(xScale, xAccessor);
 	$: yGet = get(yScale, yAccessor);
 </script>
 
-<Grafico padding={{ left: 96 }} bind:innerWidth bind:innerHeight {...args}>
+<Grafico padding={{ left: 196 }} bind:innerWidth bind:innerHeight {...args}>
 	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 		<Tick {tick} y2={-innerHeight} />+
 	</XAxis>
@@ -41,13 +39,19 @@
 						dy={yScale.bandwidth() / 2}
 						text-anchor="end"
 						dominant-baseline="middle"
-						fonts-size="24"
-						fill="gray">{yAccessor(item)}</text
+						font-size="24"
+						font-weight="400"
+						fill={scaleOrdinale(yAccessor(item))}
 					>
-					<rect
+						{yAccessor(item)}
+					</text>
+					<Rect
 						width={xGet(item) * v}
 						height={yScale.bandwidth()}
 						fill={scaleOrdinale(yAccessor(item))}
+						fill-opacity=".3"
+						stroke={scaleOrdinale(yAccessor(item))}
+						r="0 2 2 0"
 					/>
 				</g>
 			</Spring>

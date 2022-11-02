@@ -1,10 +1,8 @@
 <script>
-	import { Grafico } from 'graficos';
+	import { Grafico, Line } from 'graficos';
 	import RadialAxis from 'graficos/axis/RadialAxis.svelte';
 	import RadialTick from 'graficos/axis/RadialTick.svelte';
-	import RadialLine from 'graficos/components/LineRadial.svelte';
 	import { csv, timeParse, scaleRadial, scaleTime, extent, lineRadial } from 'd3';
-	import { format } from 'date-fns';
 
 	export let args = {};
 
@@ -71,7 +69,7 @@
             ? 'rotate(90)translate(0,22)'
             : 'rotate(-90)translate(0, -15)'} -->
 
-		<path d={line(data)} stroke="rgba(0 0 0 / .15)" stroke-width="2" fill="none" />
+		<Line d={line(data)} stroke-width="2" />
 	</g>
 </Grafico>
 

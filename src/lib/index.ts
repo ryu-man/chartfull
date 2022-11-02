@@ -1,16 +1,4 @@
-export {
-  Area,
-  Legend,
-  Line,
-  Pie,
-  Arc,
-  Slice,
-  Stack,
-  Bin,
-  Box,
-  Declare,
-  Candle
-} from './components'
+export * from './components'
 
 export { XAxis, YAxis, Tick } from './axis'
 

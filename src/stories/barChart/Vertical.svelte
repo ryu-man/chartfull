@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Declare, ScaleOrdinal, XAxis, YAxis, Tick } from 'graficos';
+	import { Grafico, YAxis, Tick, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
 	import { csv, schemeCategory10, max } from 'd3';
 	import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
@@ -40,13 +40,23 @@
 			{@const yProgress = (innerHeight - y) / (innerHeight - yGet(item))}
 
 			<g transform={`translate(${xGet(item)},${0})`}>
-				<rect
+				<!-- <rect
 					class={item.Country}
 					{y}
 					width={xScale.bandwidth()}
 					height={innerHeight - y}
 					fill={colorScale(item.Country)}
 					fill-opacity=".8"
+				/> -->
+				<Rect
+					class={item.Country}
+					{y}
+					width={xScale.bandwidth()}
+					height={innerHeight - y}
+					fill={colorScale(item.Country)}
+					fill-opacity=".3"
+					stroke={colorScale(item.Country)}
+					r="2 2 0 0"
 				/>
 				<text
 					dy={innerHeight - 16 * yProgress}
@@ -60,10 +70,10 @@
 		</Spring>
 	{/each}
 	<text
-		x={innerWidth / 2}
+		x={innerWidth}
 		y={innerHeight}
 		dy={54}
-		text-anchor="middle"
+		text-anchor="end"
 		font-size="36pt"
 		font-weight="900"
 		letter-spacing="8pt"

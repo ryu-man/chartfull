@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Line, XAxis, YAxis, Tick, get } from 'graficos';
+	import { Grafico, XAxis, YAxis, Tick, get, Line } from 'graficos';
 	import {
 		csv,
 		extent,
@@ -10,6 +10,7 @@
 		group,
 		scaleOrdinal
 	} from 'd3';
+	import { line } from 'd3-shape';
 
 	export let args = {};
 
@@ -36,6 +37,7 @@
 
 	$: xGet = get(xScale, xAccessor);
 	$: yGet = get(yScale, yAccessor);
+	$: gen = line().x(xGet).y(yGet);
 </script>
 
 <Grafico {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
@@ -63,7 +65,7 @@
 
 	<g class="data">
 		{#each [...groups.entries()] as [key, data]}
-			<Line {data} y={yGet} x={xGet} stroke={colorScale(key)} />
+			<Line d={gen(data)} stroke={colorScale(key)}   />
 		{/each}
 	</g>
 </Grafico>

@@ -1,13 +1,5 @@
-<script context="module">
-	export const key = Symbol();
-
-	export const graficoContext = () => getContext(key) || {};
-
-	export const GETTERS_KEY = Symbol();
-</script>
-
 <script lang="ts">
-	import { getContext, setContext, tick } from 'svelte';
+	import { tick } from 'svelte';
 	import { writable } from 'svelte-tools';
 	import { setGraficoContext, type GraficoContext } from './context';
 	import { classNames, css } from '../utils';
@@ -20,7 +12,7 @@
 	export let innerWidth = 0;
 	export let innerHeight = 0;
 	export let padding: Padding = {};
-	export let data = [];
+	export let data: any[] = [];
 	export let style: string | Properties = '';
 	let _class = '';
 	export { _class as class };

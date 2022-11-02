@@ -1,5 +1,6 @@
 const path = require('path')
 const preprocess = require('svelte-preprocess')
+const { mergeConfig, defineConfig } = require('vite');
 
 module.exports = {
   "stories": ["../src/stories/**/*.stories.mdx", "../src/stories/**/*.stories.@(js|jsx|ts|tsx|svelte)"],
@@ -14,11 +15,14 @@ module.exports = {
   staticDirs: ['../static'],
 
   async viteFinal(config) {
-    config.resolve.alias = {
-      "$lib": path.resolve('./src/lib'),
-      "graficos": path.resolve('./src/lib')
-    }
 
-    return config
+    return mergeConfig(config, defineConfig({
+      resolve: {
+        alias: {
+          "$lib": path.resolve('./src/lib'),
+          "graficos": path.resolve('./src/lib')
+        }
+      }
+    }))
   }
 };

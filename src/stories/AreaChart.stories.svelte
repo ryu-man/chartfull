@@ -3,6 +3,7 @@
 	import { Grafico, XAxis, YAxis, Tick, Area } from 'graficos';
 	import { csv, extent, max, timeParse } from 'd3';
 	import { scaleLinear, scaleTime } from 'd3-scale';
+	import { area } from 'd3-shape';
 	import { code } from './areaChart.code';
 
 	let data = [];
@@ -20,6 +21,8 @@
 	const [xAccessor, yAccessor] = [(d) => d.date, (d) => +d.value];
 	let innerWidth = 1;
 	let innerHeight = 1;
+
+	$: ar = area().x(xScaled).y0(innerHeight).y1(y1Scaled);
 
 	$: xScale = scaleTime(extent(data, xAccessor) ?? [], [0, innerWidth]);
 	$: yScale = scaleLinear([0, max(data, yAccessor)] ?? [], [innerHeight, 0]);
@@ -56,20 +59,12 @@
 			<text slot="label" x={innerWidth}>Year</text>
 		</XAxis>
 
-		<YAxis scale={yScale} tickFormat={d=> Math.trunc(d/1000)+'K'} let:tick>
+		<YAxis scale={yScale} tickFormat={(d) => Math.trunc(d / 1000) + 'K'} let:tick>
 			<Tick {tick} x2={-innerWidth} duration={400} />
 			<text slot="label">Value</text>
 		</YAxis>
 
-		<Area
-			x={xScaled}
-			y0={innerHeight}
-			y1={y1Scaled}
-			{data}
-			fill="rgb(0 0 0 / 30%)"
-			stroke="rgb(0 0 0 / 40%)"
-			strokeWidth="1"
-		/>
+		<Area d={ar(data)} stroke-width="1" />
 	</Grafico>
 </Story>
 
