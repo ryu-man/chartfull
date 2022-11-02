@@ -83,6 +83,8 @@
 	on:click
 >
 	{#await tick() then _}
+		<slot name="html-pre" />
+
 		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
 			<g
 				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
@@ -94,6 +96,8 @@
 				font-style={fontStyle}
 				font-variant={fontVariant}
 			>
+				<slot name="svg-pre" />
+
 				{#await tick() then _}
 					<slot
 						width={$width$}
@@ -108,12 +112,12 @@
 					/>
 				{/await}
 
-				<slot name="svg" />
+				<slot name="svg-post" />
 			</g>
 		</svg>
 	{/await}
 
-	<slot name="html" />
+	<slot name="html-post" />
 </div>
 
 <style>
