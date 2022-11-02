@@ -86,9 +86,8 @@
 	on:mouseup
 	on:click
 >
+	<slot name="html-pre" />
 	{#await tick() then _}
-		<slot name="html-pre" />
-
 		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
 			<g
 				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
