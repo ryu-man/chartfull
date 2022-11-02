@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { writable } from 'svelte-tools';
+	import { derived, writable } from 'svelte-tools';
 	import { setGraficoContext, type GraficoContext } from './context';
 	import { classNames, css } from '../utils';
 	import { sizeStore } from '../stores';
@@ -58,6 +58,8 @@
 
 	setGraficoContext(context);
 
+	const height$$ = derived(height$, (h) => (h ? h + 'px' : '100%'));
+
 	$: $data$ = data;
 	$: innerWidth = $innerWidth$;
 	$: innerHeight = $innerHeight$;
@@ -68,9 +70,11 @@
 	bind:clientHeight={$height$}
 	use:css={style}
 	class={classNames(_class, 'grafico')}
-	style="--height: {height
-		? height + 'px'
-		: '100%'}; --padding-top: {$paddingTop$}px;--padding-bottom: {$paddingBottom$}px;--padding-left: {$paddingLeft$}px;--padding-right: {$paddingRight$}px;"
+	style:--height={$height$$}
+	style:--padding-top="{$paddingTop$}px"
+	style:--padding-bottom="{$paddingBottom$}px"
+	style:--padding-left="{$paddingLeft$}px"
+	style:--padding-right="{$paddingRight$}px"
 	on:mouseenter
 	on:mouseleave
 	on:mousemove
