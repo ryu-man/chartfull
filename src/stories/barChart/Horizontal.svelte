@@ -46,8 +46,10 @@
 		>
 	</XAxis>
 	{#each data as item, i (i)}
+		{@const min_range = min(xScale.range())}
+
 		<Spring from={0} to={1} damping={0.5} stiffness={0.04} let:value={v}>
-			<g transform={`translate(${min(xScale.range())},${yGet(item)})`} opacity={v}>
+			<g transform={`translate(${min_range},${yGet(item)})`} opacity={v}>
 				<text
 					dx={-16 * v}
 					dy={yScale.bandwidth() / 2}
@@ -60,7 +62,7 @@
 					{yAccessor(item)}
 				</text>
 				<Rect
-					width={xGet(item) * v - min(xScale.range())}
+					width={(xGet(item) - min_range) * v}
 					height={yScale.bandwidth()}
 					fill={colorScale(yAccessor(item))}
 					fill-opacity=".3"
