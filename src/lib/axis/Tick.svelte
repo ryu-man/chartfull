@@ -4,11 +4,11 @@
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { linear } from 'svelte/easing';
-	import { get } from './TickContext.svelte';
-	import { context } from './Axis.svelte';
+	import { getTickContext } from './context_tick';
+	import { getAxisContext } from './context_axis'
 
-	const { k, xy, textAnchor, tickSize$ } = get();
-	const { currentScale$, previousScale$, tickFormat$ } = context();
+	const { k, xy, textAnchor, tickSize$ } = getTickContext();
+	const { currentScale$, previousScale$, tickFormat$ } = getAxisContext();
 
 	export let tick;
 
@@ -190,7 +190,7 @@
 	.tick > line {
 		/* pointer-events: none; */
 	}
-	.tick > :global(text){
+	.tick > :global(text) {
 		pointer-events: all;
 	}
 	.tick :global(text:not(.raw)) {

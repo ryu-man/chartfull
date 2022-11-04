@@ -4,7 +4,7 @@
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
-	import TickContext from './TickContext.svelte';
+	import { setTickContext } from './context_tick';
 
 	const { innerHeight$ } = getGraficoContext();
 
@@ -65,58 +65,57 @@
 		textAnchor: orient === 'left' ? 'end' : 'start',
 		tickColor
 	};
+	setTickContext(context);
 
 	$: !isPathDataSet && (d = `M${k * 6},0H0V${$innerHeight$}H${k * 6}`);
 </script>
 
-<TickContext value={context}>
-	<Axis
-		{scale}
-		{x}
-		{y}
-		{id}
-		{orient}
-		{ticks}
-		{tickArguments}
-		{tickValues}
-		{tickFormat}
-		{tickPadding}
-		{fontFamily}
-		{fontWeight}
-		{fontSize}
-		{fontSizeAdjust}
-		{fontVariant}
-		{fontStyle}
-		{fontStretch}
-		class={classNames(_class, 'y', orient)}
-		style="--axis-fill: {fill};"
-		let:ticks
-		let:format
-	>
-		{#each ticks as tick, index (+tick || tick)}
-			<slot {index} {tick} {format} text={format(tick)}>
-				<Tick {tick}>
-					<text>{format(tick)}</text>
-				</Tick>
-			</slot>
-		{/each}
+<Axis
+	{scale}
+	{x}
+	{y}
+	{id}
+	{orient}
+	{ticks}
+	{tickArguments}
+	{tickValues}
+	{tickFormat}
+	{tickPadding}
+	{fontFamily}
+	{fontWeight}
+	{fontSize}
+	{fontSizeAdjust}
+	{fontVariant}
+	{fontStyle}
+	{fontStretch}
+	class={classNames(_class, 'y', orient)}
+	style="--axis-fill: {fill};"
+	let:ticks
+	let:format
+>
+	{#each ticks as tick, index (+tick || tick)}
+		<slot {index} {tick} {format} text={format(tick)}>
+			<Tick {tick}>
+				<text>{format(tick)}</text>
+			</Tick>
+		</slot>
+	{/each}
 
-		<path
-			class="domain"
-			fill="none"
-			{stroke}
-			stroke-width={strokeWidth}
-			stroke-dasharray={strokeDasharray}
-			stroke-dashoffset={strokeDashoffset}
-			stroke-opacity={strokeOpacity}
-			stroke-linecap={strokeLinecap}
-			stroke-linejoin={strokeLinejoin}
-			stroke-miterlimit={strokeMiterlimit}
-			{d}
-		/>
+	<path
+		class="domain"
+		fill="none"
+		{stroke}
+		stroke-width={strokeWidth}
+		stroke-dasharray={strokeDasharray}
+		stroke-dashoffset={strokeDashoffset}
+		stroke-opacity={strokeOpacity}
+		stroke-linecap={strokeLinecap}
+		stroke-linejoin={strokeLinejoin}
+		stroke-miterlimit={strokeMiterlimit}
+		{d}
+	/>
 
-		<g class="label" id="y-axis-label">
-			<slot name="label" />
-		</g>
-	</Axis>
-</TickContext>
+	<g class="label" id="y-axis-label">
+		<slot name="label" />
+	</g>
+</Axis>

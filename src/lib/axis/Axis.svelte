@@ -1,15 +1,9 @@
-<script context="module">
-	export const KEY = {};
-	export const SCALES = {};
-	export const context = () => getContext(KEY);
-</script>
-
 <script lang="ts">
-	import { getContext, setContext } from 'svelte';
 	import { writable } from 'svelte-tools/accessible';
 	import { memorable } from 'svelte-tools/memorable';
 	import type { Properties } from 'csstype';
 	import { classNames, css } from '$lib/utils';
+	import { setAxisContext } from './context_axis';
 
 	export let x = 0;
 	export let y = 0;
@@ -45,7 +39,7 @@
 	const tickFormat$ = writable(identity);
 	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
 
-	setContext(KEY, {
+	setAxisContext({
 		currentScale$,
 		previousScale$,
 		tickFormat$

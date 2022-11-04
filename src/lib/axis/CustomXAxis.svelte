@@ -3,7 +3,7 @@
 	import { getGraficoContext } from '../Grafico';
 	import { classNames } from '../utils';
 	import Axis from './Axis.svelte';
-	import TickContext from './TickContext.svelte';
+	import { setTickContext } from './context_tick';
 
 	const { innerWidth$ } = getGraficoContext();
 
@@ -63,54 +63,53 @@
 		textAnchor: 'middle',
 		tickColor
 	};
+	setTickContext(context);
 
 	let ticks = [];
 
 	$: !isPathDataSet && (d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
 </script>
 
-<TickContext value={context}>
-	<Axis
-		{scale}
-		{x}
-		{y}
-		{id}
-		{orient}
-		{tickValues}
-		{tickArguments}
-		{tickFormat}
-		{tickPadding}
-		{fontFamily}
-		{fontWeight}
-		{fontSize}
-		{fontSizeAdjust}
-		{fontVariant}
-		{fontStyle}
-		{fontStretch}
-		class={classNames(_class, 'x', orient)}
-		style="--axis-fill: {fill};"
-		bind:ticks
-		let:format
-		let:previousScale
-	>
-		<slot {ticks} {format} {previousScale} />
+<Axis
+	{scale}
+	{x}
+	{y}
+	{id}
+	{orient}
+	{tickValues}
+	{tickArguments}
+	{tickFormat}
+	{tickPadding}
+	{fontFamily}
+	{fontWeight}
+	{fontSize}
+	{fontSizeAdjust}
+	{fontVariant}
+	{fontStyle}
+	{fontStretch}
+	class={classNames(_class, 'x', orient)}
+	style="--axis-fill: {fill};"
+	bind:ticks
+	let:format
+	let:previousScale
+>
+	<slot {ticks} {format} {previousScale} />
 
-		<path
-			class="domain"
-			fill="none"
-			{stroke}
-			stroke-width={strokeWidth}
-			stroke-dasharray={strokeDasharray}
-			stroke-dashoffset={strokeDashoffset}
-			stroke-opacity={strokeOpacity}
-			stroke-linecap={strokeLinecap}
-			stroke-linejoin={strokeLinejoin}
-			stroke-miterlimit={strokeMiterlimit}
-			{d}
-		/>
+	<path
+		class="domain"
+		fill="none"
+		{stroke}
+		stroke-width={strokeWidth}
+		stroke-dasharray={strokeDasharray}
+		stroke-dashoffset={strokeDashoffset}
+		stroke-opacity={strokeOpacity}
+		stroke-linecap={strokeLinecap}
+		stroke-linejoin={strokeLinejoin}
+		stroke-miterlimit={strokeMiterlimit}
+		{d}
+	/>
 
-		<g class="label" id="x-axis-label">
-			<slot name="label" />
-		</g>
-	</Axis>
-</TickContext>
+	<g class="label" id="x-axis-label">
+		<slot name="label" />
+	</g>
+</Axis>
