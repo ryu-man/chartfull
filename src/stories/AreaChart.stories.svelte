@@ -22,7 +22,7 @@
 	let innerWidth = 1;
 	let innerHeight = 1;
 
-	$: ar = area().x(xScaled).y0(innerHeight).y1(y1Scaled);
+	$: areaDataPath = area().x(xScaled).y0(innerHeight).y1(y1Scaled);
 
 	$: xScale = scaleTime(extent(data, xAccessor) ?? [], [0, innerWidth]);
 	$: yScale = scaleLinear([0, max(data, yAccessor)] ?? [], [innerHeight, 0]);
@@ -64,7 +64,7 @@
 			<text slot="label">Value</text>
 		</YAxis>
 
-		<Area d={ar(data)} stroke-width="1" />
+		<Area d={areaDataPath(data)} stroke-width="1" />
 	</Grafico>
 </Story>
 

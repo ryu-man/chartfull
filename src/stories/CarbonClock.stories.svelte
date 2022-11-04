@@ -1,11 +1,10 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Grafico, XAxis, YAxis, Tick, Line } from 'graficos';
-	import Tooltip from 'graficos/components/Tooltip.svelte';
 	import { csv, zoom, select } from 'd3';
-	import { quantile, bin, extent, min, max } from 'd3-array';
-	import { scaleLinear, scaleTime } from 'd3-scale';
-	import { tick } from 'svelte';
+	import { extent } from 'd3-array';
+	import { scaleLinear } from 'd3-scale';
+	import { line } from 'd3';
 
 	let data = [];
 
@@ -33,12 +32,17 @@
 	$: xScale = scaleLinear(extent(data, xAccess), [0, innerWidth]);
 	$: yScale = scaleLinear(extent(data, co2Acess), [innerHeight, 0]);
 
+	$: d1 = line()
+		.x((d) => xScale(xAccess(d)))
+		.y((d) => yScale(co2Acess(d)));
+	$: d2 = line()
+		.x((d) => xScale(xAccess(d)))
+		.y((d) => yScale(seasonallyAdjustedAccess(d)));
+
 	let d3zoom = zoom()
 		.scaleExtent([0.5, 5])
 		.duration(200)
-		.on('zoom', async (e) => {
-			await tick();
-			console.log(e.transform.k);
+		.on('zoom', (e) => {
 			const transform = e.transform;
 
 			if (!_xScale) {
@@ -60,7 +64,7 @@
 	let offsetX = 0;
 	let offsetY = 0;
 
-	function zoomable(node, zoom) {
+	function zoomable(node, zoom, x, y) {
 		select(node).call(zoom);
 	}
 </script>
@@ -114,16 +118,9 @@
 					fill="rgb(64 55 201 / 40%)"
 				/>
 			{/each}
+			<Line d={d1(data)} stroke="rgba(0,0,0, .1)" />
 			<Line
-				{data}
-				x={(d) => xScale(xAccess(d))}
-				y={(d) => yScale(co2Acess(d))}
-				stroke="rgba(0,0,0, .1)"
-			/>
-			<Line
-				{data}
-				x={(d) => xScale(xAccess(d))}
-				y={(d) => yScale(seasonallyAdjustedAccess(d))}
+				d2={d2(data)}
 				stroke="rgb(64 55 201 / 50%)"
 				strokeWidth="3"
 				on:mouseenter={(e) => {}}

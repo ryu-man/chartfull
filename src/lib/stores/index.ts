@@ -47,5 +47,3 @@ export function memorable<T>(value: T, capacity = 1): Memorable<T> {
         ...Array.from(new Array(capacity)).map((_, i) => derived(store, values => values[i + 1]))
     ]
 }
-
-export { lineStore as line } from './line'
