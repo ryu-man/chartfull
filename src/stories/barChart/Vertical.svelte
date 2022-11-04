@@ -40,14 +40,6 @@
 			{@const yProgress = (innerHeight - y) / (innerHeight - yGet(item))}
 
 			<g transform={`translate(${xGet(item)},${0})`}>
-				<!-- <rect
-					class={item.Country}
-					{y}
-					width={xScale.bandwidth()}
-					height={innerHeight - y}
-					fill={colorScale(item.Country)}
-					fill-opacity=".8"
-				/> -->
 				<Rect
 					class={item.Country}
 					{y}
@@ -59,12 +51,13 @@
 					r="2 2 0 0"
 				/>
 				<text
-					dy={innerHeight - 16 * yProgress}
+					{y}
+					dy="-8"
 					dx={xScale.bandwidth() / 2}
 					text-anchor="middle"
 					font-size="11pt"
 					style:mix-blend-mode="plus-lighter"
-					fill="rgb(0 0 0 / 1)">{xAccessor(item)}</text
+					fill={colorScale(item.Country)}>{xAccessor(item)}</text
 				>
 			</g>
 		</Spring>
