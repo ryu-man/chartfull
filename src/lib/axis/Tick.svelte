@@ -7,7 +7,7 @@
 	import { getTickContext } from './context_tick';
 	import { getAxisContext } from './context_axis';
 
-	const { k, xy, textAnchor, tickSize$ } = getTickContext();
+	const { k, xy, textAnchor, tickSize$, offset$ } = getTickContext();
 	const { currentScale$, previousScale$, tickFormat$ } = getAxisContext();
 
 	export let tick;
@@ -16,13 +16,6 @@
 	$: size = $tickSize$;
 
 	export let padding = 0;
-
-	const offsets = {
-		x: 0,
-		y: 0
-	};
-	export let offset = 0;
-	offsets[xy] = offset;
 
 	export let fontFamily;
 	export let fontSize = '12pt';
@@ -53,8 +46,8 @@
 	export let delay = 0;
 	export let easing = linear;
 
-	export let dx = 0;
-	export let dy = 0;
+	export let dx = $offset$.x;
+	export let dy = $offset$.y;
 
 	const axisType = xy === 'y' ? 'x' : 'y';
 
@@ -79,12 +72,12 @@
 		}
 	});
 
-	function enter(node, { duration = 0, delay = 0, easing, s0, s1, offset, type }) {
+	function enter(node, { duration = 0, delay = 0, easing, s0, s1, dx, dy, type }) {
 		const d = s1 - s0;
 
-		let transform = (t) => `translate(${s0 + d * t + offset}px,0)`;
+		let transform = (t) => `translate(${s0 + d * t + dx}px,${dy}px)`;
 		if (type === 'y') {
-			transform = (t) => `translate(0,${s0 + d * t + offset}px)`;
+			transform = (t) => `translate(${dx}px,${s0 + d * t + dy}px)`;
 		}
 
 		return () => ({
@@ -95,12 +88,12 @@
 		});
 	}
 
-	function exit(node, { duration = 0, delay = 0, easing, s0, s1, offset, type }) {
+	function exit(node, { duration = 0, delay = 0, easing, s0, s1, dx, dy, type }) {
 		const d = s1 - s0;
 
-		let transform = (t, u) => `translate(${s0 + d * u + offset}px, 0)`;
+		let transform = (t, u) => `translate(${s0 + d * u + dx}px, ${dy}px)`;
 		if (type === 'y') {
-			transform = (t, u) => `translate(0,${s0 + d * u + offset}px)`;
+			transform = (t, u) => `translate(${dx}px, ${s0 + d * u + dy}px)`;
 		}
 
 		return () => ({
@@ -110,14 +103,12 @@
 			css: (t, u) => `opacity: ${t}; transform: ${transform(t, u)}`
 		});
 	}
-
-	$: offset = offsets[xy];
 </script>
 
 <g
 	class="tick {axisType}"
 	style:--fill={fill}
-	style:transform={`translate(${$x$ + dx + offset || 0}px,${$y$ + dy + offset || 0}px)`}
+	style:transform={`translate(${$x$ + dx || 0}px,${$y$ + dy || 0}px)`}
 	font-family={fontFamily}
 	font-size={fontSize}
 	font-weight={fontWeight}
@@ -134,7 +125,8 @@
 		easing,
 		s0: previousScale$.value(tick),
 		s1: currentScale$.value(tick),
-		offset,
+		dx,
+		dy,
 		type: axisType
 	}}
 	out:exit|local={{
@@ -143,7 +135,8 @@
 		easing,
 		s0: previousScale$.value(tick),
 		s1: currentScale$.value(tick),
-		offset,
+		dx,
+		dy,
 		type: axisType
 	}}
 	on:click

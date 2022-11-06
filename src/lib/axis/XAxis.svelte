@@ -52,8 +52,14 @@
 	$: tickSize$.set(tickSize);
 	const padding$ = writable(tickPadding);
 	$: padding$.set(tickPadding);
-	const offset$ = writable(tickOffset);
-	$: offset$.set(tickOffset);
+	const offset$ = writable({
+		x: 0,
+		y: tickOffset
+	});
+	$: offset$.set({
+		x: 0,
+		y: tickOffset
+	});
 
 	const context = {
 		xy: 'y',
