@@ -5,7 +5,7 @@
 	import { tweened } from 'svelte/motion';
 	import { linear } from 'svelte/easing';
 	import { getTickContext } from './context_tick';
-	import { getAxisContext } from './context_axis'
+	import { getAxisContext } from './context_axis';
 
 	const { k, xy, textAnchor, tickSize$ } = getTickContext();
 	const { currentScale$, previousScale$, tickFormat$ } = getAxisContext();
@@ -61,77 +61,53 @@
 	let x = axisType === 'x' ? currentScale$.value(tick) : 0;
 	let y = axisType === 'y' ? currentScale$.value(tick) : 0;
 
-	const [enter, exit] = axisType === 'x' ? [enterX, exitX] : [enterY, exitY];
-
 	const x$ = tweened(x, { duration, delay, easing });
-	onMount(() =>
-		currentScale$.subscribe(() => {
-			if (axisType === 'x') {
-				x$.set($currentScale$(tick));
-			} else {
-				x$.set(0);
-			}
-		})
-	);
+	onMount(() => {
+		if (axisType === 'x') {
+			return currentScale$.subscribe((scale) => {
+				x$.set(scale(tick));
+			});
+		}
+	});
 
 	const y$ = tweened(y, { duration, delay, easing });
-	onMount(() =>
-		currentScale$.subscribe(() => {
-			if (axisType === 'y') {
-				y$.set($currentScale$(tick));
-			} else {
-				y$.set(0);
-			}
-		})
-	);
+	onMount(() => {
+		if (axisType === 'y') {
+			return currentScale$.subscribe((scale) => {
+				y$.set(scale(tick));
+			});
+		}
+	});
 
-	function enterX(node, { duration = 0, delay = 0, easing }) {
-		const oldVal = previousScale$.value(tick);
-		const newVal = currentScale$.value(tick);
-		const d = newVal - oldVal;
+	function enter(node, { duration = 0, delay = 0, easing, s0, s1, offset, type }) {
+		const d = s1 - s0;
 
-		return () => ({
-			duration,
-			delay,
-			easing,
-			css: (t, u) => `opacity: ${t}; transform: translate(${oldVal + d * t + offset}px,0)`
-		});
-	}
-	function exitX(node, { duration = 0, delay = 0, easing }) {
-		const oldVal = previousScale$.value(tick);
-		const newVal = currentScale$.value(tick);
-		const d = newVal - oldVal;
+		let transform = (t) => `translate(${s0 + d * t + offset}px,0)`;
+		if (type === 'y') {
+			transform = (t) => `translate(0,${s0 + d * t + offset}px)`;
+		}
 
 		return () => ({
 			duration,
 			delay,
 			easing,
-			css: (t, u) => `opacity: ${t}; transform: translate(${oldVal + d * u + offset}px, 0)`
+			css: (t) => `opacity: ${t}; transform: ${transform(t)}`
 		});
 	}
 
-	function enterY(node, { duration = 0, delay = 0, easing }) {
-		const oldVal = previousScale$.value(tick);
-		const newVal = currentScale$.value(tick);
-		const d = newVal - oldVal;
+	function exit(node, { duration = 0, delay = 0, easing, s0, s1, offset, type }) {
+		const d = s1 - s0;
+
+		let transform = (t, u) => `translate(${s0 + d * u + offset}px, 0)`;
+		if (type === 'y') {
+			transform = (t, u) => `translate(0,${s0 + d * u + offset}px)`;
+		}
 
 		return () => ({
 			duration,
 			delay,
 			easing,
-			css: (t, u) => `opacity: ${t}; transform: translate(0,${oldVal + d * t + offset}px)`
-		});
-	}
-	function exitY(node, { duration = 0, delay = 0, easing }) {
-		const oldVal = previousScale$.value(tick);
-		const newVal = currentScale$.value(tick);
-		const d = newVal - oldVal;
-
-		return () => ({
-			duration,
-			delay,
-			easing,
-			css: (t, u) => `opacity:${t}; transform: translate(0,${oldVal + d * u + offset}px)`
+			css: (t, u) => `opacity: ${t}; transform: ${transform(t, u)}`
 		});
 	}
 
@@ -152,8 +128,24 @@
 	text-anchor={textAnchor}
 	alignment-baseline="middle"
 	fill-opacity={fillOpacity}
-	in:enter|local={{ duration, delay, easing }}
-	out:exit|local={{ duration, delay, easing }}
+	in:enter|local={{
+		duration,
+		delay,
+		easing,
+		s0: previousScale$.value(tick),
+		s1: currentScale$.value(tick),
+		offset,
+		type: axisType
+	}}
+	out:exit|local={{
+		duration,
+		delay,
+		easing,
+		s0: previousScale$.value(tick),
+		s1: currentScale$.value(tick),
+		offset,
+		type: axisType
+	}}
 	on:click
 	on:introstart
 	on:introend
