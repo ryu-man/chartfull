@@ -1,9 +1,8 @@
-<script lang="ts">
+<script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Grafico, XAxis, YAxis, Tick, get } from 'graficos';
 	import { first, last } from 'graficos/utils/array';
-	import { bin, csv, extent, Bin } from 'd3';
-	import { scaleLinear } from 'd3-scale';
+	import { bin, csv, extent, scaleLinear } from 'd3';
 	let data = [];
 
 	csv('unemployment-x.csv', (d) => ({
@@ -26,9 +25,9 @@
 	);
 	$: xScale = scaleLinear([first(bins).x0, last(bins).x1], [0, innerWidth]);
 
-	$: x0Get = get(xScale, (d: Bin<number, number>) => d.x0);
-	$: x1Get = get(xScale, (d: Bin<number, number>) => d.x1);
-	$: yGet = get(yScale, (d: Bin<number, number>) => d.length);
+	$: x0Get = get(xScale, (d) => d.x0);
+	$: x1Get = get(xScale, (d) => d.x1);
+	$: yGet = get(yScale, (d) => d.length);
 </script>
 
 <Meta

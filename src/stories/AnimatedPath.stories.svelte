@@ -2,8 +2,7 @@
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Grafico } from 'graficos';
 	import Line from 'graficos/shape/Line.svelte';
-	import { max } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
+	import { scaleLinear, max } from 'd3';
 
 	let data = [];
 

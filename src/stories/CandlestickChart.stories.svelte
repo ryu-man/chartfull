@@ -1,13 +1,7 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Grafico, XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
-	import { csv } from 'd3';
-	import { extent, min, max } from 'd3-array';
-	import { schemeCategory10 } from 'd3-scale-chromatic';
-	import { scaleLinear, scaleUtc } from 'd3-scale';
-	import { timeFormat } from 'd3-time-format';
-	import { timeWeek, timeMonth, timeDay } from 'd3-time';
-	import { getWeekOfMonth, getWeeksInMonth } from 'date-fns';
+	import { csv, min, max, scaleLinear } from 'd3';
 
 	const converter = (d) => {
 		return {
@@ -43,7 +37,7 @@
 <Story
 	name="Candlestick chart"
 	args={{
-		height:0,
+		height: 0,
 		padding: {
 			left: 48,
 			bottom: 48,
@@ -54,7 +48,14 @@
 	let:args
 >
 	<Grafico bind:innerWidth bind:innerHeight {...args}>
-		<text fill-opacity=".1" font-size="24pt" font-weight="600" text-anchor="end" dominant-baseline="text-before-edge" x={innerWidth}>Daily stock status of Apple stock</text>
+		<text
+			fill-opacity=".1"
+			font-size="32pt"
+			font-weight="600"
+			text-anchor="end"
+			dominant-baseline="text-before-edge"
+			x={innerWidth}>Daily stock status of Apple stock</text
+		>
 		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 			<Tick {tick} y2={-innerHeight} />
 			<text slot="label" x={innerWidth}>Time</text>
@@ -62,12 +63,18 @@
 		<YAxis scale={yScale} let:tick>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price ($)</text>
-			
 		</YAxis>
 
 		<g class="data">
 			{#each data as candle}
-				<Candle {candle} x={xScale(xAccessor(candle))} scale={yScale} width={xScale.band()} fillOpacity={.5} strokeOpacity={.9} />
+				<Candle
+					{candle}
+					x={xScale(xAccessor(candle))}
+					scale={yScale}
+					width={xScale.band()}
+					fillOpacity={0.5}
+					strokeOpacity={0.9}
+				/>
 			{/each}
 		</g>
 	</Grafico>

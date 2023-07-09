@@ -89,19 +89,34 @@
 		{padding}
 		bind:innerWidth
 		bind:innerHeight
-		on:mousemove={(e) => {
+		on:pointermove={(e) => {
 			offsetX = Math.max(0, e.offsetX - padding.left);
 			offsetY = Math.max(0, e.offsetY - padding.top);
 		}}
 	>
+		<defs>
+			<clipPath id="clip">
+				<rect width={innerWidth} height={innerHeight} />
+			</clipPath>
+		</defs>
+
 		<rect width={innerWidth} height={innerHeight} use:zoomable={d3zoom} fill="white" />
-		<YAxis scale={yScale} let:tick let:index>
-			<Tick {tick} x2={-innerWidth} duration={200} />
-			<text slot="label" fill="rgb(64 55 201 / 30%)" pointer-events="none">Atmospheric CO₂</text>
+
+		<YAxis scale={yScale} duration={100} let:tick let:index>
+			<Tick {tick} x2={-innerWidth} />
+			<text slot="label" fill="rgb(64 55 201 / 30%)" pointer-events="none" dy="32">Atmospheric CO₂</text>
 		</YAxis>
 
-		<XAxis scale={xScale} orient="bottom" y={innerHeight} tickFormat={(d) => d + ''} let:tick>
-			<Tick {tick} y2={-innerHeight} duration={200} />
+		<XAxis
+			scale={xScale}
+			duration={100}
+			orient="bottom"
+			y={innerHeight}
+			tickFormat={(d) => d + ''}
+			let:tick
+		>
+			<Tick {tick} y2={-innerHeight} />
+			<text slot="label" text-anchor="end" pointer-events="none" x={innerWidth} dx="-32">Year</text>
 		</XAxis>
 
 		<g stroke="rgb(0 0 0 / .3)" pointer-events="none">
@@ -109,7 +124,7 @@
 			<line x1={offsetX} x2={offsetX} y2={innerHeight} />
 		</g>
 
-		<g>
+		<g clip-path="url(#clip)">
 			{#each data as d}
 				<circle
 					cx={xScale(xAccess(d))}
