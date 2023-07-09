@@ -1,114 +1,128 @@
-<script>
+<script lang="ts">
 	// https://github.com/d3/d3-axis/blob/master/src/axis.js
 
 	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
-	import { linear } from 'svelte/easing';
-	import { getTickContext } from './context_tick';
-	import { getAxisContext } from './context_axis';
+	import { cubicOut } from 'svelte/easing';
+	import { getAxisContext } from './context';
 
-	const { k, xy, textAnchor, tickSize$, offset$ } = getTickContext();
-	const { currentScale$, previousScale$, tickFormat$ } = getAxisContext();
+	const {
+		currentScale$,
+		previousScale$,
+		tickFormat$,
+		duration$,
+		delay$,
+		easing$,
+		k,
+		xy,
+		textAnchor,
+		tickSize$,
+		offsetX$,
+		offsetY$
+	} = getAxisContext();
 
-	export let tick;
+	export let tick: any;
 
-	export let size = tickSize$.value;
+	export let size = $tickSize$;
 	$: size = $tickSize$;
 
 	export let padding = 0;
 
-	export let fontFamily;
+	export let fontFamily: string = '';
 	export let fontSize = '12pt';
-	export let fontSizeAdjust;
-	export let fontStretch;
-	export let fontStyle;
-	export let fontVariant;
-	export let fontWeight;
+	export let fontSizeAdjust: string = '';
+	export let fontStretch: string = '';
+	export let fontStyle: string = '';
+	export let fontVariant: string = '';
+	export let fontWeight: string = '';
 
 	export let stroke = 'rgba(0 0 0/ .07)';
-	export let strokeWidth;
-	export let strokeOpacity;
-	export let strokeLinecap;
-	export let strokeLinejoin;
-	export let strokeDasharray;
-	export let strokeDashoffset;
-	export let strokeMiterlimit;
+	export let strokeWidth: string = '';
+	export let strokeOpacity: string = '';
+	export let strokeLinecap: string = '';
+	export let strokeLinejoin: string = '';
+	export let strokeDasharray: string = '';
+	export let strokeDashoffset: string = '';
+	export let strokeMiterlimit: string = '';
 	export let fill = 'var(--axis-fill)';
 	export let fillOpacity = '1';
 
 	export let x1 = 0;
-	export let x2 = xy === 'x' ? tickSize$.value : 0;
+	export let x2 = xy === 'y' ? $tickSize$ : 0;
 
 	export let y1 = 0;
-	export let y2 = xy === 'y' ? tickSize$.value : 0;
+	export let y2 = xy === 'x' ? $tickSize$ : 0;
 
-	export let duration = 0;
-	export let delay = 0;
-	export let easing = linear;
+	export let dx = $offsetX$;
+	export let dy = $offsetY$;
 
-	export let dx = $offset$.x;
-	export let dy = $offset$.y;
+	let x = xy === 'x' ? $previousScale$(tick) || $currentScale$(tick) : 0;
+	let y = xy === 'y' ? $previousScale$(tick) || $currentScale$(tick) : 0;
 
-	const axisType = xy === 'y' ? 'x' : 'y';
-
-	let x = axisType === 'x' ? currentScale$.value(tick) : 0;
-	let y = axisType === 'y' ? currentScale$.value(tick) : 0;
-
-	const x$ = tweened(x, { duration, delay, easing });
+	const x$ = tweened(x, { duration: $duration$, delay: $delay$, easing: $easing$ });
 	onMount(() => {
-		if (axisType === 'x') {
+		if (xy === 'x') {
+			// x$.set($previousScale$(tick));
+
 			return currentScale$.subscribe((scale) => {
 				x$.set(scale(tick));
 			});
 		}
 	});
 
-	const y$ = tweened(y, { duration, delay, easing });
+	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing: $easing$ });
 	onMount(() => {
-		if (axisType === 'y') {
+		if (xy === 'y') {
+			// y$.set($previousScale$(tick));
+
 			return currentScale$.subscribe((scale) => {
 				y$.set(scale(tick));
 			});
 		}
 	});
 
-	function enter(node, { duration = 0, delay = 0, easing, s0, s1, dx, dy, type }) {
-		const d = s1 - s0;
+	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing: $easing$ });
 
-		let transform = (t) => `translate(${s0 + d * t + dx}px,${dy}px)`;
-		if (type === 'y') {
-			transform = (t) => `translate(${dx}px,${s0 + d * t + dy}px)`;
+	function enter(node: SVGGElement, { duration = 0, delay = 0, easing = cubicOut, tick }) {
+		if (xy === 'x') {
+			x$.set($previousScale$(tick) || $currentScale$(tick));
+		} else {
+			y$.set($previousScale$(tick) || $currentScale$(tick));
 		}
+
+		opacity$.set(1);
 
 		return () => ({
 			duration,
 			delay,
 			easing,
-			css: (t) => `opacity: ${t}; transform: ${transform(t)}`
+			css: () => ''
 		});
 	}
 
-	function exit(node, { duration = 0, delay = 0, easing, s0, s1, dx, dy, type }) {
-		const d = s1 - s0;
-
-		let transform = (t, u) => `translate(${s0 + d * u + dx}px, ${dy}px)`;
-		if (type === 'y') {
-			transform = (t, u) => `translate(${dx}px, ${s0 + d * u + dy}px)`;
+	function exit(node: SVGGElement, { duration = 0, delay = 0, easing = cubicOut, tick }) {
+		if (xy === 'x') {
+			x$.set($currentScale$(tick) || $currentScale$(tick));
+		} else {
+			y$.set($currentScale$(tick) || $currentScale$(tick));
 		}
+
+		opacity$.set(0);
 
 		return () => ({
 			duration,
 			delay,
 			easing,
-			css: (t, u) => `opacity: ${t}; transform: ${transform(t, u)}`
+			css: () => ''
 		});
 	}
 </script>
 
 <g
-	class="tick {axisType}"
+	class="tick {xy}"
 	style:--fill={fill}
-	style:transform={`translate(${$x$ + dx || 0}px,${$y$ + dy || 0}px)`}
+	style:transform={`translate3d(${$x$ + dx || 0}px,${$y$ + dy || 0}px, 1px)`}
+	style:opacity={$opacity$}
 	font-family={fontFamily}
 	font-size={fontSize}
 	font-weight={fontWeight}
@@ -119,27 +133,10 @@
 	text-anchor={textAnchor}
 	alignment-baseline="middle"
 	fill-opacity={fillOpacity}
-	in:enter|local={{
-		duration,
-		delay,
-		easing,
-		s0: previousScale$.value(tick),
-		s1: currentScale$.value(tick),
-		dx,
-		dy,
-		type: axisType
-	}}
-	out:exit|local={{
-		duration,
-		delay,
-		easing,
-		s0: previousScale$.value(tick),
-		s1: currentScale$.value(tick),
-		dx,
-		dy,
-		type: axisType
-	}}
+	in:enter|local={{ duration: $duration$, tick, easing: $easing$ }}
+	out:exit|local={{ duration: $duration$, tick, easing: $easing$ }}
 	on:click
+	on:keypress
 	on:introstart
 	on:introend
 	on:outrostart
@@ -150,7 +147,7 @@
 	<line
 		{x1}
 		{y1}
-		{...{ [xy + '2']: size * k, x2: x2 * k, y2: y2 * k }}
+		{...{ [xy === 'x' ? 'y2' : 'x2']: size * k, x2: x2 * k, y2: y2 * k }}
 		{stroke}
 		stroke-width={strokeWidth}
 		stroke-opacity={strokeOpacity}
@@ -161,7 +158,7 @@
 		stroke-miterlimit={strokeMiterlimit}
 	/>
 	<slot>
-		<text>{tickFormat$.value(tick)}</text>
+		<text>{$tickFormat$(tick)}</text>
 	</slot>
 </g>
 

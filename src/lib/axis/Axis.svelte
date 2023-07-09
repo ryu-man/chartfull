@@ -3,7 +3,7 @@
 	import { memorable } from 'svelte-tools/memorable';
 	import type { Properties } from 'csstype';
 	import { classNames, css } from '$lib/utils';
-	import { setAxisContext } from './context_axis';
+	import { setAxisContext } from './context';
 
 	export let x = 0;
 	export let y = 0;
@@ -28,24 +28,6 @@
 	export { klass as class };
 
 	const k = ['left', 'top'].includes(orient) ? -1 : 1;
-
-	const identity = (d) => d;
-
-	export let ticks = [];
-
-	const [currentScale$, previousScale$] = memorable(scale);
-	$: currentScale$.set(scale);
-
-	const tickFormat$ = writable(identity);
-	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
-
-	setAxisContext({
-		currentScale$,
-		previousScale$,
-		tickFormat$
-	});
-
-	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
 </script>
 
 <g
@@ -61,12 +43,7 @@
 	style:--tick-padding={tickPadding * k + 'px'}
 	use:css={style}
 >
-	<slot
-		{ticks}
-		format={tickFormat$.value}
-		currentScale={$currentScale$}
-		previousScale={$previousScale$}
-	/>
+	<slot />
 </g>
 
 <style>

@@ -1,12 +1,16 @@
-<script>
+<script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { fly } from 'svelte/transition';
+	import { cubicOut, linear } from 'svelte/easing';
 	import { writable } from 'svelte-tools';
-	import { getGraficoContext } from '$lib/Grafico';
+	import { getChartfullContext } from 'graficos/chartfull';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
-	import { setTickContext } from './context_tick';
+	import { setAxisContext } from './context';
+	import { memorable } from 'svelte-tools/memorable';
 
-	const { innerHeight$ } = getGraficoContext();
+	const { innerHeight$ } = getChartfullContext();
 
 	export let id = 'y';
 	export let x = 0;
@@ -42,6 +46,10 @@
 	export let fill = 'rgba(0 0 0 / .4)';
 	export let d;
 
+	export let duration = 100;
+	export let delay = 0;
+	export let easing = cubicOut;
+
 	let _class = '';
 	export { _class as class };
 
@@ -49,29 +57,34 @@
 
 	const isPathDataSet = !!d;
 
-	const tickSize$ = writable(tickSize);
-	$: tickSize$.set(tickSize);
-	const padding$ = writable(tickPadding);
-	$: padding$.set(tickPadding);
-	const offset$ = writable({
-		x: tickOffset,
-		y: 0
-	});
-	$: offset$.set({
-		x: tickOffset,
-		y: 0
+	const identity = (d) => d;
+
+	const [currentScale$, previousScale$] = memorable(scale);
+	$: currentScale$.set(scale);
+
+	const tickFormat$ = writable(identity);
+	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
+	$: formatter = $tickFormat$;
+
+	const { duration$, delay$, easing$, offsetX$, tickSize$, padding$ } = setAxisContext({
+		currentScale$,
+		previousScale$,
+		tickFormat$,
+		k,
+		xy: 'y',
+		textAnchor: 'end',
+		tickColor
 	});
 
-	const context = {
-		xy: 'x',
-		k,
-		offset$,
-		tickSize$,
-		padding$,
-		textAnchor: orient === 'left' ? 'end' : 'start',
-		tickColor
-	};
-	setTickContext(context);
+	$: duration$.set(duration);
+	$: delay$.set(delay);
+	$: easing$.set(easing);
+
+	$: tickSize$.set(tickSize);
+	$: padding$.set(tickPadding);
+	$: offsetX$.set(tickOffset);
+
+	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
 
 	$: !isPathDataSet && (d = `M${k * 6},0H0V${$innerHeight$}H${k * 6}`);
 </script>
@@ -82,10 +95,7 @@
 	{y}
 	{id}
 	{orient}
-	{ticks}
 	{tickArguments}
-	{tickValues}
-	{tickFormat}
 	{tickPadding}
 	{fontFamily}
 	{fontWeight}
@@ -96,13 +106,11 @@
 	{fontStretch}
 	class={classNames(_class, 'y', orient)}
 	style="--axis-fill: {fill};"
-	let:ticks
-	let:format
 >
 	{#each ticks as tick, index (+tick || tick)}
-		<slot {index} {tick} {format} text={format(tick)}>
+		<slot {index} {tick} {formatter} text={formatter(tick)}>
 			<Tick {tick}>
-				<text>{format(tick)}</text>
+				<text>{formatter(tick)}</text>
 			</Tick>
 		</slot>
 	{/each}

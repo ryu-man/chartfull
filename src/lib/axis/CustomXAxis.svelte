@@ -1,11 +1,10 @@
 <script>
 	import { writable } from 'svelte-tools';
-	import { getGraficoContext } from '../Grafico';
+	import { getChartfullContext } from '../chartfull';
 	import { classNames } from '../utils';
 	import Axis from './Axis.svelte';
-	import { setTickContext } from './context_tick';
 
-	const { innerWidth$ } = getGraficoContext();
+	const { innerWidth$ } = getChartfullContext();
 
 	export let id = 'x';
 	export let x = 0;
@@ -63,7 +62,7 @@
 		textAnchor: 'middle',
 		tickColor
 	};
-	setTickContext(context);
+	// setTickContext(context);
 
 	let ticks = [];
 

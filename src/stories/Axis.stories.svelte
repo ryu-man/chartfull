@@ -1,27 +1,29 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Grafico, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
-	import { csv, extent, timeParse, timeMonths, scaleTime } from 'd3';
-	import { startOfYear, endOfYear } from 'date-fns';
+	import { csv, extent, timeParse, timeMonths, scaleTime, timeFormat } from 'd3';
+	import { startOfYear, endOfYear, addYears, set } from 'date-fns';
 	import MarginDecorator from './MarginDecorator.svelte';
+	import { onMount } from 'svelte';
 
 	const timeParser = timeParse('%Y%m%d');
 
 	const today = new Date();
 	let data = [];
-	const duration = 1000;
+	const duration = 300;
 
 	const delay = (delay = 1000) => new Promise((res) => setTimeout(res, delay));
 
-	Promise.resolve(timeMonths(startOfYear(today), endOfYear(today))).then(async (array) => {
-		for (const d of array) {
-			data = [...data, d];
-			await delay(duration);
-		}
-	});
-
 	let innerWidth = 0;
 	let innerHeight = 0;
+
+	onMount(async () => {
+		const array = timeMonths(startOfYear(today), addYears(endOfYear(today), 5));
+		for (const d of array) {
+			data = [...data, d];
+			await delay(duration*4);
+		}
+	});
 
 	$: xScale = scaleTime(extent(data), [0, innerWidth]);
 	$: yScale = scaleTime(extent(data), [innerHeight, 0]);
@@ -45,9 +47,10 @@
 				y={innerHeight / 2}
 				orient={top ? 'top' : 'bottom'}
 				tickSize={6}
+				{duration}
 				let:tick
 			>
-				<Tick {tick} {duration} />
+				<Tick {tick} />
 			</XAxis>
 		</Grafico>
 	</Story>
@@ -70,9 +73,10 @@
 				tickSize={6}
 				stroke="gray"
 				strokeWidth="2"
+				{duration}
 				let:tick
 			>
-				<Tick {tick} {duration} />
+				<Tick {tick} />
 			</YAxis>
 		</Grafico>
 	</Story>

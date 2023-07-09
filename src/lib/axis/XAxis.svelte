@@ -1,12 +1,17 @@
-<script>
+<script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { fly, crossfade, type FlyParams, type TransitionConfig } from 'svelte/transition';
+	import { cubicOut, linear } from 'svelte/easing';
 	import { writable } from 'svelte-tools';
-	import { getGraficoContext } from '$lib/Grafico';
+	import { min, max } from 'd3-array';
+	import { getChartfullContext } from 'graficos/chartfull';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
-	import { setTickContext } from './context_tick';
+	import { setAxisContext } from './context';
+	import { memorable } from 'svelte-tools/memorable';
 
-	const { innerWidth$ } = getGraficoContext();
+	const { innerWidth$ } = getChartfullContext();
 
 	export let id = 'x';
 	export let x = 0;
@@ -41,6 +46,10 @@
 	export let fill = 'rgba(0 0 0 / .4)';
 	export let d;
 
+	export let duration = 100;
+	export let delay = 0;
+	export let easing = cubicOut;
+
 	let _class = '';
 	export { _class as class };
 
@@ -48,31 +57,34 @@
 
 	const isPathDataSet = !!d;
 
-	const tickSize$ = writable(tickSize);
-	$: tickSize$.set(tickSize);
-	const padding$ = writable(tickPadding);
-	$: padding$.set(tickPadding);
-	const offset$ = writable({
-		x: 0,
-		y: tickOffset
-	});
-	$: offset$.set({
-		x: 0,
-		y: tickOffset
-	});
+	const identity = (d) => d;
 
-	const context = {
-		xy: 'y',
+	const [currentScale$, previousScale$] = memorable(scale);
+	$: currentScale$.set(scale);
+
+	const tickFormat$ = writable(identity);
+	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
+	$: formatter = $tickFormat$;
+
+	const { duration$, delay$, easing$, offsetY$, tickSize$, padding$ } = setAxisContext({
+		currentScale$,
+		previousScale$,
+		tickFormat$,
 		k,
-		offset$,
-		tickSize$,
-		padding$,
+		xy: 'x',
 		textAnchor: 'middle',
 		tickColor
-	};
-	setTickContext(context);
+	});
 
-	let ticks = [];
+	$: duration$.set(duration);
+	$: delay$.set(delay);
+	$: easing$.set(easing);
+
+	$: tickSize$.set(tickSize);
+	$: padding$.set(tickPadding);
+	$: offsetY$.set(tickOffset);
+
+	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
 
 	$: !isPathDataSet && (d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
 </script>
@@ -83,9 +95,6 @@
 	{y}
 	{id}
 	{orient}
-	{tickValues}
-	{tickArguments}
-	{tickFormat}
 	{tickPadding}
 	{fontFamily}
 	{fontWeight}
@@ -96,13 +105,11 @@
 	{fontStretch}
 	class={classNames(_class, 'x', orient)}
 	style="--axis-fill: {fill};"
-	bind:ticks
-	let:format
 >
-	{#each ticks as tick, index (JSON.stringify(tick))}
-		<slot {index} {tick} {format} text={format(tick)}>
+	{#each ticks as tick, index (tick.toString())}
+		<slot {index} {tick} {formatter} text={formatter(tick)}>
 			<Tick {tick}>
-				<text>{format(tick)}</text>
+				<text>{formatter(tick)}</text>
 			</Tick>
 		</slot>
 	{/each}
