@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { derived, writable } from 'svelte-tools';
-	import { setGraficoContext, type GraficoContext } from './context';
+	import { setChartfullContext, type ChartfullContext } from './context';
 	import { classNames, css } from '../utils';
 	import { sizeStore } from '../stores';
 	import type { Padding } from '../types';
@@ -48,7 +48,7 @@
 
 	const data$ = writable(data);
 
-	const context: GraficoContext<any> = {
+	const context: ChartfullContext<any> = {
 		width$,
 		height$,
 		innerWidth$,
@@ -60,7 +60,7 @@
 		data$
 	};
 
-	setGraficoContext(context);
+	setChartfullContext(context);
 
 	const height$$ = derived(height$, (h) => (h ? h + 'px' : '100%'));
 
@@ -92,9 +92,11 @@
 	on:blur
 	on:mousedown
 	on:mouseup
+	on:pointermove
 	on:click
+	on:keypress
 >
-	<slot name="html-pre" />
+	<slot name="html-before" />
 	{#await tick() then _}
 		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
 			<g
@@ -107,7 +109,7 @@
 				font-style={fontStyle}
 				font-variant={fontVariant}
 			>
-				<slot name="svg-pre" />
+				<slot name="svg-before" />
 
 				{#await tick() then _}
 					<slot
@@ -123,12 +125,12 @@
 					/>
 				{/await}
 
-				<slot name="svg-post" />
+				<slot name="svg-after" />
 			</g>
 		</svg>
 	{/await}
 
-	<slot name="html-post" />
+	<slot name="html-after" />
 </div>
 
 <style>
