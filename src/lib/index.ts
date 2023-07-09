@@ -1,38 +1,11 @@
-export * from './components'
+export * from './components';
 
-export { XAxis, YAxis, Tick } from './axis'
+export * from './axis';
 
-export {
-  ScaleBand,
-  ScaleDiverging,
-  ScaleDivergingLog,
-  ScaleDivergingPow,
-  ScaleDivergingSqrt,
-  ScaleDivergingSymlog,
-  ScaleIdentity,
-  ScaleLinear,
-  ScaleLog,
-  ScaleOrdinal,
-  ScalePoint,
-  ScalePow,
-  ScaleQuantile,
-  ScaleQuantize,
-  ScaleRadial,
-  ScaleSequential,
-  ScaleSequentialLog,
-  ScaleSequentialPow,
-  ScaleSequentialQuantile,
-  ScaleSequentialSqrt,
-  ScaleSequentialSymlog,
-  ScaleSqrt,
-  ScaleSymlog,
-  ScaleThreshold,
-  ScaleTime,
-  ScaleUtc,
-  scaleStore,
-  scaleFinance
-} from './scales'
+export { scaleStore, scaleFinance } from './scales';
 
-export { default as Grafico } from './Grafico'
+export { Chartfull as Grafico } from './chartfull';
 
-export { get } from './utils'
+export * from './chartfull';
+
+export * from './utils';
