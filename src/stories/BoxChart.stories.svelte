@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, Box } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, Box } from 'graficos';
 	import { csv } from 'd3';
 	import { quantile, bin, extent, min, max } from 'd3-array';
 	import { scaleLinear } from 'd3-scale';
@@ -16,7 +16,7 @@
 
 	let innerWidth;
 	let innerHeight;
-	let boxWidth = 24
+	let boxWidth = 24;
 
 	const xAccessor = (d) => d.carat;
 	const yAccessor = (d) => d.price;
@@ -60,12 +60,13 @@
 		})
 		.filter(Boolean);
 
-	$: xScale = scaleLinear(extent(data, xAccessor), [0+boxWidth/2, innerWidth- boxWidth/2]);
+	$: xScale = scaleLinear(extent(data, xAccessor), [0 + boxWidth / 2, innerWidth - boxWidth / 2]);
 	$: yScale = scaleLinear(extent(data, yAccessor), [innerHeight, 0]);
 </script>
 
 <Meta
 	title="Charts/Box chart"
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } }
 	}}
@@ -78,7 +79,7 @@
 	}}
 	let:args
 >
-	<Grafico
+	<Chartfull
 		height={args.height}
 		padding={{ top: 54, left: 72, bottom: 32 }}
 		bind:innerWidth
@@ -111,5 +112,5 @@
 				{/each}
 			</Box>
 		{/each}
-	</Grafico>
+	</Chartfull>
 </Story>

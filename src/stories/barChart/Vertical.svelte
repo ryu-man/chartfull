@@ -1,8 +1,7 @@
 <script>
-	import { Grafico, YAxis, Tick, Rect } from 'graficos';
+	import { Chartfull, YAxis, Tick, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
-	import { csv, schemeCategory10, max } from 'd3';
-	import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
+	import { csv, schemeCategory10, max, scaleBand, scaleLinear, scaleOrdinal } from 'd3';
 
 	export let args = {};
 
@@ -27,12 +26,12 @@
 	$: yGet = (d) => yScale(yAccessor(d));
 </script>
 
-<Grafico
+<Chartfull
 	bind:innerWidth
 	bind:innerHeight
 	{...args}
 	data={samples}
-	padding={{ bottom: 32, left: 32 }}
+	padding={{ bottom: 48, left: 32 }}
 	fontSize="16"
 >
 	{#each data as item (xAccessor(item))}
@@ -65,7 +64,7 @@
 	<text
 		x={innerWidth}
 		y={innerHeight}
-		dy={54}
+		dy={72}
 		text-anchor="end"
 		font-size="36pt"
 		font-weight="900"
@@ -93,17 +92,4 @@
 			letter-spacing="4pt">Income</text
 		>
 	</YAxis>
-
-	<!-- <XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
-		<text
-			slot="label"
-			x={innerWidth}
-			text-anchor="end"
-			font-weight="700"
-			font-size="32pt"
-			fill="black"
-			fill-opacity=".2">Country</text
-		>
-		<Tick {tick} dx={xScale.bandwidth() / 2} stroke="#e8e8e8" />
-	</XAxis> -->
-</Grafico>
+</Chartfull>

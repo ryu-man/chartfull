@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
+	import { Chartfull, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
 	import { csv, extent, timeParse, timeMonths, scaleTime, timeFormat } from 'd3';
 	import { startOfYear, endOfYear, addYears, set } from 'date-fns';
 	import MarginDecorator from './MarginDecorator.svelte';
@@ -29,7 +29,7 @@
 	$: yScale = scaleTime(extent(data), [innerHeight, 0]);
 </script>
 
-<Meta title="Components/Axis" component={Grafico} />
+<Meta title="Components/Axis" component={Chartfull} />
 
 <MarginDecorator>
 	<Story
@@ -41,7 +41,7 @@
 		}}
 		let:args={{ top, duration }}
 	>
-		<Grafico bind:innerWidth bind:innerHeight>
+		<Chartfull bind:innerWidth bind:innerHeight>
 			<XAxis
 				scale={xScale}
 				y={innerHeight / 2}
@@ -52,7 +52,7 @@
 			>
 				<Tick {tick} />
 			</XAxis>
-		</Grafico>
+		</Chartfull>
 	</Story>
 
 	<Story
@@ -64,7 +64,7 @@
 		}}
 		let:args={{ left, duration }}
 	>
-		<Grafico bind:innerWidth bind:innerHeight>
+		<Chartfull bind:innerWidth bind:innerHeight>
 			<YAxis
 				scale={yScale}
 				x={innerWidth / 2}
@@ -78,6 +78,6 @@
 			>
 				<Tick {tick} />
 			</YAxis>
-		</Grafico>
+		</Chartfull>
 	</Story>
 </MarginDecorator>

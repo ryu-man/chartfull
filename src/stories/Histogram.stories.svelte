@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, get } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get } from 'graficos';
 	import { first, last } from 'graficos/utils/array';
 	import { bin, csv, extent, scaleLinear } from 'd3';
 	let data = [];
@@ -32,7 +32,7 @@
 
 <Meta
 	title="Charts/Histogram"
-	component={Grafico}
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } },
 		thresholds: { control: { type: 'number' } }
@@ -53,7 +53,7 @@
 	}}
 	let:args
 >
-	<Grafico {...args} bind:innerWidth bind:innerHeight>
+	<Chartfull {...args} bind:innerWidth bind:innerHeight>
 		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 			<Tick {tick} y2={-innerHeight} />
 		</XAxis>
@@ -72,5 +72,5 @@
 				/>
 			{/each}
 		</g>
-	</Grafico>
+	</Chartfull>
 </Story>

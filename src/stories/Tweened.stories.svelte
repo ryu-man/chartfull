@@ -1,7 +1,7 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { fade } from 'svelte/transition';
-	import { Grafico } from 'graficos';
+	import { Chartfull } from 'graficos';
 	import { Tweened } from 'graficos/components';
 	import CustomXAxis from 'graficos/axis/CustomXAxis.svelte';
 	import { csv, extent, timeParse, timeMonths, scaleTime, shuffle } from 'd3';
@@ -37,7 +37,7 @@
 
 <Meta
 	title="Components/Tweened"
-	component={Grafico}
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } },
 		width: { control: { type: 'number' } }
@@ -54,7 +54,7 @@
 		}}
 		let:args
 	>
-		<Grafico bind:innerWidth bind:innerHeight {...args}>
+		<Chartfull bind:innerWidth bind:innerHeight {...args}>
 			<Tweened
 				{to}
 				enter={(d) => ({ ...d, opacity: 0, val: 0 })}
@@ -68,7 +68,7 @@
 					<text x={i * 192} fill-opacity={t.opacity}>{t.val.toFixed(2)}</text>
 				{/each}
 			</Tweened>
-		</Grafico>
+		</Chartfull>
 
 		<button
 			on:click={() => {
@@ -100,7 +100,7 @@
 		}}
 		let:args
 	>
-		<Grafico bind:innerWidth bind:innerHeight {...args}>
+		<Chartfull bind:innerWidth bind:innerHeight {...args}>
 			<CustomXAxis scale={xScale} let:ticks let:format let:previousScale>
 				<Tweened
 					to={ticks.map((d) => ({ tick: d, x: xScale(d), opacity: 1 }))}
@@ -118,6 +118,6 @@
 					{/each}
 				</Tweened>
 			</CustomXAxis>
-		</Grafico>
+		</Chartfull>
 	</Story>
 </MarginDecorator>

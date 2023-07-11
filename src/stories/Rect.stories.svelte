@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, Rect } from 'graficos';
+	import { Chartfull, Rect } from 'graficos';
 	import MarginDecorator from './MarginDecorator.svelte';
 </script>
 
@@ -8,8 +8,8 @@
 
 <MarginDecorator>
 	<Story id="rect" name="Rect" args={{ width: 200, height: 500, r: '0' }} let:args>
-		<Grafico>
+		<Chartfull>
 			<Rect {...args} />
-		</Grafico>
+		</Chartfull>
 	</Story>
 </MarginDecorator>

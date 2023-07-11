@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Line, Area } from 'graficos';
+	import { Chartfull, Line, Area } from 'graficos';
 	import { scaleBand, scaleLinear, scaleRadial } from 'd3-scale';
 	import { lineRadial, curveCardinalClosed, curveCardinal } from 'd3';
 	import { onMount } from 'svelte';
@@ -47,7 +47,7 @@
 		.curve(curveCardinalClosed.tension(.4));
 </script>
 
-<Grafico
+<Chartfull
 	bind:innerWidth
 	bind:innerHeight
 	{...args}
@@ -95,7 +95,7 @@
 			<Area d={gen(item)} />
 		{/each}
 	</g>
-</Grafico>
+</Chartfull>
 
 <style>
 	:global(html, body, #root) {

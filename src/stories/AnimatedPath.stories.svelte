@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico } from 'graficos';
+	import { Chartfull } from 'graficos';
 	import Line from 'graficos/shape/Line.svelte';
 	import { scaleLinear, max } from 'd3';
 
@@ -37,9 +37,9 @@
 	}}
 	let:args
 >
-	<Grafico height={args.height} bind:innerWidth bind:innerHeight>
+	<Chartfull height={args.height} bind:innerWidth bind:innerHeight>
 		<Line {data} {x} {y} />
-	</Grafico>
+	</Chartfull>
 
 	<button
 		on:click={() => {

@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Declare, ScaleOrdinal, XAxis, YAxis, Tick } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick } from 'graficos';
 
 	import { csv, schemeCategory10, max, extent, group, rollup, range, min } from 'd3';
 	import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
@@ -94,7 +94,7 @@
 	}
 </script>
 
-<Grafico
+<Chartfull
 	bind:innerWidth
 	bind:innerHeight
 	{...args}
@@ -211,4 +211,4 @@
 			);
 		}}>{year}</text
 	>
-</Grafico>
+</Chartfull>

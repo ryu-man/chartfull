@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, XAxis, YAxis, Tick, get, Line } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line } from 'graficos';
 	import {
 		csv,
 		extent,
@@ -40,7 +40,7 @@
 	$: gen = line().x(xGet).y(yGet);
 </script>
 
-<Grafico {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
+<Chartfull {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
 	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 		<Tick {tick} y2={-innerHeight} />
 		<text slot="label" x={innerWidth}>Years</text>
@@ -68,4 +68,4 @@
 			<Line d={gen(data)} stroke={colorScale(key)}   />
 		{/each}
 	</g>
-</Grafico>
+</Chartfull>

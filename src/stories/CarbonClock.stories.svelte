@@ -1,7 +1,7 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, Line } from 'graficos';
-	import { csv, zoom, select } from 'd3';
+	import { Chartfull, XAxis, YAxis, Tick, Line } from 'graficos';
+	import { csv, zoom, select, zoomIdentity } from 'd3';
 	import { extent } from 'd3-array';
 	import { scaleLinear } from 'd3-scale';
 	import { line } from 'd3';
@@ -21,16 +21,19 @@
 	let innerWidth;
 	let innerHeight;
 
+	let transform = zoomIdentity;
+
 	const [xAccess, co2Acess, seasonallyAdjustedAccess] = [
 		(d) => d.date,
 		(d) => d.co2,
 		(d) => d['seasonally_adjusted']
 	];
-	let _xScale;
-	let _yScale;
 
-	$: xScale = scaleLinear(extent(data, xAccess), [0, innerWidth]);
-	$: yScale = scaleLinear(extent(data, co2Acess), [innerHeight, 0]);
+	$: _xScale = scaleLinear(extent(data, xAccess), [0, innerWidth]);
+	$: _yScale = scaleLinear(extent(data, co2Acess), [innerHeight, 0]);
+
+	$: xScale = transform.rescaleX(_xScale);
+	$: yScale = transform.rescaleY(_yScale);
 
 	$: d1 = line()
 		.x((d) => xScale(xAccess(d)))
@@ -43,17 +46,7 @@
 		.scaleExtent([0.5, 5])
 		.duration(200)
 		.on('zoom', (e) => {
-			const transform = e.transform;
-
-			if (!_xScale) {
-				_xScale = xScale;
-			}
-			if (!_yScale) {
-				_yScale = yScale;
-			}
-
-			xScale = transform.rescaleX(_xScale);
-			yScale = transform.rescaleY(_yScale);
+			transform = e.transform;
 		});
 	$: d3zoom.extent([
 		[0, 0],
@@ -82,16 +75,17 @@
 	args={{
 		height: 0
 	}}
+	component={Chartfull}
 	let:args
 >
-	<Grafico
+	<Chartfull
 		height={args.height}
 		{padding}
 		bind:innerWidth
 		bind:innerHeight
 		on:pointermove={(e) => {
 			offsetX = Math.max(0, e.offsetX - padding.left);
-			offsetY = Math.max(0, e.offsetY - padding.top);
+			offsetY = Math.min(innerHeight, Math.max(0, e.offsetY - padding.top));
 		}}
 	>
 		<defs>
@@ -104,7 +98,9 @@
 
 		<YAxis scale={yScale} duration={100} let:tick let:index>
 			<Tick {tick} x2={-innerWidth} />
-			<text slot="label" fill="rgb(64 55 201 / 30%)" pointer-events="none" dy="32">Atmospheric CO₂</text>
+			<text slot="label" fill="rgb(64 55 201 / 20%)" pointer-events="none" dy="32"
+				>Atmospheric CO₂</text
+			>
 		</YAxis>
 
 		<XAxis
@@ -116,20 +112,22 @@
 			let:tick
 		>
 			<Tick {tick} y2={-innerHeight} />
-			<text slot="label" text-anchor="end" pointer-events="none" x={innerWidth} dx="-32">Year</text>
+			<text
+				slot="label"
+				fill="rgb(64 55 201 / 20%)"
+				text-anchor="end"
+				pointer-events="none"
+				x={innerWidth}
+				dx="-32">Year</text
+			>
 		</XAxis>
-
-		<g stroke="rgb(0 0 0 / .3)" pointer-events="none">
-			<line x2={innerWidth} y1={offsetY} y2={offsetY} />
-			<line x1={offsetX} x2={offsetX} y2={innerHeight} />
-		</g>
 
 		<g clip-path="url(#clip)">
 			{#each data as d}
 				<circle
 					cx={xScale(xAccess(d))}
 					cy={yScale(co2Acess(d))}
-					r="2"
+					r={transform.k * 1.2}
 					fill="rgb(64 55 201 / 40%)"
 				/>
 			{/each}
@@ -143,11 +141,38 @@
 			/>
 		</g>
 
-		<text x={offsetX} y={offsetY} dx={16}>
-			{xScale.invert(offsetX).toFixed(2)}
-		</text>
-		<text x={offsetX} y={offsetY} dx={-16} text-anchor="end">
-			{yScale.invert(offsetY).toFixed(2)}
-		</text>
-	</Grafico>
+		<g color="rgb(0 0 0 / .3)" pointer-events="none">
+			<g>
+				<line x2={innerWidth} y1={offsetY} y2={offsetY} stroke="currentColor" />
+				<text
+					x={0}
+					y={Math.max(40, offsetY)}
+					dx={20}
+					dy={-20}
+					text-anchor="start"
+					fill="currentColor"
+					font-size="14pt"
+					font-weight="900"
+				>
+					{yScale.invert(offsetY).toFixed(2)}
+				</text>
+			</g>
+
+			<g>
+				<line x1={offsetX} x2={offsetX} y2={innerHeight} stroke="currentColor" />
+				<text
+					x={Math.min(offsetX, innerWidth - 80)}
+					y={innerHeight}
+					dx={20}
+					dy={-20}
+					fill="currentColor"
+					font-size="14pt"
+					font-weight="900"
+					text-anchor="start"
+				>
+					{xScale.invert(offsetX).toFixed(0)}
+				</text>
+			</g>
+		</g>
+	</Chartfull>
 </Story>

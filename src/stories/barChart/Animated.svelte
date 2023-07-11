@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, XAxis, Tick, Rect } from 'graficos';
+	import { Chartfull, XAxis, Tick, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
 
 	import { csv, schemeCategory10, max } from 'd3';
@@ -44,7 +44,7 @@
 	$: [xGet, yGet] = [(d) => xScale(xAccessor(d)), (d) => yScale(yAccessor(d))];
 </script>
 
-<Grafico bind:innerWidth bind:innerHeight data={samples} padding={{ left: 196 }} {...args}>
+<Chartfull bind:innerWidth bind:innerHeight data={samples} padding={{ left: 196 }} {...args}>
 	<XAxis scale={xScale} orient="bottom" y={innerHeight} let:tick>
 		<Tick {tick} y2={-innerHeight} />
 	</XAxis>
@@ -78,4 +78,4 @@
 			</g>
 		</Spring>
 	{/each}
-</Grafico>
+</Chartfull>

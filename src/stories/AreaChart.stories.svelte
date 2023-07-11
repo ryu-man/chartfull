@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, Area } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, Area } from 'graficos';
 	import { csv, extent, max, timeParse } from 'd3';
 	import { scaleLinear, scaleTime } from 'd3-scale';
 	import { area } from 'd3-shape';
@@ -33,7 +33,7 @@
 
 <Meta
 	title="Charts/Area chart"
-	component={Grafico}
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } }
 	}}
@@ -47,7 +47,7 @@
 	source={code}
 	let:args
 >
-	<Grafico
+	<Chartfull
 		{...args}
 		{data}
 		padding={{ top: 24, left: 64, right: 0, bottom: 24 }}
@@ -65,7 +65,7 @@
 		</YAxis>
 
 		<Area d={areaDataPath(data)} stroke-width="1" />
-	</Grafico>
+	</Chartfull>
 </Story>
 
 <style>

@@ -1,7 +1,7 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, ScaleOrdinal, get } from 'graficos';
-	import { csv, extent, max, scaleLinear, schemeAccent } from 'd3';
+	import { Chartfull, XAxis, YAxis, Tick, get } from 'graficos';
+	import { csv, extent, max, scaleLinear, schemeAccent, scaleOrdinal } from 'd3';
 
 	let data = [];
 
@@ -21,6 +21,10 @@
 	$: xScale = scaleLinear(extent(data, xAcc), [0, innerWidth]);
 	$: yScale = scaleLinear(extent(data, yAcc), [innerHeight, 0]);
 	$: zScale = scaleLinear([200000, 1310000000], [4, 40]);
+	$: colorScale = scaleOrdinal(
+		data.map((d) => d.country),
+		schemeAccent
+	);
 
 	$: xGet = get(xScale, xAcc);
 	$: yGet = get(yScale, yAcc);
@@ -29,7 +33,7 @@
 
 <Meta
 	title="Charts/Bubble chart"
-	component={Grafico}
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } }
 	}}
@@ -48,7 +52,7 @@
 	}}
 	let:args
 >
-	<Grafico {...args} {data} fontFamilly="Brandon Grotesque" bind:innerWidth bind:innerHeight>
+	<Chartfull {...args} {data} fontFamilly="Brandon Grotesque" bind:innerWidth bind:innerHeight>
 		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 			<Tick {tick} y={0} y2={-innerHeight} />
 		</XAxis>
@@ -66,7 +70,7 @@
 				mix-blend-mode="multiply"
 			/>
 		{/each}
-	</Grafico>
+	</Chartfull>
 </Story>
 
 <Story
@@ -82,9 +86,15 @@
 	}}
 	let:args
 >
-	<Grafico {...args} bind:innerWidth bind:innerHeight>
-		<text x={innerWidth} text-anchor="end" font-size="36pt" font-weight="700" fill="#9b9b9b" fill-opacity=".3" dominant-baseline="text-before-edge"
-			>Bubble chart - multiple colors</text
+	<Chartfull {...args} bind:innerWidth bind:innerHeight>
+		<text
+			x={innerWidth}
+			text-anchor="end"
+			font-size="36pt"
+			font-weight="700"
+			fill="#9b9b9b"
+			fill-opacity=".3"
+			dominant-baseline="text-before-edge">Bubble chart - multiple colors</text
 		>
 
 		<XAxis y={innerHeight} scale={xScale} orient="bottom" tickSize={-innerHeight} let:tick>
@@ -95,16 +105,16 @@
 			<Tick {tick} x2={-innerWidth} />
 		</YAxis>
 
-		<ScaleOrdinal domain={data.map((d) => d.country)} range={schemeAccent} let:scale={colorize}>
+		<g>
 			{#each data as item}
 				<circle
 					cx={xGet(item)}
 					cy={yGet(item)}
 					r={zGet(item)}
-					fill={colorize(item.country)}
+					fill={colorScale(item.country)}
 					style="mix-blend-mode: multiply;"
 				/>
 			{/each}
-		</ScaleOrdinal>
-	</Grafico>
+		</g>
+	</Chartfull>
 </Story>

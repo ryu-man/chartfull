@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
+	import { Chartfull, XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
 	import { csv, min, max, scaleLinear } from 'd3';
 
 	const converter = (d) => {
@@ -29,6 +29,7 @@
 
 <Meta
 	title="Charts/Candlestick chart"
+	component={Chartfull}
 	argTypes={{
 		height: { control: { type: 'number' } }
 	}}
@@ -47,7 +48,7 @@
 	}}
 	let:args
 >
-	<Grafico bind:innerWidth bind:innerHeight {...args}>
+	<Chartfull bind:innerWidth bind:innerHeight {...args}>
 		<text
 			fill-opacity=".1"
 			font-size="32pt"
@@ -77,5 +78,5 @@
 				/>
 			{/each}
 		</g>
-	</Grafico>
+	</Chartfull>
 </Story>

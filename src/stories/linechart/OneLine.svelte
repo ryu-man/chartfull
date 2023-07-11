@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, XAxis, YAxis, Tick, get, Line } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line } from 'graficos';
 	import { csv, extent, scaleLinear, scaleTime, timeParse } from 'd3';
 	import { line } from 'd3-shape';
 
@@ -29,7 +29,7 @@
 	$: dataPath = line(xGet, yGet);
 </script>
 
-<Grafico
+<Chartfull
 	padding={{ left: 72, top: 16, right: 16, bottom: 16 }}
 	fontSize="16"
 	{...args}
@@ -59,4 +59,4 @@
 	</text>
 
 	<Line d={dataPath(data)} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
-</Grafico>
+</Chartfull>

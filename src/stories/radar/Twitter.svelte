@@ -1,5 +1,5 @@
 <script>
-	import { Grafico } from 'graficos';
+	import { Chartfull } from 'graficos';
 	import { scaleLinear, csv, timeParse, scaleRadial, scaleTime, extent, lineRadial } from 'd3';
 	import { format } from 'date-fns';
 
@@ -44,7 +44,7 @@
 		.radius((d) => yScale(d.close));
 </script>
 
-<Grafico
+<Chartfull
 	bind:innerWidth
 	bind:innerHeight
 	{...args}
@@ -86,7 +86,7 @@
 
 		<path d={line(data)} stroke="rgba(0 0 0 / .15)" stroke-width="2" fill="none" />
 	</g>
-</Grafico>
+</Chartfull>
 
 <style>
 	:global(html, body, #root) {

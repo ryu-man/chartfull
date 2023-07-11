@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico } from 'graficos';
+	import { Chartfull } from 'graficos';
 	import { onMount } from 'svelte';
 	import Twitter from './Twitter.svelte';
 	import Basic from './Basic.svelte';
@@ -8,7 +8,7 @@
 	onMount(() => {});
 </script>
 
-<Meta title="Charts/Radar" component={Grafico} />
+<Meta title="Charts/Radar" component={Chartfull} />
 
 <Story
 	name="Radar/Basic"

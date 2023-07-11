@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Line } from 'graficos';
+	import { Chartfull, Line } from 'graficos';
 	import RadialAxis from 'graficos/axis/RadialAxis.svelte';
 	import RadialTick from 'graficos/axis/RadialTick.svelte';
 	import { csv, timeParse, scaleRadial, scaleTime, extent, lineRadial } from 'd3';
@@ -39,7 +39,7 @@
 		.radius((d) => yScale(d.close));
 </script>
 
-<Grafico
+<Chartfull
 	bind:innerWidth
 	bind:innerHeight
 	{...args}
@@ -71,7 +71,7 @@
 
 		<Line d={line(data)} stroke-width="2" />
 	</g>
-</Grafico>
+</Chartfull>
 
 <style>
 	:global(html, body, #root) {

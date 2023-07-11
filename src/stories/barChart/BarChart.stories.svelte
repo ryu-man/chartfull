@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico } from 'graficos';
+	import { Chartfull } from 'graficos';
 	import { csv } from 'd3';
 
 	import MarginDecorator from '../MarginDecorator.svelte';
@@ -35,7 +35,7 @@
 
 <Meta
 	title="Charts/Bar chart"
-	component={Grafico}
+	component={Chartfull}
 	argTypes={{ height: { control: { type: 'number' } } }}
 />
 
