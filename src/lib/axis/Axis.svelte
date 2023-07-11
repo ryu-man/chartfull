@@ -47,6 +47,9 @@
 </g>
 
 <style>
+	.x.axis :global(.tick text) {
+		text-anchor: center;
+	}
 	.x.top.axis :global(.tick text) {
 		dominant-baseline: text-after-edge;
 	}
@@ -63,9 +66,17 @@
 		text-anchor: end;
 	}
 
+	/***************************************************************/
 	.y.axis :global(.tick text) {
 		dominant-baseline: central;
 	}
+	.y.left.axis :global(.tick text) {
+		dominant-baseline: end;
+	}
+	.y.right.axis :global(.tick text) {
+		text-anchor: start;
+	}
+
 	.y.axis :global(.label > :not(text[writing-mode])) {
 		writing-mode: vertical-lr;
 	}
@@ -78,6 +89,11 @@
 	.y.axis.right :global(.label > :not(text[dominant-baseline])) {
 		dominant-baseline: text-before-edge;
 	}
+	.y.axis.right :global(.label > :not(text[text-anchor])) {
+		text-anchor: start;
+	}
+	/***************************************************************/
+
 	.y.axis :global(.label > :not(text[text-anchor])) {
 		text-anchor: start;
 	}
