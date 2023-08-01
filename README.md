@@ -1,95 +1,86 @@
-# Graficos
+# Chartfull
 
-Declarative, reactive and customizable redefined [D3.js](https://d3js.org/) for [Svelte](https://www.svelte.dev).
+an impressive data visualization library aimed at [Svelte](https://www.svelte.dev) framework users. This library, powered by the ever-popular [D3.js](https://d3js.org/), is highly customizable, allowing you to make the most of your data, as well as its declarative and reactive approach, allowing you to easily create interactive and informative visualizations. 
 
-## Get started
+Whether you're an experienced developer or just starting out, you'll find that this library is simple to use and yields stunning results that will impress. So why not try it out right now and take your data visualizations to the next level?
 
-## Install
+
+## Usage
 
 Coming soon !
 
 <!-- ```bash -->
 <!-- # using npm -->
-<!-- npm install graficos -->
+<!-- npm install Chartfulls -->
 <!--  -->
 <!-- # using yarn -->
-<!-- yarn install graficos -->
+<!-- yarn install Chartfulls -->
 <!-- ``` -->
 
 ## Usage
 
 ```html
-<script>
-    import {group} from 'd3-array'
-    import {Grafico, XAxis, YAxis, Line, Declare} from "graficos"
+<script lang="ts">
+    import { Chartfull, XAxis, YAxis, Line } from "Chartfull"
+
     let data = []
+
+    let innerWidth: number
+    let inner Height: number
+
+    const xAccessor = d=> d.x
+    const yAccessor = d=> d.y
+
+	$: xScale = scaleTime(extent(data.map(xAccessor)), [0, innerWidth]);
+	$: yScale = scaleLinear(extent(data.map(yAccessor)), [innerHeight, 0]);
+
+	$: xGet = get(xScale, xAccessor);
+	$: yGet = get(yScale, yAccessor);
+
+	$: d = line(xGet, yGet)(data);
 </script>
 
-<!--> Line chart<-->
-<Grafico data={group(data, (d)=>d.group)} let:data let:innerWidth let:innerHeight>
-    <Line class="{key}" {data} x="{(d)=> o.x}" y="{(o)=> o.xprop}"/>
-    <XAxis slot="xaxis" domain={extent(data, d=> d.x)} range={[0, innerWidth]}/>
-    <YAxis slot="yaxis" domain={extent(data, d=> d.y)} range={[innerHeight, 0]}/>
-</Grafico>
+<!--> Line chart <-->
 
-<!-- Declare global values -->
-<Declare value={d=> d.x} let:value={xAccessor}>
-  <Declare value={d=> d.y} let:value={yAccessor}>
+<Chartfull
+	padding={{ left: 72, top: 16, right: 16, bottom: 16 }}
+	fontSize="16"
+	{...args}
+	{data}
+	bind:innerWidth
+	bind:innerHeight
+>
+	<YAxis scale={yScale} let:tick>
+		<Tick {tick} x2={-innerWidth} />
+		<text slot="label">Label goes here</text>
+	</YAxis>
 
-    <Grafico data={group(data, (d)=>d.group)} let:data let:innerWidth let:innerHeight>
-      <Line class="{key}" {data} x="{xAccessor}" y="{yAccessor}"/>
-      <XAxis slot="xaxis" domain={xAccessor} range={[0, innerWidth]}/>
-      <YAxis slot="yaxis" domain={yAccessor} range={[innerHeight, 0]}/>
-    </Grafico>
+	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
+		<Tick {tick} y2={-innerHeight} />
+		<text slot="label" x={innerWidth}>Label goes here</text>
+	</XAxis>
 
-  </Declare>
-</Declare>
+	<text
+		x={innerWidth}
+		text-anchor="end"
+		dominant-baseline="text-before-edge"
+		font-size="24pt"
+		font-weight="600"
+		fill="rgba(0,0,0, .1)"
+	>
+		Chart title
+	</text>
+
+	<Line {d} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
+</Chartfull>
+
 ```
 
 ## Components
 
-### Axis
-
-#### XAxis / YAxis
-
-- scale
-- accessor
-- domain
-- range
-- tickValues
-
-#### Continous Axis
-
-- Linear
-- Log
-- Pow
-- SQRT
-- Symlog
-- Time
-- UTC
-  
-#### Ordinal
-
-- Band
-- Ponit
-
-### Line
-### Area
-### Rect
-### Circle
-
-## Charts
-
-- Line
-- Area
-- Scatter
-- Pie
-- Heat map
-- Histogram
-
 ## Licence
 
-Graficos is [MIT Licence](./LICENSE)
+Chartfulls is [MIT Licence](./LICENSE)
 
 ## Inspiration
 
