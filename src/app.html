@@ -2,12 +2,19 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="description" content="" />
-		<link rel="icon" href="%svelte.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%svelte.head%
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
 	</head>
+	<style>
+		html, body, body > div{
+			width: 100vw;
+			height: 100vh;
+			margin: 0;
+			padding: 0;
+		}
+	</style>
 	<body>
-		<div>%svelte.body%</div>
+		<div>%sveltekit.body%</div>
 	</body>
 </html>

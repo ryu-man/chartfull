@@ -1,84 +1,115 @@
-<script context="module">
-  import { getContext } from 'svelte'
+<script lang="ts">
+	import type { Properties } from 'csstype';
+	import { classNames, css } from '$lib/utils';
 
-  export const Key = {}
-  export const context = () => getContext(Key)
-</script>
+	export let x = 0;
+	export let y = 0;
+	export let scale;
+	export let orient;
+	export let tickArguments = [8];
+	export let tickValues;
+	export let tickFormat;
+	export let tickPadding = 0;
 
-<script>
-  import { classNames } from '../utils'
+	export let fontFamily: Properties['fontFamily'] = undefined;
+	export let fontSize: Properties['fontSize'] = undefined;
+	export let fontSizeAdjust: Properties['fontSizeAdjust'] = undefined;
+	export let fontStretch: Properties['fontStretch'] = undefined;
+	export let fontStyle: Properties['fontStyle'] = undefined;
+	export let fontVariant: Properties['fontVariant'] = undefined;
+	export let fontWeight: Properties['fontWeight'] = undefined;
 
-  export let x = 0
-  export let y = 0
-  export let scale
-  export let tickArguments
-  export let tickValues
-  export let tickFormat
+	export let textAnchor: 'start' | 'middle' | 'end' = 'start';
 
-  export let fontFamily
-  export let fontSize
-  export let fontSizeAdjust
-  export let fontStretch
-  export let fontStyle
-  export let fontVariant
-  export let fontWeight
+	export let fill: string | undefined = undefined
 
-  export let style
+	export let style: Properties | string = '';
 
-  let _class
-  export { _class as class }
+	let klass = '';
+	export { klass as class };
 
-  const identity = (d) => d
-
-  $: ticks =
-    tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain()
-
-  $: format =
-    tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity
-
+	const k = ['left', 'top'].includes(orient) ? -1 : 1;
 </script>
 
 <g
-  class={classNames(_class, 'axis')}
-  transform={`translate(${x}, ${y})`}
-  font-family={fontFamily}
-  font-size={fontSize}
-  font-weight={fontWeight}
-  font-size-adjust={fontSizeAdjust}
-  font-stretch={fontStretch}
-  font-style={fontStyle}
-  font-variant={fontVariant}
-  {style}
+	class={classNames(klass, 'axis')}
+	transform={`translate(${x}, ${y})`}
+	font-family={fontFamily}
+	font-size={fontSize}
+	font-weight={fontWeight}
+	font-size-adjust={fontSizeAdjust}
+	font-stretch={fontStretch}
+	font-style={fontStyle}
+	font-variant={fontVariant}
+	text-anchor={textAnchor}
+	{fill}
+	style:--tick-padding={tickPadding * k + 'px'}
+	use:css={style}
 >
-  <slot {ticks} {format} />
+	<slot />
 </g>
 
 <style>
-  .x.top.axis :global(.tick text) {
-    dominant-baseline: text-after-edge;
-  }
-  .x.bottom.axis :global(.tick text) {
-    dominant-baseline: hanging;
-  }
-  .x.axis :global(.label > :not(.raw)) {
-    transform: translateY(-8px);
-  }
-  .x.axis :global(.label text:not(.raw)) {
-    font-size: 10pt;
-    text-anchor: end;
-    fill: rgb(175, 175, 175);
-  }
+	.x.axis :global(.tick text) {
+		text-anchor: center;
+	}
+	.x.top.axis :global(.tick text) {
+		dominant-baseline: text-after-edge;
+	}
+	.x.bottom.axis :global(.tick :not(text[dominant-baseline])) {
+		dominant-baseline: text-before-edge;
+	}
+	.x.bottom.axis :global(.label > :not(text[dominant-baseline])) {
+		dominant-baseline: text-after-edge;
+	}
+	.x.bottom.axis :global(.label > :not(text[transform])) {
+		transform: translate(-16px, -8px);
+	}
+	.x.axis :global(.label :not(text[text-anchor])) {
+		text-anchor: end;
+	}
 
-  .y.axis :global(.tick text) {
-    dominant-baseline: central;
-  }
-  .y.axis :global(.label > :not(.raw)) {
-    transform: translate(8px, 0) rotate(-90deg);
-  }
-  .y.axis :global(.label text:not(.raw)) {
-    font-size: 10pt;
-    fill: rgb(175, 175, 175);
-    text-anchor: end;
-    dominant-baseline: hanging;
-  }
+	/***************************************************************/
+	.y.axis :global(.tick text) {
+		dominant-baseline: central;
+	}
+	.y.left.axis :global(.tick text) {
+		dominant-baseline: end;
+	}
+	.y.right.axis :global(.tick text) {
+		text-anchor: start;
+	}
+
+	.y.axis :global(.label > :not(text[writing-mode])) {
+		writing-mode: vertical-lr;
+	}
+	.y.left.axis :global(.label > :not(text[dominant-baseline])) {
+		dominant-baseline: text-after-edge;
+	}
+	.y.left.axis :global(.label > :not(text[transform])) {
+		transform: translate(8px, 16px);
+	}
+	.y.axis.right :global(.label > :not(text[dominant-baseline])) {
+		dominant-baseline: text-before-edge;
+	}
+	.y.axis.right :global(.label > :not(text[text-anchor])) {
+		text-anchor: start;
+	}
+	/***************************************************************/
+
+	.y.axis :global(.label > :not(text[text-anchor])) {
+		text-anchor: start;
+	}
+	.y.axis :global(.label :not(text[dominant-baseline])) {
+	}
+
+	.axis :global(.label :not(text[fill])) {
+		fill: rgba(0, 0, 0, 0.1);
+	}
+	.axis :global(.label :not(text[font-size])) {
+		font-size: 24pt;
+	}
+	.axis :global(.label :not(text[font-weight])) {
+		font-weight: 700;
+	}
 </style>

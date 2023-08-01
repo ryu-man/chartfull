@@ -1,21 +1,36 @@
-<script>
-	export let x;
-	export let low;
-	export let high;
-	export let open;
-	export let close;
-	export let width;
+<script lang="ts">
+	type Candle = {
+		low: number;
+		high: number;
+		open: number;
+		close: number;
+	};
+
+	export let candle: Candle;
+	export let x = 0;
+	export let y = 0;
+	export let scale;
+	export let width: number;
+	export let opacity = 1
+	export let strokeOpacity = opacity
+	export let fillOpacity = opacity
 
 	export let data = {};
 
-	$: color = open > close ? 'green' : 'red';
-	$: height = Math.abs(close - open);
+	$: color = candle.open > candle.close ? 'green' : 'red';
+	$: lowScaled = scale(candle.low);
+	$: highScaled = scale(candle.high);
+	$: openScaled = scale(candle.open);
+	$: closeScaled = scale(candle.close);
+
+	$: height = Math.abs(closeScaled - openScaled);
 </script>
 
 <g
 	class="candle"
-	transform="translate({x})"
+	transform="translate({x}, {y})"
 	{color}
+	{opacity}
 	on:click
 	on:dblclick
 	on:mouseenter
@@ -28,7 +43,7 @@
 	on:focus
 	on:blur
 >
-	<line y1={low} y2={high} stroke="currentColor" />
-	<rect x={-width / 2} y={Math.min(open, close)} {width} {height} fill="currentColor" />
+	<line y1={lowScaled} y2={highScaled} stroke="currentColor" stroke-opacity={strokeOpacity} />
+	<rect x={-width / 2} y={Math.min(openScaled, closeScaled)} {width} {height} fill="currentColor" fill-opacity={fillOpacity} />
 	<slot {data} />
 </g>

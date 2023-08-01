@@ -1,5 +1,5 @@
 <script>
-	import { Grafico, Line, XAxis, YAxis, Tick, access } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line } from 'graficos';
 	import {
 		csv,
 		extent,
@@ -10,6 +10,7 @@
 		group,
 		scaleOrdinal
 	} from 'd3';
+	import { line } from 'd3-shape';
 
 	export let args = {};
 
@@ -34,32 +35,37 @@
 	$: groups = group(data, zAccessor);
 	$: colorScale = scaleOrdinal(groups.keys(), schemeCategory10);
 
-	$: xGet = access(xScale, xAccessor);
-	$: yGet = access(yScale, yAccessor);
+	$: xGet = get(xScale, xAccessor);
+	$: yGet = get(yScale, yAccessor);
+	$: gen = line().x(xGet).y(yGet);
 </script>
 
-<Grafico {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
-	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:text let:x>
-		<Tick {x} y2={-innerHeight}>
-			<text>{text}</text>
-		</Tick>
+<Chartfull {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
+	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
+		<Tick {tick} y2={-innerHeight} />
 		<text slot="label" x={innerWidth}>Years</text>
 	</XAxis>
 
-	<YAxis scale={yScale} let:y let:text>
+	<YAxis scale={yScale} let:tick>
 		<text slot="label">↑ Unemployment (%)</text>
-		<Tick {y} x2={-innerWidth}>
-			<text>{text}</text>
-		</Tick>
+		<Tick {tick} x2={-innerWidth} />
 	</YAxis>
+
+	<text
+		x={innerWidth}
+		text-anchor="end"
+		dominant-baseline="text-before-edge"
+		font-size="16pt"
+		font-weight="600"
+		fill="rgba(0,0,0, .1)"
+		letter-spacing=".1"
+	>
+		Unemployment rate of various U.S. metro divisions from 2000 through 2013
+	</text>
 
 	<g class="data">
 		{#each [...groups.entries()] as [key, data]}
-			<Line {data} y={yGet} x={xGet} stroke={colorScale(key)} />
+			<Line d={gen(data)} stroke={colorScale(key)}   />
 		{/each}
 	</g>
-
-	<text x={innerWidth} dy="-16" text-anchor="end" font-size="16pt" font-weight="600" fill="gray">
-		Unemployment rate of various U.S. metro divisions from 2000 through 2013
-	</text>
-</Grafico>
+</Chartfull>
