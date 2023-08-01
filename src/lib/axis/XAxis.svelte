@@ -17,8 +17,8 @@
 	export let ticks = [];
 	export let orient: 'top' | 'bottom' = 'bottom';
 	export let tickArguments = [8];
-	export let tickValues: string | undefined = undefined;
-	export let tickFormat: string | undefined = undefined;
+	export let tickValues: unknown[] | undefined = undefined;
+	export let tickFormat: ((date: Date) => string) | undefined = undefined;
 
 	export let tickSize = 6;
 	export let tickPadding = 8;
@@ -53,7 +53,9 @@
 	const [currentScale$, previousScale$] = memorable(scale);
 	$: currentScale$.set(scale);
 
-	const tickFormat$ = writable(identity);
+	const tickFormat$ = writable(
+		tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity
+	);
 	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
 	$: formatter = $tickFormat$;
 
