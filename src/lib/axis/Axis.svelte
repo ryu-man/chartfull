@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { writable } from 'svelte-tools/accessible';
-	import { memorable } from 'svelte-tools/memorable';
 	import type { Properties } from 'csstype';
 	import { classNames, css } from '$lib/utils';
-	import { setAxisContext } from './context';
 
 	export let x = 0;
 	export let y = 0;
@@ -21,6 +18,10 @@
 	export let fontStyle: Properties['fontStyle'] = undefined;
 	export let fontVariant: Properties['fontVariant'] = undefined;
 	export let fontWeight: Properties['fontWeight'] = undefined;
+
+	export let textAnchor: 'start' | 'middle' | 'end' = 'start';
+
+	export let fill: string | undefined = undefined
 
 	export let style: Properties | string = '';
 
@@ -40,6 +41,8 @@
 	font-stretch={fontStretch}
 	font-style={fontStyle}
 	font-variant={fontVariant}
+	text-anchor={textAnchor}
+	{fill}
 	style:--tick-padding={tickPadding * k + 'px'}
 	use:css={style}
 >
@@ -60,7 +63,7 @@
 		dominant-baseline: text-after-edge;
 	}
 	.x.bottom.axis :global(.label > :not(text[transform])) {
-		transform: translateY(-8px);
+		transform: translate(-16px, -8px);
 	}
 	.x.axis :global(.label :not(text[text-anchor])) {
 		text-anchor: end;
@@ -84,7 +87,7 @@
 		dominant-baseline: text-after-edge;
 	}
 	.y.left.axis :global(.label > :not(text[transform])) {
-		transform: translateX(8px);
+		transform: translate(8px, 16px);
 	}
 	.y.axis.right :global(.label > :not(text[dominant-baseline])) {
 		dominant-baseline: text-before-edge;
@@ -104,9 +107,9 @@
 		fill: rgba(0, 0, 0, 0.1);
 	}
 	.axis :global(.label :not(text[font-size])) {
-		font-size: 36pt;
+		font-size: 24pt;
 	}
 	.axis :global(.label :not(text[font-weight])) {
-		font-weight: 600;
+		font-weight: 700;
 	}
 </style>

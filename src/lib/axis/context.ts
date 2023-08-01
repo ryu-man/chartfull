@@ -2,7 +2,7 @@ import { getContext, setContext } from 'svelte';
 import { cubicOut } from 'svelte/easing';
 import { writable, type Writable } from 'svelte/store';
 
-export const AXIS_CONTEXT_KEY = 'graficos_axis_context_key';
+export const AXIS_CONTEXT_KEY = 'chartfull_axis_context_key';
 
 type AxisContext = {
 	currentScale$: Writable<(val: any) => number>;
@@ -10,8 +10,7 @@ type AxisContext = {
 	tickFormat$: Writable<(val: any) => string>;
 	duration$: Writable<number>;
 	delay$: Writable<number>;
-	easing$: Writable<number>;
-	textAnchor: string;
+	easing$: Writable<(t: number) => number>;
 	tickSize$: Writable<number>;
 	offsetX$: Writable<number>;
 	offsetY$: Writable<number>;

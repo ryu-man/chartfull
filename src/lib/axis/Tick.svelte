@@ -15,7 +15,6 @@
 		easing$,
 		k,
 		xy,
-		textAnchor,
 		tickSize$,
 		offsetX$,
 		offsetY$
@@ -28,24 +27,27 @@
 
 	export let padding = 0;
 
-	export let fontFamily: string = '';
-	export let fontSize = '12pt';
-	export let fontSizeAdjust: string = '';
-	export let fontStretch: string = '';
-	export let fontStyle: string = '';
-	export let fontVariant: string = '';
-	export let fontWeight: string = '';
+	export let fontFamily: string | undefined = '';
+	export let fontSize: string | undefined = '12pt';
+	export let fontSizeAdjust: string | undefined = '';
+	export let fontStretch: string | undefined = '';
+	export let fontStyle: string | undefined = '';
+	export let fontVariant: string | undefined = '';
+	export let fontWeight: string | undefined = '';
 
-	export let stroke = 'rgba(0 0 0/ .07)';
-	export let strokeWidth: string = '';
-	export let strokeOpacity: string = '';
-	export let strokeLinecap: string = '';
-	export let strokeLinejoin: string = '';
-	export let strokeDasharray: string = '';
-	export let strokeDashoffset: string = '';
-	export let strokeMiterlimit: string = '';
-	export let fill = 'var(--axis-fill)';
-	export let fillOpacity = '1';
+	export let stroke: string | undefined = 'rgba(0 0 0/ .07)';
+	export let strokeWidth: string | undefined = '';
+	export let strokeOpacity: string | undefined = '';
+	export let strokeLinecap: 'inherit' | 'round' | 'butt' | 'square' | null | undefined = undefined;
+	export let strokeLinejoin: 'inherit' | 'round' | 'miter' | 'bevel' | null | undefined = undefined;
+	export let strokeDasharray: string | undefined = '';
+	export let strokeDashoffset: string | undefined = '';
+	export let strokeMiterlimit: string | undefined = '';
+
+	export let fill: string | undefined = undefined;
+	export let fillOpacity: string | undefined = '1';
+
+	export let textAnchor: 'start' | 'middle' | 'end' | undefined = undefined;
 
 	export let x1 = 0;
 	export let x2 = xy === 'y' ? $tickSize$ : 0;
@@ -60,67 +62,46 @@
 	let y = xy === 'y' ? $previousScale$(tick) || $currentScale$(tick) : 0;
 
 	const x$ = tweened(x, { duration: $duration$, delay: $delay$, easing: $easing$ });
+	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing: $easing$ });
+	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing: $easing$ });
+
 	onMount(() => {
 		if (xy === 'x') {
-			// x$.set($previousScale$(tick));
-
 			return currentScale$.subscribe((scale) => {
 				x$.set(scale(tick));
 			});
-		}
-	});
-
-	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing: $easing$ });
-	onMount(() => {
-		if (xy === 'y') {
-			// y$.set($previousScale$(tick));
-
+		} else {
 			return currentScale$.subscribe((scale) => {
 				y$.set(scale(tick));
 			});
 		}
 	});
 
-	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing: $easing$ });
-
-	function enter(node: SVGGElement, { duration = 0, delay = 0, easing = cubicOut, tick }) {
-		if (xy === 'x') {
-			x$.set($previousScale$(tick) || $currentScale$(tick));
-		} else {
-			y$.set($previousScale$(tick) || $currentScale$(tick));
-		}
-
+	function enter(node: SVGGElement, { duration = 0, easing = cubicOut }) {
 		opacity$.set(1);
 
 		return () => ({
 			duration,
-			delay,
+			delay: 0,
 			easing,
 			css: () => ''
 		});
 	}
 
-	function exit(node: SVGGElement, { duration = 0, delay = 0, easing = cubicOut, tick }) {
-		if (xy === 'x') {
-			x$.set($currentScale$(tick) || $currentScale$(tick));
-		} else {
-			y$.set($currentScale$(tick) || $currentScale$(tick));
-		}
-
+	function exit(node: SVGGElement, { duration = 0, easing = cubicOut }) {
 		opacity$.set(0);
 
-		return () => ({
+		return {
 			duration,
-			delay,
+			delay: 0,
 			easing,
 			css: () => ''
-		});
+		};
 	}
 </script>
 
 <g
 	class="tick {xy}"
-	style:--fill={fill}
 	style:transform={`translate3d(${$x$ + dx || 0}px,${$y$ + dy || 0}px, 1px)`}
 	style:opacity={$opacity$}
 	font-family={fontFamily}
@@ -132,17 +113,14 @@
 	font-variant={fontVariant}
 	text-anchor={textAnchor}
 	alignment-baseline="middle"
+	{fill}
 	fill-opacity={fillOpacity}
-	in:enter|local={{ duration: $duration$, tick, easing: $easing$ }}
-	out:exit|local={{ duration: $duration$, tick, easing: $easing$ }}
-	on:click
-	on:keypress
+	in:enter|local={{ easing: $easing$ }}
+	out:exit|local={{ duration: $duration$, easing: $easing$ }}
 	on:introstart
 	on:introend
 	on:outrostart
 	on:outroend
-	on:mouseenter
-	on:mouseleave
 >
 	<line
 		{x1}

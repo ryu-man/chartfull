@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { flip } from 'svelte/animate';
-	import { fly, crossfade, type FlyParams, type TransitionConfig } from 'svelte/transition';
-	import { cubicOut, linear } from 'svelte/easing';
+	import { cubicOut } from 'svelte/easing';
 	import { writable } from 'svelte-tools';
-	import { min, max } from 'd3-array';
 	import { getChartfullContext } from 'graficos/chartfull';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
@@ -13,38 +10,41 @@
 
 	const { innerWidth$ } = getChartfullContext();
 
+	export let scale;
 	export let id = 'x';
 	export let x = 0;
 	export let y = 0;
-	export let scale;
-	export let orient = 'bottom';
+	export let ticks = [];
+	export let orient: 'top' | 'bottom' = 'bottom';
 	export let tickArguments = [8];
-	export let tickValues;
-	export let tickFormat;
+	export let tickValues: string | undefined = undefined;
+	export let tickFormat: string | undefined = undefined;
 
 	export let tickSize = 6;
 	export let tickPadding = 8;
 	export let tickOffset = typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5;
-	export let tickColor;
 
-	export let fontFamily;
-	export let fontSize;
-	export let fontSizeAdjust;
-	export let fontStretch;
-	export let fontStyle;
-	export let fontVariant;
-	export let fontWeight;
+	export let fontFamily: string | undefined = undefined;
+	export let fontSize: string | undefined = undefined;
+	export let fontSizeAdjust: string | undefined = undefined;
+	export let fontStretch: string | undefined = undefined;
+	export let fontStyle: string | undefined = undefined;
+	export let fontVariant: string | undefined = undefined;
+	export let fontWeight: string | undefined = undefined;
 
 	export let stroke = 'rgba(0 0 0/ .2)';
 	export let strokeWidth = 2;
-	export let strokeOpacity;
-	export let strokeLinecap;
-	export let strokeLinejoin;
-	export let strokeDasharray;
-	export let strokeDashoffset;
-	export let strokeMiterlimit;
+	export let strokeOpacity: string | undefined = undefined;
+	export let strokeLinecap: string | undefined = undefined;
+	export let strokeLinejoin: string | undefined = undefined;
+	export let strokeDasharray: string | undefined = undefined;
+	export let strokeDashoffset: string | undefined = undefined;
+	export let strokeMiterlimit: string | undefined = undefined;
+
 	export let fill = 'rgba(0 0 0 / .4)';
-	export let d;
+
+	export let textAnchor: 'start' | 'middle' | 'end' = 'middle';
+	export let d: string | undefined = undefined;
 
 	export let duration = 100;
 	export let delay = 0;
@@ -66,14 +66,15 @@
 	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
 	$: formatter = $tickFormat$;
 
+	const d$ = writable(d || `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
+	$: d$.set(d || `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
+
 	const { duration$, delay$, easing$, offsetY$, tickSize$, padding$ } = setAxisContext({
 		currentScale$,
 		previousScale$,
 		tickFormat$,
 		k,
-		xy: 'x',
-		textAnchor: 'middle',
-		tickColor
+		xy: 'x'
 	});
 
 	$: duration$.set(duration);
@@ -85,8 +86,6 @@
 	$: offsetY$.set(tickOffset);
 
 	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
-
-	$: !isPathDataSet && (d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
 </script>
 
 <Axis
@@ -103,10 +102,11 @@
 	{fontVariant}
 	{fontStyle}
 	{fontStretch}
+	{textAnchor}
+	{fill}
 	class={classNames(_class, 'x', orient)}
-	style="--axis-fill: {fill};"
 >
-	{#each ticks as tick, index (tick.toString())}
+	{#each ticks as tick, index (tick + '')}
 		<slot {index} {tick} {formatter} text={formatter(tick)}>
 			<Tick {tick}>
 				<text>{formatter(tick)}</text>
@@ -125,7 +125,7 @@
 		stroke-linecap={strokeLinecap}
 		stroke-linejoin={strokeLinejoin}
 		stroke-miterlimit={strokeMiterlimit}
-		{d}
+		d={$d$}
 	/>
 
 	<g class="label" id="x-axis-label">
