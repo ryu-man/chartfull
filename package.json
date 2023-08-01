@@ -1,10 +1,6 @@
 {
   "name": "chartfull",
-  "version": "0.1.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "svelte": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "1.0.0-alpha.1",
   "repository": "https://github.com/ryu-man/grafico.git",
   "author": "ryuman <rioman19@gmail.com>",
   "license": "MIT",
