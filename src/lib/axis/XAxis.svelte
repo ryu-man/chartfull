@@ -32,15 +32,6 @@
 	export let fontVariant: string | undefined = undefined;
 	export let fontWeight: string | undefined = undefined;
 
-	export let stroke = 'rgba(0 0 0/ .2)';
-	export let strokeWidth = 2;
-	export let strokeOpacity: string | undefined = undefined;
-	export let strokeLinecap: string | undefined = undefined;
-	export let strokeLinejoin: string | undefined = undefined;
-	export let strokeDasharray: string | undefined = undefined;
-	export let strokeDashoffset: string | undefined = undefined;
-	export let strokeMiterlimit: string | undefined = undefined;
-
 	export let fill = 'rgba(0 0 0 / .4)';
 
 	export let textAnchor: 'start' | 'middle' | 'end' = 'middle';
@@ -65,9 +56,6 @@
 	const tickFormat$ = writable(identity);
 	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
 	$: formatter = $tickFormat$;
-
-	const d$ = writable(d || `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
-	$: d$.set(d || `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`);
 
 	const { duration$, delay$, easing$, offsetY$, tickSize$, padding$ } = setAxisContext({
 		currentScale$,
@@ -114,19 +102,11 @@
 		</slot>
 	{/each}
 
-	<path
-		class="domain"
-		fill="none"
-		{stroke}
-		stroke-width={strokeWidth}
-		stroke-dasharray={strokeDasharray}
-		stroke-dashoffset={strokeDashoffset}
-		stroke-opacity={strokeOpacity}
-		stroke-linecap={strokeLinecap}
-		stroke-linejoin={strokeLinejoin}
-		stroke-miterlimit={strokeMiterlimit}
-		d={$d$}
-	/>
+	{@const d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`}
+
+	<slot name="domain" {d}>
+		<path class="domain" fill="none" stroke="rgba(0 0 0/ .5)" {d} />
+	</slot>
 
 	<g class="label" id="x-axis-label">
 		<slot name="label" />
