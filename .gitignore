@@ -4,6 +4,7 @@ node_modules
 /.svelte-kit
 /package
 /storybook-static
+dist/
 .env
 .env.*
 !.env.example
