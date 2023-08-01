@@ -73,7 +73,8 @@
 	bind:clientWidth={$width$}
 	bind:clientHeight={$height$}
 	use:css={style}
-	class={classNames(_class, 'grafico')}
+	class={classNames('chartfull', _class)}
+	role="figure"
 	style:--height={$height$$}
 	style:--min-height="{minHeight}px"
 	style:--max-height="{maxHeight}px"
@@ -90,11 +91,7 @@
 	on:mouseover
 	on:focus
 	on:blur
-	on:mousedown
-	on:mouseup
 	on:pointermove
-	on:click
-	on:keypress
 >
 	<slot name="html-before" />
 	{#await tick() then _}
@@ -134,7 +131,7 @@
 </div>
 
 <style>
-	.grafico {
+	.chartfull {
 		width: 100%;
 		min-width: var(--min-width, unset);
 		max-width: var(--max-width, unset);
@@ -143,8 +140,10 @@
 		max-height: var(--max-height, unset);
 		position: relative;
 		margin: 0;
+
+		background-color: var(--background-color, transparent);
 	}
-	.grafico > :global(text.title) {
+	.chartfull > :global(text.title) {
 	}
 	svg {
 		width: 100%;
