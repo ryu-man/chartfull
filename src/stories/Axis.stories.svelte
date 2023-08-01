@@ -1,6 +1,6 @@
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, ScaleTime, XAxis, YAxis, Tick } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick } from 'graficos';
 	import { csv, extent, timeParse, timeMonths, scaleTime, timeFormat } from 'd3';
 	import { startOfYear, endOfYear, addYears, set } from 'date-fns';
 	import MarginDecorator from './MarginDecorator.svelte';
@@ -21,7 +21,7 @@
 		const array = timeMonths(startOfYear(today), addYears(endOfYear(today), 5));
 		for (const d of array) {
 			data = [...data, d];
-			await delay(duration*4);
+			await delay(duration * 4);
 		}
 	});
 

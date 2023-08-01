@@ -1,6 +1,7 @@
 <script>
 	import { Chartfull, Line } from 'graficos';
-	import RadialAxis from 'graficos/axis/RadialAxis.svelte';
+	import AngleAxis from 'graficos/axis/AngleAxis.svelte';
+	import RaduisAxis from 'graficos/axis/RaduisAxis.svelte';
 	import RadialTick from 'graficos/axis/RadialTick.svelte';
 	import { csv, timeParse, scaleRadial, scaleTime, extent, lineRadial } from 'd3';
 
@@ -27,16 +28,17 @@
 	let innerWidth = 300;
 	let innerHeight = 300;
 
-	$: xScale = scaleTime()
+	$: raduisScale = scaleTime()
 		.domain(extent(data, (d) => d.date))
 		.range([0, 2 * Math.PI]);
-	$: yScale = scaleRadial()
+
+	$: angleScale = scaleRadial()
 		.domain(extent(data, (d) => d.close))
 		.range([100, Math.min(innerWidth, innerHeight) / 2 - 6]);
 
 	$: line = lineRadial()
-		.angle((d) => xScale(d.date))
-		.radius((d) => yScale(d.close));
+		.angle((d) => raduisScale(d.date))
+		.radius((d) => angleScale(d.close));
 </script>
 
 <Chartfull
@@ -48,34 +50,18 @@
 	fontSize="14"
 >
 	<g transform="translate({innerWidth / 2}, {innerHeight / 2})">
-		<RadialAxis raduisScale={xScale} angleScale={yScale}>
-			<text
-				text-anchor="middle"
-				fill="rgba(0 0 0 / .2)"
-				font-weight="900"
-				font-size="20pt"
-				dominant-baseline="middle">Twitter</text
-			>
+		<AngleAxis scale={angleScale} let:tick let:i>
+			{@const r = angleScale(tick)}
+			<g>
+				<circle {r} fill="none" stroke="rgba(0 0 0 / {0.1 - i * 0.01})" />
+				<text x={r} dx="4" font-size="8pt" fill="rgba(0 0 0 / .7)">{tick}</text>
+			</g>
+		</AngleAxis>
 
-			{#each xScale.ticks() as tick, i}
-				<RadialTick {tick} />
-			{/each}
-		</RadialAxis>
-		<!-- {#each yScale.ticks() as tick, i}
-			<circle r={yScale(tick)} fill="none" stroke="rgba(0 0 0 / {0.1 - i * 0.01})" />
-		{/each} -->
-
-		<!-- transform={angle < Math.PI / 2 || angle > (Math.PI * 3) / 2
-            ? 'rotate(90)translate(0,22)'
-            : 'rotate(-90)translate(0, -15)'} -->
+		<RaduisAxis scale={raduisScale} r={angleScale(angleScale.domain().at(0))} let:tick>
+			<RadialTick {tick} angle={raduisScale(tick)} />
+		</RaduisAxis>
 
 		<Line d={line(data)} stroke-width="2" />
 	</g>
 </Chartfull>
-
-<style>
-	:global(html, body, #root) {
-		height: 100%;
-		width: 100%;
-	}
-</style>

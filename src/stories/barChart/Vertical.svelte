@@ -50,13 +50,14 @@
 					r="2 2 0 0"
 				/>
 				<text
-					{y}
-					dy="-8"
+					y={Math.max(y - 8, 128)}
+					dy="0"
 					dx={xScale.bandwidth() / 2}
-					text-anchor="middle"
-					font-size="11pt"
-					style:mix-blend-mode="plus-lighter"
-					fill={colorScale(item.Country)}>{xAccessor(item)}</text
+					text-anchor="end"
+					font-size="12pt"
+					fill={colorScale(item.Country)}
+					writing-mode="vertical-lr"
+					style:mix-blend-mode="plus-lighter">{xAccessor(item)}</text
 				>
 			</g>
 		</Spring>
@@ -83,13 +84,6 @@
 		let:tick
 	>
 		<Tick {tick} x2={-innerWidth} />
-		<text
-			slot="label"
-			font-weight="700"
-			font-size="32pt"
-			fill="black"
-			fill-opacity=".2"
-			letter-spacing="4pt">Income</text
-		>
+		<text slot="label" letter-spacing="4pt">Income</text>
 	</YAxis>
 </Chartfull>

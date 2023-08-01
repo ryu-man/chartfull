@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Chartfull, XAxis, YAxis, Tick, Line } from 'graficos';
 	import { csv, zoom, select, zoomIdentity } from 'd3';
@@ -44,10 +44,11 @@
 
 	let d3zoom = zoom()
 		.scaleExtent([0.5, 5])
-		.duration(200)
+		.duration(100)
 		.on('zoom', (e) => {
 			transform = e.transform;
 		});
+
 	$: d3zoom.extent([
 		[0, 0],
 		[innerWidth, innerHeight]
@@ -59,6 +60,13 @@
 
 	function zoomable(node, zoom, x, y) {
 		select(node).call(zoom);
+	}
+
+	function onPointerMoveHandler(e: PointerEvent) {
+		const currentTarget = e.currentTarget as SVGRectElement;
+		const { left, top } = currentTarget.getBoundingClientRect();
+		offsetX = Math.max(0, e.offsetX - padding.left);
+		offsetY = Math.min(innerHeight, Math.max(0, e.offsetY - padding.top));
 	}
 </script>
 
@@ -78,23 +86,20 @@
 	component={Chartfull}
 	let:args
 >
-	<Chartfull
-		height={args.height}
-		{padding}
-		bind:innerWidth
-		bind:innerHeight
-		on:pointermove={(e) => {
-			offsetX = Math.max(0, e.offsetX - padding.left);
-			offsetY = Math.min(innerHeight, Math.max(0, e.offsetY - padding.top));
-		}}
-	>
+	<Chartfull height={args.height} {padding} bind:innerWidth bind:innerHeight>
 		<defs>
 			<clipPath id="clip">
 				<rect width={innerWidth} height={innerHeight} />
 			</clipPath>
 		</defs>
 
-		<rect width={innerWidth} height={innerHeight} use:zoomable={d3zoom} fill="white" />
+		<rect
+			width={innerWidth}
+			height={innerHeight}
+			use:zoomable={d3zoom}
+			fill="transparent"
+			on:pointermove={onPointerMoveHandler}
+		/>
 
 		<YAxis scale={yScale} duration={100} let:tick let:index>
 			<Tick {tick} x2={-innerWidth} />
@@ -129,6 +134,7 @@
 					cy={yScale(co2Acess(d))}
 					r={transform.k * 1.2}
 					fill="rgb(64 55 201 / 40%)"
+					pointer-events="none"
 				/>
 			{/each}
 			<Line d={d1(data)} stroke="rgba(0,0,0, .1)" />

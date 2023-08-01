@@ -42,7 +42,7 @@
 		padding: {
 			left: 48,
 			bottom: 48,
-			top: 48,
+			top: 96,
 			right: 48
 		}
 	}}
@@ -50,12 +50,14 @@
 >
 	<Chartfull bind:innerWidth bind:innerHeight {...args}>
 		<text
-			fill-opacity=".1"
+			fill-opacity=".6"
 			font-size="32pt"
 			font-weight="600"
 			text-anchor="end"
-			dominant-baseline="text-before-edge"
-			x={innerWidth}>Daily stock status of Apple stock</text
+			dominant-baseline="text-top"
+			x={innerWidth}
+			dx="0"
+			dy="-32">Daily stock status of Apple stock</text
 		>
 		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 			<Tick {tick} y2={-innerHeight} />

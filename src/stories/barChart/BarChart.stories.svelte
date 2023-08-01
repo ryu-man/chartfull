@@ -8,7 +8,7 @@
 	import HorizontalStory from './Horizontal.svelte';
 	import AnimatedStory from './Animated.svelte';
 	import VerticalStory from './Vertical.svelte';
-	import PopulationBarChart from './PopulationBarChart.svelte'
+	import PopulationBarChart from '../others/PopulationBarChart.stories.svelte'
 
 	let data = [];
 
@@ -61,7 +61,7 @@
 	>
 		<VerticalStory {args} />
 	</Story>
-	<Story
+	<!-- <Story
 		name="Population"
 		args={{
 			height: 0,
@@ -70,7 +70,7 @@
 		let:args
 	>
 		<PopulationBarChart {args} />
-	</Story>
+	</Story> -->
 
 
 
