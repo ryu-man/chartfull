@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { Chartfull, XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
-	import { csv, min, max, scaleLinear } from 'd3';
+	import { csv, min, max, scaleLinear, timeWeek } from 'd3';
+	import { every } from 'lodash';
+	import { getWeek, getISOWeek, getWeekOfMonth, format } from 'date-fns';
 
 	const converter = (d) => {
 		return {
@@ -19,12 +21,26 @@
 	let innerWidth;
 	let innerHeight;
 
+	let inFocusTick = undefined;
+
 	const xAccessor = (d) => d.date;
 	const lowAccessor = (d) => d.low;
 	const highAccessor = (d) => d.high;
 
 	$: xScale = scaleFinance(data.map(xAccessor), [0, innerWidth]).paddingInner(0.03);
 	$: yScale = scaleLinear([min(data, lowAccessor), max(data, highAccessor)], [innerHeight, 0]);
+
+	function xScaleFormatter(date: Date) {
+		if (getISOWeek(date) === 1) {
+			return format(date, 'yyyy');
+		}
+
+		if (getWeekOfMonth(date, { weekStartsOn: 1 }) === 1) {
+			return format(date, 'MMM');
+		}
+
+		return getWeekOfMonth(date, { weekStartsOn: 1 });
+	}
 </script>
 
 <Meta
@@ -59,11 +75,36 @@
 			dx="0"
 			dy="-32">Daily stock status of Apple stock</text
 		>
-		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
-			<Tick {tick} y2={-innerHeight} />
+		<XAxis
+			scale={xScale}
+			y={innerHeight}
+			orient="bottom"
+			tickArguments={[16]}
+			tickFormat={xScaleFormatter}
+			let:tick
+			let:text
+		>
+			<Tick
+				{tick}
+				y2={-innerHeight}
+				on:pointerenter={(e) => {
+					inFocusTick = tick;
+				}}
+				on:pointerleave={() => {
+					inFocusTick = undefined;
+				}}
+			>
+				<text>{text}</text>
+				{#if tick === inFocusTick}
+					<!-- content here -->
+					<text dy="24" text-anchor="middle" font-size="8pt">{format(tick, 'dd MMM yyyy')}</text>
+				{/if}
+			</Tick>
+
 			<text slot="label" x={innerWidth}>Time</text>
 		</XAxis>
-		<YAxis scale={yScale} let:tick>
+
+		<YAxis scale={yScale} tickArguments={[13]} let:tick>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price ($)</text>
 		</YAxis>
