@@ -100,6 +100,7 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <g
 	class="tick {xy}"
 	style:transform={`translate3d(${$x$ + dx || 0}px,${$y$ + dy || 0}px, 1px)`}
@@ -115,12 +116,18 @@
 	alignment-baseline="middle"
 	{fill}
 	fill-opacity={fillOpacity}
+	role="group"
 	in:enter|local={{ easing: $easing$ }}
 	out:exit|local={{ duration: $duration$, easing: $easing$ }}
+	on:keypress
 	on:introstart
 	on:introend
 	on:outrostart
 	on:outroend
+	on:click
+	on:pointerover
+	on:pointerenter
+	on:pointerleave
 >
 	<line
 		{x1}
@@ -146,6 +153,7 @@
 		backface-visibility: hidden;
 		perspective: 1000px;
 		pointer-events: none;
+		cursor: pointer;
 	}
 	.tick > line {
 		/* pointer-events: none; */
