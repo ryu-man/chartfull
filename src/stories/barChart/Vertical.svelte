@@ -76,7 +76,6 @@
 	<YAxis
 		scale={yScale}
 		orient="left"
-		tickSize={innerWidth}
 		tickFormat={(d) => {
 			const q = d / 1000;
 			return q === 0 ? '0' : q + 'K';

@@ -147,7 +147,7 @@
 			/>
 		</g>
 
-		<g color="rgb(0 0 0 / .3)" pointer-events="none">
+		<g color="rgb(0 0 0 / .3)" pointer-events="none" stroke-dasharray="8">
 			<g>
 				<line x2={innerWidth} y1={offsetY} y2={offsetY} stroke="currentColor" />
 				<text

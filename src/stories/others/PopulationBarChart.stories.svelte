@@ -117,7 +117,6 @@
 			scale={yScale}
 			x={innerWidth}
 			orient="right"
-			tickSize={innerWidth}
 			tickFormat={(d) => Math.round(d / 1e6) + 'M'}
 			d=""
 			let:tick
