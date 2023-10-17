@@ -106,8 +106,6 @@
 				font-style={fontStyle}
 				font-variant={fontVariant}
 			>
-				<slot name="svg-before" />
-
 				{#await tick() then _}
 					<slot
 						width={$width$}
@@ -121,8 +119,6 @@
 						data={$data$}
 					/>
 				{/await}
-
-				<slot name="svg-after" />
 			</g>
 		</svg>
 	{/await}
