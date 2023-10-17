@@ -5,8 +5,8 @@
 		title: 'Components/Animated Path',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>

@@ -5,8 +5,8 @@
 		title: 'Charts/Line chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } }
 		}
 	};
 </script>
@@ -18,7 +18,6 @@
 	import RadialLine from './RadialLine.svelte';
 
 	const args = {
-		height: 0,
 		padding: {
 			top: 54,
 			right: 0,

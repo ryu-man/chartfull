@@ -5,8 +5,8 @@
 		title: 'Charts/Box chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>
@@ -79,9 +79,6 @@
 
 <Story
 	name="Box chart"
-	args={{
-		height: 0
-	}}
 	let:args
 >
 	<Chartfull

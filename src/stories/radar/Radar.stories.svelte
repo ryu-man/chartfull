@@ -5,8 +5,8 @@
 		title: 'Charts/Radar',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>
@@ -19,13 +19,7 @@
 	onMount(() => {});
 </script>
 
-<Story
-	name="Radar/Basic"
-	args={{
-		height: 0
-	}}
-	let:args
->
+<Story name="Radar/Basic" let:args>
 	<Basic {args} />
 </Story>
 

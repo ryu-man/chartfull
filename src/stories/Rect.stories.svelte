@@ -4,10 +4,8 @@
 	export const meta = {
 		title: 'Components/Rect',
 		component: Chartfull,
-		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
-		}
+		width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } },
 	};
 </script>
 

@@ -69,7 +69,6 @@
 		text-anchor="end"
 		font-size="36pt"
 		font-weight="900"
-		letter-spacing="8pt"
 		fill="rgb(0 0 0 / .3)">Countries</text
 	>
 
@@ -83,6 +82,6 @@
 		let:tick
 	>
 		<Tick {tick} x2={-innerWidth} />
-		<text slot="label" letter-spacing="4pt">Income</text>
+		<text slot="label" letter-spacing="0">Income</text>
 	</YAxis>
 </Chartfull>

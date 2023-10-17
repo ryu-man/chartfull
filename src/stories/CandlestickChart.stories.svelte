@@ -5,8 +5,8 @@
 		title: 'Charts/Candlestick chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>
@@ -55,18 +55,9 @@
 	}
 </script>
 
-<Meta
-	title="Charts/Candlestick chart"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } }
-	}}
-/>
-
 <Story
 	name="Candlestick chart"
 	args={{
-		height: 0,
 		padding: {
 			left: 48,
 			bottom: 48,

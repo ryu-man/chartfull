@@ -5,8 +5,8 @@
 		title: 'Charts/Area chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } },
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>
@@ -44,14 +44,7 @@
 	$: y1Scaled = (d) => yScale(yAccessor(d));
 </script>
 
-<Story
-	name="one"
-	args={{
-		height: 0
-	}}
-	source={code}
-	let:args
->
+<Story name="Area chart" source={code} let:args>
 	<Chartfull
 		{...args}
 		{data}

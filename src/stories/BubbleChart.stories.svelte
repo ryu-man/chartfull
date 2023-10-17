@@ -5,14 +5,14 @@
 		title: 'Charts/Bubble chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { type: 'string' },
+			height: { type: 'string' }
 		}
 	};
 </script>
 
 <script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { XAxis, YAxis, Tick, get } from 'graficos';
 	import { csv, extent, max, scaleLinear, schemeAccent, scaleOrdinal } from 'd3';
 
@@ -44,18 +44,10 @@
 	$: zGet = get(zScale, zAcc);
 </script>
 
-<Meta
-	title="Charts/Bubble chart"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } }
-	}}
-/>
 
 <Story
 	name="mono"
 	args={{
-		height: 0,
 		padding: {
 			left: 24,
 			top: 0,

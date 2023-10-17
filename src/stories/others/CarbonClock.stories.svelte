@@ -5,8 +5,8 @@
 		title: 'Charts/Others',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } }
 		}
 	};
 </script>
@@ -84,13 +84,7 @@
 	}
 </script>
 
-<Story
-	name="Carbon clock chart"
-	args={{
-		height: 0
-	}}
-	let:args
->
+<Story name="Carbon clock chart" let:args>
 	<Chartfull height={args.height} {padding} bind:innerWidth bind:innerHeight>
 		<defs>
 			<clipPath id="clip">

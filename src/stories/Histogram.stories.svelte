@@ -4,10 +4,8 @@
 	export const meta = {
 		title: 'Charts/Histogram',
 		component: Chartfull,
-		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
-		}
+		width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } },
 	};
 </script>
 
@@ -48,19 +46,9 @@
 	$: yGet = get(yScale, (d) => d.length);
 </script>
 
-<Meta
-	title="Charts/Histogram"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } },
-		thresholds: { control: { type: 'number' } }
-	}}
-/>
-
 <Story
 	name="Histogram"
 	args={{
-		height: 0,
 		padding: {
 			left: 48,
 			top: 24,

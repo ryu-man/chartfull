@@ -5,8 +5,8 @@
 		title: 'Charts/Bar chart',
 		component: Chartfull,
 		argTypes: {
-			width: { control: { type: 'number' } },
-			height: { control: { type: 'number' } }
+			width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } }
 		}
 	};
 </script>
@@ -45,21 +45,13 @@
 </script>
 
 <MarginDecorator>
-	<Story
-		name="Horizontal"
-		args={{
-			height: 0,
-			horizontal: true
-		}}
-		let:args
-	>
+	<Story name="Horizontal" let:args>
 		<HorizontalStory {args} />
 	</Story>
 
 	<Story
 		name="Vertical"
 		args={{
-			height: 0,
 			padding: { bottom: 0, left: 48, top: 0, right: 0 }
 		}}
 		let:args
@@ -80,7 +72,6 @@
 	<Story
 		name="Animated"
 		args={{
-			height: 0,
 			horizontal: true
 		}}
 		let:args
