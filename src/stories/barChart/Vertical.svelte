@@ -65,7 +65,7 @@
 	<text
 		x={innerWidth}
 		y={innerHeight}
-		dy={72}
+		dy={56}
 		text-anchor="end"
 		font-size="36pt"
 		font-weight="900"
