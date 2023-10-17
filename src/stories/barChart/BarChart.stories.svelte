@@ -1,14 +1,25 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Bar chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
 	import { onMount } from 'svelte';
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull } from 'graficos';
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { csv } from 'd3';
-
 	import MarginDecorator from '../MarginDecorator.svelte';
 	import HorizontalStory from './Horizontal.svelte';
 	import AnimatedStory from './Animated.svelte';
 	import VerticalStory from './Vertical.svelte';
-	import PopulationBarChart from '../others/PopulationBarChart.stories.svelte'
+	import PopulationBarChart from '../others/PopulationBarChart.stories.svelte';
 
 	let data = [];
 
@@ -32,12 +43,6 @@
 		return () => clearInterval(interval);
 	});
 </script>
-
-<Meta
-	title="Charts/Bar chart"
-	component={Chartfull}
-	argTypes={{ height: { control: { type: 'number' } } }}
-/>
 
 <MarginDecorator>
 	<Story
@@ -71,8 +76,6 @@
 	>
 		<PopulationBarChart {args} />
 	</Story> -->
-
-
 
 	<Story
 		name="Animated"

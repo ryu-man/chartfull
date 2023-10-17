@@ -1,9 +1,20 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Components/Animated Path',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-
-	import { Chartfull, XAxis, YAxis, Tick } from 'graficos';
+	import { XAxis, YAxis, Tick } from 'graficos';
 	import { tweened } from 'svelte/motion';
-
 	import { csv, schemeCategory10, max, extent, group, rollup, range, min } from 'd3';
 	import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
 	import PopulationBar from './PopulationBar.svelte';

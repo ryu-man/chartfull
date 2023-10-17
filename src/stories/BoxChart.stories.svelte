@@ -1,6 +1,19 @@
+<script context="module">
+		import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Box chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick, Box } from 'graficos';
+	import { XAxis, YAxis, Tick, Box } from 'graficos';
 	import { csv } from 'd3';
 	import { quantile, bin, extent, min, max } from 'd3-array';
 	import { scaleLinear } from 'd3-scale';
@@ -63,14 +76,6 @@
 	$: xScale = scaleLinear(extent(data, xAccessor), [0 + boxWidth / 2, innerWidth - boxWidth / 2]);
 	$: yScale = scaleLinear(extent(data, yAccessor), [innerHeight, 0]);
 </script>
-
-<Meta
-	title="Charts/Box chart"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } }
-	}}
-/>
 
 <Story
 	name="Box chart"

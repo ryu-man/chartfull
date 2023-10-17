@@ -1,6 +1,19 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Bubble chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick, get } from 'graficos';
+	import { XAxis, YAxis, Tick, get } from 'graficos';
 	import { csv, extent, max, scaleLinear, schemeAccent, scaleOrdinal } from 'd3';
 
 	let data = [];

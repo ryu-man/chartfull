@@ -1,6 +1,19 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Others',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script lang="ts">
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick, Line } from 'graficos';
+	import { Story } from '@storybook/addon-svelte-csf';
+	import { XAxis, YAxis, Tick, Line } from 'graficos';
 	import { csv, zoom, select, zoomIdentity } from 'd3';
 	import { extent } from 'd3-array';
 	import { scaleLinear } from 'd3-scale';
@@ -38,6 +51,7 @@
 	$: d1 = line()
 		.x((d) => xScale(xAccess(d)))
 		.y((d) => yScale(co2Acess(d)));
+
 	$: d2 = line()
 		.x((d) => xScale(xAccess(d)))
 		.y((d) => yScale(seasonallyAdjustedAccess(d)));
@@ -70,20 +84,11 @@
 	}
 </script>
 
-<Meta
-	title="Charts/Others"
-	argTypes={{
-		width: { control: { type: 'number' } },
-		height: { control: { type: 'number' } }
-	}}
-/>
-
 <Story
 	name="Carbon clock chart"
 	args={{
 		height: 0
 	}}
-	component={Chartfull}
 	let:args
 >
 	<Chartfull height={args.height} {padding} bind:innerWidth bind:innerHeight>

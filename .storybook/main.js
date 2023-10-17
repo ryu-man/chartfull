@@ -3,7 +3,13 @@ import { mergeConfig, defineConfig } from 'vite'
 
 export default {
   stories: ['../src/stories/**/*.mdx', '../src/stories/**/*.stories.@(js|jsx|ts|tsx|svelte)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-styling', '@storybook/addon-svelte-csf'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-styling',
+    '@storybook/addon-svelte-csf',
+    '@storybook/addon-mdx-gfm'
+  ],
   framework: "@storybook/sveltekit",
   staticDirs: ['../static'],
   async viteFinal(config) {
@@ -17,7 +23,7 @@ export default {
     }));
   },
   docs: {
-    autodocs: true
+    autodocs: false
   }
 }
 

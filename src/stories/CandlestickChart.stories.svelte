@@ -1,9 +1,21 @@
+<script context="module">
+		import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Candlestick chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script lang="ts">
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
-	import { csv, min, max, scaleLinear, timeWeek } from 'd3';
-	import { every } from 'lodash';
-	import { getWeek, getISOWeek, getWeekOfMonth, format } from 'date-fns';
+	import { XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
+	import { csv, min, max, scaleLinear } from 'd3';
+	import { getISOWeek, getWeekOfMonth, format } from 'date-fns';
 
 	const converter = (d) => {
 		return {

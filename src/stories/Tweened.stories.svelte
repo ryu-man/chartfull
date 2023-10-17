@@ -1,7 +1,19 @@
+<script context="module">
+		import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Components/Tweened',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { fade } from 'svelte/transition';
-	import { Chartfull } from 'graficos';
 	import { Tweened } from 'graficos/components';
 	import CustomXAxis from 'graficos/axis/CustomXAxis.svelte';
 	import { csv, extent, timeParse, timeMonths, scaleTime, shuffle } from 'd3';

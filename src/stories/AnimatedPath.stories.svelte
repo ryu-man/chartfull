@@ -1,5 +1,15 @@
+<script context="module">
+	export const meta = {
+		title: 'Components/Animated Path',
+		argTypes: {
+			width: { control: { type: 'number' } },
+			height: { control: { type: 'number' } }
+		}
+	};
+</script>
+
 <script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { Chartfull } from 'graficos';
 	import Line from 'graficos/shape/Line.svelte';
 	import { scaleLinear, max } from 'd3';
@@ -20,14 +30,6 @@
 	$: x = (d) => xScale(xAccessor(d));
 	$: y = (d) => yScale(yAccessor(d));
 </script>
-
-<Meta
-	title="Components/Animated Path"
-	argTypes={{
-		width: { control: { type: 'number' } },
-		height: { control: { type: 'number' } }
-	}}
-/>
 
 <Story
 	name="Labeled"
