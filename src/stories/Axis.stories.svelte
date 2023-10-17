@@ -1,6 +1,19 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Components/Animated Path',
+		component: Chartfull,
+		argTypes: {
+			width: { type: 'string' },
+			height: { type: 'string' }
+		}
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick } from 'graficos';
+	import { XAxis, YAxis, Tick } from 'graficos';
 	import { csv, extent, timeParse, timeMonths, scaleTime, timeFormat } from 'd3';
 	import { startOfYear, endOfYear, addYears, set } from 'date-fns';
 	import MarginDecorator from './MarginDecorator.svelte';

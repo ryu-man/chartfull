@@ -1,22 +1,25 @@
-<script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
+<script context="module">
 	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Radar',
+		component: Chartfull,
+		argTypes: {
+			width: { type: 'string' },
+			height: { type: 'string' }
+		}
+	};
+</script>
+
+<script>
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { onMount } from 'svelte';
-	import Twitter from './Twitter.svelte';
 	import Basic from './Basic.svelte';
 
 	onMount(() => {});
 </script>
 
-<Meta title="Charts/Radar" component={Chartfull} />
-
-<Story
-	name="Radar/Basic"
-	args={{
-		height: 0
-	}}
-	let:args
->
+<Story name="Radar/Basic" let:args>
 	<Basic {args} />
 </Story>
 

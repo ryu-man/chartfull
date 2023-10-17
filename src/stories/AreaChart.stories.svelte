@@ -1,6 +1,19 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Area chart',
+		component: Chartfull,
+		argTypes: {
+			width: { type: 'string' },
+			height: { type: 'string' }
+		}
+	};
+</script>
+
 <script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick, Area } from 'graficos';
+	import { Story } from '@storybook/addon-svelte-csf';
+	import { XAxis, YAxis, Tick, Area } from 'graficos';
 	import { csv, extent, max, timeParse } from 'd3';
 	import { scaleLinear, scaleTime } from 'd3-scale';
 	import { area } from 'd3-shape';
@@ -31,22 +44,7 @@
 	$: y1Scaled = (d) => yScale(yAccessor(d));
 </script>
 
-<Meta
-	title="Charts/Area chart"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } }
-	}}
-/>
-
-<Story
-	name="one"
-	args={{
-		height: 0
-	}}
-	source={code}
-	let:args
->
+<Story name="Area chart" source={code} let:args>
 	<Chartfull
 		{...args}
 		{data}

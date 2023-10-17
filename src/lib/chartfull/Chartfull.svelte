@@ -7,15 +7,19 @@
 	import type { Padding } from '../types';
 	import type { Properties } from 'csstype';
 
-	export let width: number;
-	export let minWidth: number | undefined = 600;
-	export let maxWidth: number | undefined = undefined;
-	export let height: number;
-	export let minHeight: number | undefined = undefined;
-	export let maxHeight: number | undefined = undefined;
+	export let width: string = '100%';
+	export let minWidth: string | undefined = undefined;
+	export let maxWidth: string | undefined = undefined;
+
+	export let height: string = '100%';
+	export let minHeight: string | undefined = undefined;
+	export let maxHeight: string | undefined = undefined;
+
 	export let innerWidth = 0;
 	export let innerHeight = 0;
+
 	export let padding: Padding = {};
+
 	export let data: any[] = [];
 	export let style: string | Properties = '';
 	let _class = '';
@@ -38,7 +42,7 @@
 		paddingLeft$,
 		paddingRight$,
 		paddingTop$
-	} = sizeStore(width, height, {
+	} = sizeStore(0, 0, {
 		top: 0,
 		right: 0,
 		bottom: 0,
@@ -75,11 +79,12 @@
 	use:css={style}
 	class={classNames('chartfull', _class)}
 	role="figure"
-	style:--height={$height$$}
-	style:--min-height="{minHeight}px"
-	style:--max-height="{maxHeight}px"
-	style:--min-width="{minWidth}px"
-	style:--max-width="{maxWidth}px"
+	style:--height={height}
+	style:--min-height={minHeight}
+	style:--max-height={maxHeight}
+	style:--width={width}
+	style:--min-width={minWidth}
+	style:--max-width={maxWidth}
 	style:--padding-top="{$paddingTop$}px"
 	style:--padding-bottom="{$paddingBottom$}px"
 	style:--padding-left="{$paddingLeft$}px"
@@ -106,8 +111,6 @@
 				font-style={fontStyle}
 				font-variant={fontVariant}
 			>
-				<slot name="svg-before" />
-
 				{#await tick() then _}
 					<slot
 						width={$width$}
@@ -121,8 +124,6 @@
 						data={$data$}
 					/>
 				{/await}
-
-				<slot name="svg-after" />
 			</g>
 		</svg>
 	{/await}
@@ -132,9 +133,10 @@
 
 <style>
 	.chartfull {
-		width: 100%;
+		width: var(--width, 100%);
 		min-width: var(--min-width, unset);
 		max-width: var(--max-width, unset);
+
 		height: var(--height, 100%);
 		min-height: var(--min-height, unset);
 		max-height: var(--max-height, unset);

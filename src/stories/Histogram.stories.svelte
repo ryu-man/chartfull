@@ -1,23 +1,39 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Histogram',
+		component: Chartfull,
+		width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } },
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Chartfull, XAxis, YAxis, Tick, get } from 'graficos';
+	import { XAxis, YAxis, Tick, get } from 'graficos';
 	import { first, last } from 'graficos/utils/array';
 	import { bin, csv, extent, scaleLinear } from 'd3';
+	import { onMount } from 'svelte';
+
 	let data = [];
 
-	csv('unemployment-x.csv', (d) => ({
-		id: d.id,
-		state: d.state,
-		county: d.county,
-		rate: +d.rate
-	})).then((res) => (data = res));
+	onMount(() => {
+		csv('unemployment-x.csv', (d) => ({
+			id: d.id,
+			state: d.state,
+			county: d.county,
+			rate: +d.rate
+		})).then((res) => (data = res));
+	});
 
 	const valueAccessor = (d) => d.rate;
 
 	let innerWidth;
 	let innerHeight;
 
-	$: bins = bin().thresholds(40).value(valueAccessor)(data);
+	$: bins = bin().domain([10, 25]).value(valueAccessor)(data);
+	$: console.log(bins);
 
 	$: yScale = scaleLinear(
 		extent(bins, (d) => d.length),
@@ -30,19 +46,9 @@
 	$: yGet = get(yScale, (d) => d.length);
 </script>
 
-<Meta
-	title="Charts/Histogram"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } },
-		thresholds: { control: { type: 'number' } }
-	}}
-/>
-
 <Story
 	name="Histogram"
 	args={{
-		height: 0,
 		padding: {
 			left: 48,
 			top: 24,

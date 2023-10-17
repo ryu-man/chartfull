@@ -1,12 +1,23 @@
-<script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
+<script context="module">
 	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Line chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } }
+		}
+	};
+</script>
+
+<script>
+	import { Story } from '@storybook/addon-svelte-csf';
 	import OneLine from './OneLine.svelte';
 	import MultiLine from './MultiLine.svelte';
 	import RadialLine from './RadialLine.svelte';
 
 	const args = {
-		height: 0,
 		padding: {
 			top: 54,
 			right: 0,
@@ -15,12 +26,6 @@
 		}
 	};
 </script>
-
-<Meta
-	title="Charts/Line chart"
-	component={Chartfull}
-	argTypes={{ height: { control: { type: 'number' } } }}
-/>
 
 <Story name="mono line" {args} let:args>
 	<OneLine {args} />

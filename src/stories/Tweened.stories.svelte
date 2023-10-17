@@ -1,7 +1,17 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Components/Tweened',
+		component: Chartfull,
+		width: { control: { type: 'string' } },
+		height: { control: { type: 'string' } }
+	};
+</script>
+
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
 	import { fade } from 'svelte/transition';
-	import { Chartfull } from 'graficos';
 	import { Tweened } from 'graficos/components';
 	import CustomXAxis from 'graficos/axis/CustomXAxis.svelte';
 	import { csv, extent, timeParse, timeMonths, scaleTime, shuffle } from 'd3';
@@ -35,25 +45,8 @@
 	}
 </script>
 
-<Meta
-	title="Components/Tweened"
-	component={Chartfull}
-	argTypes={{
-		height: { control: { type: 'number' } },
-		width: { control: { type: 'number' } }
-	}}
-/>
-
 <MarginDecorator>
-	<Story
-		id="tweened"
-		name="Tweened"
-		args={{
-			width: 100,
-			top: false
-		}}
-		let:args
-	>
+	<Story id="tweened" name="Tweened" let:args>
 		<Chartfull bind:innerWidth bind:innerHeight {...args}>
 			<Tweened
 				{to}
@@ -104,10 +97,8 @@
 			<CustomXAxis scale={xScale} let:ticks let:format let:previousScale>
 				<Tweened
 					to={ticks.map((d) => ({ tick: d, x: xScale(d), opacity: 1 }))}
-
 					enter={({ tick }) => ({ tick, x: previousScale(tick), opacity: 0 })}
 					exit={({ tick }) => ({ tick, x: xScale(tick), opacity: 0 })}
-
 					value={(d, i) => d}
 					key={(d) => d.tick.toString()}
 					duration={2000}
