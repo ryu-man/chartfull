@@ -111,19 +111,17 @@
 				font-style={fontStyle}
 				font-variant={fontVariant}
 			>
-				{#await tick() then _}
-					<slot
-						width={$width$}
-						height={$height$}
-						innerWidth={$innerWidth$}
-						innerHeight={$innerHeight$}
-						paddingTop={$paddingTop$}
-						paddingBottom={$paddingBottom$}
-						paddingLeft={$paddingLeft$}
-						paddingRight={$paddingRight$}
-						data={$data$}
-					/>
-				{/await}
+				<slot
+					width={$width$}
+					height={$height$}
+					innerWidth={$innerWidth$}
+					innerHeight={$innerHeight$}
+					paddingTop={$paddingTop$}
+					paddingBottom={$paddingBottom$}
+					paddingLeft={$paddingLeft$}
+					paddingRight={$paddingRight$}
+					data={$data$}
+				/>
 			</g>
 		</svg>
 	{/await}
