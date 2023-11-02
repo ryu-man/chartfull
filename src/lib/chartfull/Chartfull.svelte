@@ -52,7 +52,7 @@
 
 	const data$ = writable(data);
 
-	const context: ChartfullContext<any> = {
+	const context = setChartfullContext({
 		width$,
 		height$,
 		innerWidth$,
@@ -62,9 +62,7 @@
 		paddingRight$,
 		paddingTop$,
 		data$
-	};
-
-	setChartfullContext(context);
+	});
 
 	const height$$ = derived(height$, (h) => (h ? h + 'px' : '100%'));
 
@@ -77,6 +75,7 @@
 	bind:clientWidth={$width$}
 	bind:clientHeight={$height$}
 	use:css={style}
+	bind:this={context.rootElement}
 	class={classNames('chartfull', _class)}
 	role="figure"
 	style:--height={height}
@@ -125,6 +124,7 @@
 			</g>
 		</svg>
 	{/await}
+	<div class="html-layer" bind:this={context.contentElement} />
 
 	<slot name="html-after" />
 </div>
@@ -142,9 +142,15 @@
 		margin: 0;
 
 		background-color: var(--background-color, transparent);
+
+		position: relative;
+
+		overflow: hidden;
 	}
+
 	.chartfull > :global(text.title) {
 	}
+
 	svg {
 		width: 100%;
 		height: 100%;
@@ -154,5 +160,19 @@
 		top: 0;
 		left: 0;
 		z-index: 2;
+	}
+
+	.html-layer {
+		width: 100%;
+		height: 100%;
+
+		padding-top: var(--padding-top, 0);
+		padding-right: var(--padding-right, 0);
+		padding-bottom: var(--padding-bottom, 0);
+		padding-left: var(--padding-left, 0);
+
+		position: relative;
+		cursor: pointer;
+		box-sizing: border-box;
 	}
 </style>
