@@ -1,5 +1,5 @@
 <script>
-	import { Chartfull, XAxis, YAxis, Tick, get, Line } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line, Grid } from 'graficos';
 	import { csv, extent, scaleLinear, scaleTime, timeParse } from 'd3';
 	import { line } from 'd3-shape';
 
@@ -37,7 +37,9 @@
 	bind:innerWidth
 	bind:innerHeight
 >
-	<YAxis scale={yScale} let:tick>
+	<Grid width={innerWidth} height={innerHeight} />
+
+	<YAxis scale={yScale} tickArguments={[10, '.2f']} let:tick>
 		<Tick {tick} x2={-innerWidth} />
 		<text slot="label">Daily close (<tspan>$</tspan>)</text>
 	</YAxis>
@@ -49,11 +51,12 @@
 
 	<text
 		x={innerWidth}
+		dy={-64}
 		text-anchor="end"
 		dominant-baseline="text-before-edge"
 		font-size="24pt"
 		font-weight="600"
-		fill="rgba(0,0,0, .1)"
+		fill="rgba(0,0,0, .4)"
 	>
 		Daily close of Apple stock
 	</text>
