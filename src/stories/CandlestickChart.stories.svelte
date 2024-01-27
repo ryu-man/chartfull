@@ -1,5 +1,5 @@
 <script context="module">
-		import { Chartfull } from 'graficos';
+	import { Chartfull } from 'graficos';
 
 	export const meta = {
 		title: 'Charts/Candlestick chart',
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, scaleFinance, Candle, Tick } from 'graficos';
+	import { XAxis, YAxis, scaleFinance, Candle, Tick, Grid } from 'graficos';
 	import { csv, min, max, scaleLinear } from 'd3';
 	import { getISOWeek, getWeekOfMonth, format } from 'date-fns';
 
@@ -67,17 +67,20 @@
 	}}
 	let:args
 >
-	<Chartfull bind:innerWidth bind:innerHeight {...args}>
+	<Chartfull bind:innerWidth bind:innerHeight {data} {...args}>
 		<text
-			fill-opacity=".6"
+			fill-opacity=".1"
 			font-size="32pt"
-			font-weight="600"
+			font-weight="700"
 			text-anchor="end"
 			dominant-baseline="text-top"
 			x={innerWidth}
 			dx="0"
 			dy="-32">Daily stock status of Apple stock</text
 		>
+
+		<Grid width={innerWidth} height={innerHeight} />
+
 		<XAxis
 			scale={xScale}
 			y={innerHeight}
@@ -85,7 +88,7 @@
 			tickArguments={[16]}
 			tickFormat={xScaleFormatter}
 			let:tick
-			let:text
+			let:tickFormat
 		>
 			<Tick
 				{tick}
@@ -97,7 +100,7 @@
 					inFocusTick = undefined;
 				}}
 			>
-				<text>{text}</text>
+				<text>{tickFormat(tick)}</text>
 				{#if tick === inFocusTick}
 					<!-- content here -->
 					<text dy="24" text-anchor="middle" font-size="8pt">{format(tick, 'dd MMM yyyy')}</text>
@@ -107,7 +110,7 @@
 			<text slot="label" x={innerWidth}>Time</text>
 		</XAxis>
 
-		<YAxis scale={yScale} tickArguments={[13]} let:tick>
+		<YAxis scale={yScale} tickArguments={[13, '.1f']} let:tick>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price ($)</text>
 		</YAxis>

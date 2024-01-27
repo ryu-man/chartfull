@@ -11,9 +11,9 @@
 	};
 </script>
 
-<script>
+<script lang="ts">
 	import { Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, Tick, Area } from 'graficos';
+	import { XAxis, YAxis, Tick, Area, Grid } from 'graficos';
 	import { csv, extent, max, timeParse } from 'd3';
 	import { scaleLinear, scaleTime } from 'd3-scale';
 	import { area } from 'd3-shape';
@@ -37,8 +37,8 @@
 
 	$: areaDataPath = area().x(xScaled).y0(innerHeight).y1(y1Scaled);
 
-	$: xScale = scaleTime(extent(data, xAccessor) ?? [], [0, innerWidth]);
-	$: yScale = scaleLinear([0, max(data, yAccessor)] ?? [], [innerHeight, 0]);
+	$: xScale = scaleTime(extent(data, xAccessor), [0, innerWidth]);
+	$: yScale = scaleLinear([0, max(data, yAccessor)], [innerHeight, 0]);
 
 	$: xScaled = (d) => xScale(xAccessor(d));
 	$: y1Scaled = (d) => yScale(yAccessor(d));
@@ -52,13 +52,15 @@
 		bind:innerWidth
 		bind:innerHeight
 	>
-		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
-			<Tick {tick} y1={8} y2={-innerHeight} duration={400} />
+		<Grid width={innerWidth} height={innerHeight} />
+
+		<XAxis scale={xScale} y={innerHeight} orient="bottom" duration={100} let:tick>
+			<Tick {tick} y1={0} y2={-innerHeight} />
 			<text slot="label" x={innerWidth}>Year</text>
 		</XAxis>
 
-		<YAxis scale={yScale} tickFormat={(d) => Math.trunc(d / 1000) + 'K'} let:tick>
-			<Tick {tick} x2={-innerWidth} duration={400} />
+		<YAxis scale={yScale} tickFormat={(d) => Math.trunc(d / 1000) + 'K'} duration={100} let:tick>
+			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Value</text>
 		</YAxis>
 

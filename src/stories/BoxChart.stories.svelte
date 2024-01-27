@@ -1,5 +1,5 @@
 <script context="module">
-		import { Chartfull } from 'graficos';
+	import { Chartfull } from 'graficos';
 
 	export const meta = {
 		title: 'Charts/Box chart',
@@ -12,8 +12,8 @@
 </script>
 
 <script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, Tick, Box } from 'graficos';
+	import { Story } from '@storybook/addon-svelte-csf';
+	import { XAxis, YAxis, Tick, Box, Grid } from 'graficos';
 	import { csv } from 'd3';
 	import { quantile, bin, extent, min, max } from 'd3-array';
 	import { scaleLinear } from 'd3-scale';
@@ -77,22 +77,22 @@
 	$: yScale = scaleLinear(extent(data, yAccessor), [innerHeight, 0]);
 </script>
 
-<Story
-	name="Box chart"
-	let:args
->
+<Story name="Box chart" let:args>
 	<Chartfull
 		height={args.height}
 		padding={{ top: 54, left: 72, bottom: 32 }}
 		bind:innerWidth
 		bind:innerHeight
 	>
-		<YAxis scale={yScale} let:tick>
+
+		<Grid />
+		
+		<YAxis scale={yScale} tickArguments={[10, '.2f']} let:tick>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price</text>
 		</YAxis>
 
-		<XAxis scale={xScale} orient="bottom" y={innerHeight} let:tick>
+		<XAxis scale={xScale} orient="bottom" y={innerHeight} tickArguments={[10, '.2f']} let:tick>
 			<Tick {tick} y2={-innerHeight} />
 
 			<text slot="label" x={innerWidth}>Carat</text>
@@ -110,7 +110,7 @@
 				outliers={box.outliers}
 			>
 				{#each box.outliers as outlier}
-					<circle cx="0" cy={yScale(outlier)} r={3} fill="black" fill-opacity=".03" stroke="none" />
+					<circle cx="0" cy={yScale(outlier)} r={6} fill="black" fill-opacity=".02" stroke="none" />
 				{/each}
 			</Box>
 		{/each}
