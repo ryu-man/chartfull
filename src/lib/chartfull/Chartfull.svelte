@@ -124,7 +124,9 @@
 			</g>
 		</svg>
 	{/await}
-	<div class="html-layer" bind:this={context.contentElement} />
+	<div class="html-layer">
+		<div class="html-layer-inner" bind:this={context.contentElement} />
+	</div>
 
 	<slot name="html-after" />
 </div>
@@ -171,8 +173,22 @@
 		padding-bottom: var(--padding-bottom, 0);
 		padding-left: var(--padding-left, 0);
 
-		position: relative;
 		cursor: pointer;
 		box-sizing: border-box;
+
+		position:absolute;
+		top: 0;
+		left: 0;
+
+		z-index: 2;
+
+		pointer-events: none;
+	}
+
+	.html-layer-inner {
+		width: 100%;
+		height: 100%;
+		position: relative;
+
 	}
 </style>
