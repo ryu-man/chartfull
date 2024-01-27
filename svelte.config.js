@@ -11,7 +11,8 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'graficos': path.resolve('./src/lib')
+			'graficos': path.resolve('./src/lib'),
+			'chartfull': path.resolve('./src/lib')
 		}
 	}
 };
