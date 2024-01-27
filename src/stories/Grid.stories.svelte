@@ -16,7 +16,7 @@
 	let tilesize = cellsize * 5;
 </script>
 
-<Story name="Grid">
+<Story id="grid" name="Grid">
 	<Chartfull bind:innerWidth bind:innerHeight>
 		<Grid width={innerWidth} height={innerHeight} />
 	</Chartfull>
