@@ -50,11 +50,12 @@
 					r="2 2 0 0"
 				/>
 				<text
-					y={Math.max(y - 8, 128)}
+					y={Math.max(y - 8, 164)}
 					dy="0"
 					dx={xScale.bandwidth() / 2}
 					text-anchor="end"
-					font-size="12pt"
+					font-size="18pt"
+					font-weight="600"
 					fill={colorScale(item.Country)}
 					writing-mode="vertical-lr"
 					style:mix-blend-mode="plus-lighter">{xAccessor(item)}</text
