@@ -1,28 +1,23 @@
 <script lang="ts">
 	import { cubicOut } from 'svelte/easing';
-	import { writable } from 'svelte-tools';
 	import { getChartfullContext } from 'graficos/chartfull';
 	import { classNames } from '$lib/utils';
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
-	import { setAxisContext } from './context';
-	import { memorable } from 'svelte-tools/memorable';
+	import type { Scale } from './types';
 
 	const { innerWidth$ } = getChartfullContext();
 
-	export let scale;
-	export let id = 'x';
+	export let scale: Scale;
 	export let x = 0;
 	export let y = 0;
-	export let ticks = [];
 	export let orient: 'top' | 'bottom' = 'bottom';
-	export let tickArguments = [8];
+	export let tickArguments: unknown[] = [10];
 	export let tickValues: unknown[] | undefined = undefined;
-	export let tickFormat: ((date: Date) => string) | undefined = undefined;
+	export let tickFormat: ((tick: string | number | Date) => string) | undefined = undefined;
 
 	export let tickSize = 6;
 	export let tickPadding = 8;
-	export let tickOffset = typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5;
 
 	export let fontFamily: string | undefined = undefined;
 	export let fontSize: string | undefined = undefined;
@@ -48,41 +43,16 @@
 
 	const isPathDataSet = !!d;
 
-	const identity = (d) => d;
-
-	const [currentScale$, previousScale$] = memorable(scale);
-	$: currentScale$.set(scale);
-
-	const tickFormat$ = writable(
-		tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity
-	);
-	$: tickFormat$.set(tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity);
-	$: formatter = $tickFormat$;
-
-	const { duration$, delay$, easing$, offsetY$, tickSize$, padding$ } = setAxisContext({
-		currentScale$,
-		previousScale$,
-		tickFormat$,
-		k,
-		xy: 'x'
-	});
-
-	$: duration$.set(duration);
-	$: delay$.set(delay);
-	$: easing$.set(easing);
-
-	$: tickSize$.set(tickSize);
-	$: padding$.set(tickPadding);
-	$: offsetY$.set(tickOffset);
-
-	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
+	function canRender(scale: Scale) {
+		console.log(scale.domain());
+		return scale.domain().every(Boolean);
+	}
 </script>
 
 <Axis
 	{scale}
 	{x}
 	{y}
-	{id}
 	{orient}
 	{tickPadding}
 	{fontFamily}
@@ -94,13 +64,20 @@
 	{fontStretch}
 	{textAnchor}
 	{fill}
+	{tickValues}
+	{tickArguments}
+	{tickSize}
+	{duration}
+	{delay}
+	{easing}
+	{tickFormat}
 	class={classNames(_class, 'x', orient)}
+	let:ticks
+	let:tickFormat
 >
 	{#each ticks as tick, index (tick + '')}
-		<slot {index} {tick} {formatter} text={formatter(tick)}>
-			<Tick {tick}>
-				<text>{formatter(tick)}</text>
-			</Tick>
+		<slot {index} {tick} {tickFormat}>
+			<Tick {tick} />
 		</slot>
 	{/each}
 

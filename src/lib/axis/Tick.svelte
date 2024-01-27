@@ -2,33 +2,49 @@
 	// https://github.com/d3/d3-axis/blob/master/src/axis.js
 
 	import { onMount } from 'svelte';
-	import { tweened } from 'svelte/motion';
+	import { tweened, type Tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { getAxisContext } from './context';
+	import { derived } from 'svelte/store';
 
-	const {
-		currentScale$,
-		previousScale$,
-		tickFormat$,
-		duration$,
-		delay$,
-		easing$,
-		k,
-		xy,
-		tickSize$,
-		offsetX$,
-		offsetY$
-	} = getAxisContext();
+	// const {
+	// 	currentScale$,
+	// 	previousScale$,
+	// 	tickFormat$,
+	// 	duration$,
+	// 	delay$,
+	// 	easing$,
+	// 	k,
+	// 	xy,
+	// 	tickSize$,
+	// 	offsetX$,
+	// 	offsetY$
+	// } = getAxisContext();
+
+	const context$ = getAxisContext();
+	let xy = $context$.xy;
+	let k = $context$.k;
+	let tickFormat = $context$.tickFormat;
+	let easing = $context$.easing;
+
+	const currentPosition$ = derived(context$, (context) => context.currentPosition);
+	const previousPosition$ = derived(context$, (context) => context.previousPosition);
+	const isEntering$ = derived(context$, (context) => !context.previousPosition);
+	const duration$ = derived(context$, (context) => context.duration);
+	const delay$ = derived(context$, (context) => context.delay);
+	const tickSize$ = derived(context$, (context) => context.tickSize);
+	const tickPadding$ = derived(context$, (context) => context.tickPadding);
+
+	let currentPosition = $currentPosition$;
+	let previousPosition = $previousPosition$;
 
 	export let tick: any;
 
 	export let size = $tickSize$;
 	$: size = $tickSize$;
 
-	export let padding = 0;
-
 	export let fontFamily: string | undefined = '';
-	export let fontSize: string | undefined = '12pt';
+	export let fontSize: string | undefined = '10pt';
 	export let fontSizeAdjust: string | undefined = '';
 	export let fontStretch: string | undefined = '';
 	export let fontStyle: string | undefined = '';
@@ -45,7 +61,7 @@
 	export let strokeMiterlimit: string | undefined = '';
 
 	export let fill: string | undefined = undefined;
-	export let fillOpacity: string | undefined = '1';
+	export let fillOpacity: string | undefined = '.8';
 
 	export let textAnchor: 'start' | 'middle' | 'end' | undefined = undefined;
 
@@ -55,26 +71,26 @@
 	export let y1 = 0;
 	export let y2 = xy === 'x' ? $tickSize$ : 0;
 
-	export let dx = $offsetX$;
-	export let dy = $offsetY$;
+	export let dx = 0;
+	export let dy = 0;
 
-	let x = xy === 'x' ? $previousScale$(tick) || $currentScale$(tick) : 0;
-	let y = xy === 'y' ? $previousScale$(tick) || $currentScale$(tick) : 0;
+	let x = xy === 'x' ? previousPosition(tick) || currentPosition(tick) : 0;
+	let y = xy === 'y' ? previousPosition(tick) || currentPosition(tick) : 0;
 
-	const x$ = tweened(x, { duration: $duration$, delay: $delay$, easing: $easing$ });
-	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing: $easing$ });
-	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing: $easing$ });
+	const x$ = tweened(x, { duration: $duration$, delay: $delay$, easing });
+	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing });
+	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing });
 
 	onMount(() => {
-		if (xy === 'x') {
-			return currentScale$.subscribe((scale) => {
-				x$.set(scale(tick));
-			});
-		} else {
-			return currentScale$.subscribe((scale) => {
-				y$.set(scale(tick));
-			});
-		}
+		const setter = ((xy: 'x' | 'y') => {
+			if (xy === 'x') {
+				return (val: number) => x$.set(val);
+			} else {
+				return (val: number) => y$.set(val);
+			}
+		})(xy);
+
+		return currentPosition$.subscribe((position) => setter(position(tick)));
 	});
 
 	function enter(node: SVGGElement, { duration = 0, easing = cubicOut }) {
@@ -103,7 +119,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <g
 	class="tick {xy}"
-	style:transform={`translate3d(${$x$ + dx || 0}px,${$y$ + dy || 0}px, 1px)`}
+	style:transform={`translate3d(${$x$ + dx}px,${$y$ + dy}px, 1px)`}
 	style:opacity={$opacity$}
 	font-family={fontFamily}
 	font-size={fontSize}
@@ -117,8 +133,8 @@
 	{fill}
 	fill-opacity={fillOpacity}
 	role="group"
-	in:enter|local={{ easing: $easing$ }}
-	out:exit|local={{ duration: $duration$, easing: $easing$ }}
+	in:enter|local={{ duration: $duration$, easing }}
+	out:exit|local={{ duration: $duration$, easing }}
 	on:keypress
 	on:introstart
 	on:introend
@@ -143,7 +159,7 @@
 		stroke-miterlimit={strokeMiterlimit}
 	/>
 	<slot>
-		<text>{$tickFormat$(tick)}</text>
+		<text>{tickFormat(tick)}</text>
 	</slot>
 </g>
 
@@ -163,14 +179,14 @@
 	}
 	.tick :global(text:not(.raw)) {
 		vector-effect: non-scaling-stroke;
-		fill: var(--fill);
+		fill: var(--fill, currentColor);
 		font-weight: 400;
 	}
 	.tick.y :global(text:not(.raw)) {
-		transform: translateX(var(--tick-padding));
+		transform: translateX(var(--tick-padding, 0));
 	}
 	.tick.x :global(text:not(.raw)) {
-		transform: translateY(var(--tick-padding));
+		transform: translateY(var(--tick-padding, 0));
 	}
 	.tick :global(line) {
 	}
