@@ -13,8 +13,10 @@ export type ChartfullContext<T> = {
 	paddingRight$: WritableAccess<number>;
 	paddingTop$: WritableAccess<number>;
 	data$: WritableAccess<T>;
-	rootElement?: HTMLDivElement;
-	contentElement?: HTMLDivElement;
+	root_element?: HTMLDivElement;
+	html_layer_element?: HTMLDivElement
+	svg_layer_element?: SVGElement
+	svg_inner_layer_element?: SVGGElement
 };
 
 

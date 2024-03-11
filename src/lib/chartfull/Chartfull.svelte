@@ -75,7 +75,7 @@
 	bind:clientWidth={$width$}
 	bind:clientHeight={$height$}
 	use:css={style}
-	bind:this={context.rootElement}
+	bind:this={context.root_element}
 	class={classNames('chartfull', _class)}
 	role="figure"
 	style:--height={height}
@@ -97,9 +97,8 @@
 	on:blur
 	on:pointermove
 >
-	<slot name="html-before" />
 	{#await tick() then _}
-		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
+		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none" bind:this={context.svg_layer_element}>
 			<g
 				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
 				font-family={fontFamily}
@@ -109,6 +108,7 @@
 				font-stretch={fontStretch}
 				font-style={fontStyle}
 				font-variant={fontVariant}
+				bind:this={context.svg_inner_layer_element}
 			>
 				<slot
 					width={$width$}
@@ -119,16 +119,14 @@
 					paddingBottom={$paddingBottom$}
 					paddingLeft={$paddingLeft$}
 					paddingRight={$paddingRight$}
-					data={$data$}
 				/>
 			</g>
 		</svg>
 	{/await}
-	<div class="html-layer">
-		<div class="html-layer-inner" bind:this={context.contentElement} />
-	</div>
 
-	<slot name="html-after" />
+	<div class="html-layer">
+		<div class="html-layer-inner" bind:this={context.html_layer_element} />
+	</div>
 </div>
 
 <style>
@@ -165,8 +163,6 @@
 	}
 
 	.html-layer {
-		width: 100%;
-		height: 100%;
 
 		padding-top: var(--padding-top, 0);
 		padding-right: var(--padding-right, 0);
@@ -177,8 +173,7 @@
 		box-sizing: border-box;
 
 		position:absolute;
-		top: 0;
-		left: 0;
+		inset: 0;
 
 		z-index: 2;
 
