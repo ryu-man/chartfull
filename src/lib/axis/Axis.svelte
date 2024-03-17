@@ -1,14 +1,21 @@
 <script lang="ts">
+	import { cubicOut } from 'svelte/easing';
 	import type { Properties } from 'csstype';
 	import { classNames, css } from '$lib/utils';
+	import type { ScaleBand, ScalePoint } from 'd3';
+	import { setAxisContext } from './context';
+	import type { Scale } from './types';
+	import { tick } from 'svelte';
 
 	export let x = 0;
 	export let y = 0;
-	export let scale;
-	export let orient;
+	export let scale: Scale;
+	export let orient: 'top' | 'bottom' | 'left' | 'right';
 	export let tickArguments = [8];
 	export let tickValues;
 	export let tickFormat;
+
+	export let tickSize = 6;
 	export let tickPadding = 0;
 
 	export let fontFamily: Properties['fontFamily'] = undefined;
@@ -21,14 +28,85 @@
 
 	export let textAnchor: 'start' | 'middle' | 'end' = 'start';
 
-	export let fill: string | undefined = undefined
+	export let fill = 'rgba(0 0 0 / .4)';
 
-	export let style: Properties | string = '';
+	export let d: string | undefined = undefined;
+
+	export let duration = 100;
+	export let delay = 0;
+	export let easing = cubicOut;
 
 	let klass = '';
 	export { klass as class };
 
 	const k = ['left', 'top'].includes(orient) ? -1 : 1;
+	const xy = ['bottom', 'top'].includes(orient) ? 'x' : 'y';
+
+	const update = remeber(scale);
+
+	$: offset = typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5;
+	$: [currentScale, previousScale] = update(scale);
+	$: [currentPosition, previousPosition] = [
+		getPosition(currentScale, offset),
+		previousScale ? getPosition(previousScale, offset) : undefined
+	];
+
+	$: isEntering = !previousPosition;
+
+	const identity = (d) => d;
+	const _tickFormat = tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity;
+
+	const context$ = setAxisContext({
+		currentScale,
+		previousScale,
+		currentPosition,
+		previousPosition,
+		easing: easing,
+		tickFormat: _tickFormat,
+		k,
+		xy
+	});
+
+	$: $context$.currentPosition = currentPosition;
+	$: $context$.previousPosition = previousPosition;
+
+	$: $context$.duration = duration;
+	$: $context$.delay = delay;
+	$: $context$.tickSize = tickSize;
+	$: $context$.tickPadding = tickPadding * k;
+
+	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
+
+	function number(scale: Scale) {
+		// console.log(scale.domain());
+		return (d: any) => scale(d);
+	}
+
+	function center(scale: ScaleBand<any> | ScalePoint<any>, offset: number) {
+		let o = Math.max(0, scale.bandwidth() - offset / 2) / 2;
+		if (scale.round()) {
+			o = Math.round(o);
+		}
+
+		return (d: any) => +scale(d) + o;
+	}
+
+	function getPosition(scale: Scale, offset = 0) {
+		if ('bandwidth' in scale) {
+			return center(scale, offset) || 0;
+		}
+
+		return number(scale) || 0;
+	}
+
+	function remeber<T>(value: T): (v: T) => [T, T | undefined] {
+		let memory: [T, T | undefined] = [value, undefined];
+
+		return (value) => {
+			memory = [value, ...memory].slice(0, 2) as [T, T | undefined];
+			return memory;
+		};
+	}
 </script>
 
 <g
@@ -44,9 +122,8 @@
 	text-anchor={textAnchor}
 	{fill}
 	style:--tick-padding={tickPadding * k + 'px'}
-	use:css={style}
 >
-	<slot />
+		<slot {ticks} {tickFormat} />
 </g>
 
 <style>

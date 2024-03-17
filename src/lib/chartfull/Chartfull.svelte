@@ -52,7 +52,7 @@
 
 	const data$ = writable(data);
 
-	const context: ChartfullContext<any> = {
+	const context = setChartfullContext({
 		width$,
 		height$,
 		innerWidth$,
@@ -62,9 +62,7 @@
 		paddingRight$,
 		paddingTop$,
 		data$
-	};
-
-	setChartfullContext(context);
+	});
 
 	const height$$ = derived(height$, (h) => (h ? h + 'px' : '100%'));
 
@@ -77,6 +75,7 @@
 	bind:clientWidth={$width$}
 	bind:clientHeight={$height$}
 	use:css={style}
+	bind:this={context.root_element}
 	class={classNames('chartfull', _class)}
 	role="figure"
 	style:--height={height}
@@ -98,9 +97,8 @@
 	on:blur
 	on:pointermove
 >
-	<slot name="html-before" />
 	{#await tick() then _}
-		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none">
+		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none" bind:this={context.svg_layer_element}>
 			<g
 				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
 				font-family={fontFamily}
@@ -110,25 +108,25 @@
 				font-stretch={fontStretch}
 				font-style={fontStyle}
 				font-variant={fontVariant}
+				bind:this={context.svg_inner_layer_element}
 			>
-				{#await tick() then _}
-					<slot
-						width={$width$}
-						height={$height$}
-						innerWidth={$innerWidth$}
-						innerHeight={$innerHeight$}
-						paddingTop={$paddingTop$}
-						paddingBottom={$paddingBottom$}
-						paddingLeft={$paddingLeft$}
-						paddingRight={$paddingRight$}
-						data={$data$}
-					/>
-				{/await}
+				<slot
+					width={$width$}
+					height={$height$}
+					innerWidth={$innerWidth$}
+					innerHeight={$innerHeight$}
+					paddingTop={$paddingTop$}
+					paddingBottom={$paddingBottom$}
+					paddingLeft={$paddingLeft$}
+					paddingRight={$paddingRight$}
+				/>
 			</g>
 		</svg>
 	{/await}
 
-	<slot name="html-after" />
+	<div class="html-layer">
+		<div class="html-layer-inner" bind:this={context.html_layer_element} />
+	</div>
 </div>
 
 <style>
@@ -144,9 +142,15 @@
 		margin: 0;
 
 		background-color: var(--background-color, transparent);
+
+		position: relative;
+
+		overflow: hidden;
 	}
+
 	.chartfull > :global(text.title) {
 	}
+
 	svg {
 		width: 100%;
 		height: 100%;
@@ -156,5 +160,30 @@
 		top: 0;
 		left: 0;
 		z-index: 2;
+	}
+
+	.html-layer {
+
+		padding-top: var(--padding-top, 0);
+		padding-right: var(--padding-right, 0);
+		padding-bottom: var(--padding-bottom, 0);
+		padding-left: var(--padding-left, 0);
+
+		cursor: pointer;
+		box-sizing: border-box;
+
+		position:absolute;
+		inset: 0;
+
+		z-index: 2;
+
+		pointer-events: none;
+	}
+
+	.html-layer-inner {
+		width: 100%;
+		height: 100%;
+		position: relative;
+
 	}
 </style>

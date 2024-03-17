@@ -1,5 +1,4 @@
-import { scaleUtc, type ScaleTime } from 'd3-scale';
-import { range as sequence } from 'd3-array';
+import { scaleUtc, range as sequence , type ScaleTime } from 'd3';
 
 export type ScaleFinance = ScaleTime<number, number, never> & {
 	step(): number;

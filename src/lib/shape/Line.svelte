@@ -1,5 +1,5 @@
 <script>
-	import { curveLinear } from 'd3-shape';
+	import { curveLinear } from 'd3';
 	import Line from './line';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';

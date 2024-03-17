@@ -1,5 +1,5 @@
 <script>
-	import { scaleLinear } from 'd3-scale';
+	import { scaleLinear } from 'd3';
 	import { onMount } from 'svelte';
 
 	export let features = [];

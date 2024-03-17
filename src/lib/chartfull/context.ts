@@ -13,12 +13,17 @@ export type ChartfullContext<T> = {
 	paddingRight$: WritableAccess<number>;
 	paddingTop$: WritableAccess<number>;
 	data$: WritableAccess<T>;
+	root_element?: HTMLDivElement;
+	html_layer_element?: HTMLDivElement
+	svg_layer_element?: SVGElement
+	svg_inner_layer_element?: SVGGElement
 };
+
 
 export function getChartfullContext<T>() {
 	return getContext(chartfull_context_key) as ChartfullContext<T>;
 }
 
-export function setChartfullContext<T>(context: ChartfullContext<T>) {
-	setContext(chartfull_context_key, context);
+export function setChartfullContext<T>(context: Partial<ChartfullContext<T>>) {
+	return setContext(chartfull_context_key, context);
 }

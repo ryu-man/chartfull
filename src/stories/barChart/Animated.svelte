@@ -2,8 +2,7 @@
 	import { Chartfull, XAxis, Tick, Rect } from 'graficos';
 	import Spring from 'graficos/components/Spring.svelte';
 
-	import { csv, schemeCategory10, max } from 'd3';
-	import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
+	import { csv, schemeCategory10, max, scaleBand, scaleLinear, scaleOrdinal } from 'd3';
 	import { onMount } from 'svelte';
 
 	export let args = {};

@@ -1,5 +1,5 @@
 <script>
-  import { stack as Stack } from 'd3-shape'
+  import { stack as Stack } from 'd3'
 
   export let keys = []
   export let offset

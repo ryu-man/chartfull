@@ -1,5 +1,5 @@
 <script>
-	import { Chartfull, XAxis, YAxis, Tick, get, Line } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line, Grid, Legend } from 'graficos';
 	import {
 		csv,
 		extent,
@@ -8,9 +8,9 @@
 		schemeCategory10,
 		timeParse,
 		group,
-		scaleOrdinal
+		scaleOrdinal,
+		line
 	} from 'd3';
-	import { line } from 'd3-shape';
 
 	export let args = {};
 
@@ -41,6 +41,8 @@
 </script>
 
 <Chartfull {...args} {data} bind:innerWidth bind:innerHeight fontSize="12pt">
+	<Grid width={innerWidth} height={innerHeight} />
+
 	<XAxis scale={xScale} y={innerHeight} orient="bottom" let:tick>
 		<Tick {tick} y2={-innerHeight} />
 		<text slot="label" x={innerWidth}>Years</text>
@@ -53,19 +55,24 @@
 
 	<text
 		x={innerWidth}
+		dy={-54}
 		text-anchor="end"
 		dominant-baseline="text-before-edge"
 		font-size="16pt"
 		font-weight="600"
-		fill="rgba(0,0,0, .1)"
-		letter-spacing=".1"
+		fill="rgba(0 0 0 / .4)"
+		letter-spacing="0"
 	>
 		Unemployment rate of various U.S. metro divisions from 2000 through 2013
 	</text>
 
 	<g class="data">
 		{#each [...groups.entries()] as [key, data]}
-			<Line d={gen(data)} stroke={colorScale(key)}   />
+			<Line d={gen(data)} stroke={colorScale(key)} />
 		{/each}
 	</g>
+
+	<Legend x={64} y={16} dx="0" width="36vw">
+		Risus eu ultrices lacus neque viverra efficitur himenaeos eros tristique senectus cras primis duis
+	</Legend>
 </Chartfull>

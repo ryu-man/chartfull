@@ -13,11 +13,8 @@
 
 <script lang="ts">
 	import { Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, Tick, Line } from 'graficos';
-	import { csv, zoom, select, zoomIdentity } from 'd3';
-	import { extent } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
-	import { line } from 'd3';
+	import { XAxis, YAxis, Tick, Line, Grid } from 'graficos';
+	import { csv, zoom, select, zoomIdentity, extent, scaleLinear, line } from 'd3';
 
 	let data = [];
 
@@ -85,7 +82,7 @@
 </script>
 
 <Story name="Carbon clock chart" let:args>
-	<Chartfull height={args.height} {padding} bind:innerWidth bind:innerHeight>
+	<Chartfull height={args.height} {padding} {data} bind:innerWidth bind:innerHeight>
 		<defs>
 			<clipPath id="clip">
 				<rect width={innerWidth} height={innerHeight} />
@@ -100,7 +97,9 @@
 			on:pointermove={onPointerMoveHandler}
 		/>
 
-		<YAxis scale={yScale} duration={100} let:tick let:index>
+		<Grid width={innerWidth} height={innerHeight} />
+
+		<YAxis scale={yScale} tickArguments={[13, '.1f']} duration={200} let:tick let:index>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label" fill="rgb(64 55 201 / 20%)" pointer-events="none" dy="32"
 				>Atmospheric CO₂</text
@@ -109,7 +108,7 @@
 
 		<XAxis
 			scale={xScale}
-			duration={100}
+			duration={200}
 			orient="bottom"
 			y={innerHeight}
 			tickFormat={(d) => d + ''}

@@ -35,41 +35,40 @@
 	fontSize="16"
 >
 	{#each data as item (xAccessor(item))}
-		<Spring from={innerHeight} to={yGet(item)} damping={0.5} stiffness={0.04} let:value={y}>
-			{@const yProgress = (innerHeight - y) / (innerHeight - yGet(item))}
+	{@const y = yGet(item)}
 
-			<g transform={`translate(${xGet(item)},${0})`}>
-				<Rect
-					class={item.Country}
-					{y}
-					width={xScale.bandwidth()}
-					height={innerHeight - y}
-					fill={colorScale(item.Country)}
-					fill-opacity=".3"
-					stroke={colorScale(item.Country)}
-					r="2 2 0 0"
-				/>
-				<text
-					y={Math.max(y - 8, 128)}
-					dy="0"
-					dx={xScale.bandwidth() / 2}
-					text-anchor="end"
-					font-size="12pt"
-					fill={colorScale(item.Country)}
-					writing-mode="vertical-lr"
-					style:mix-blend-mode="plus-lighter">{xAccessor(item)}</text
-				>
-			</g>
-		</Spring>
+		<g transform={`translate(${xGet(item)},${0})`}>
+			<Rect
+				class={item.Country}
+				y={y}
+				width={xScale.bandwidth()}
+				height={innerHeight - y }
+				fill={colorScale(item.Country)}
+				fill-opacity=".3"
+				stroke={colorScale(item.Country)}
+				r="2 2 0 0"
+			/>
+			<text
+				y={Math.max(128, y - 16)}
+				
+				dx={xScale.bandwidth() / 2}
+				text-anchor="end"
+				font-size="14pt"
+				font-weight="600"
+				fill={colorScale(item.Country)}
+				writing-mode="vertical-lr"
+				style:mix-blend-mode="plus-lighter">{xAccessor(item)}</text
+			>
+		</g>
 	{/each}
 	<text
 		x={innerWidth}
 		y={innerHeight}
-		dy={56}
+		dy={48}
 		text-anchor="end"
-		font-size="36pt"
-		font-weight="900"
-		fill="rgb(0 0 0 / .3)">Countries</text
+		font-size="24pt"
+		font-weight="700"
+		fill="rgb(0 0 0 / .2)">Countries</text
 	>
 
 	<YAxis

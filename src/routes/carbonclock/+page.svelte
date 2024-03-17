@@ -1,9 +1,6 @@
 <script>
 	import { Grafico, XAxis, YAxis, Tick, Line } from 'graficos';
-	import { zoom, select } from 'd3';
-	import { extent } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
-	import { line } from 'd3';
+	import { zoom, select, extent, scaleLinear, line } from 'd3';
 
 	export let data = {
 		array: []
