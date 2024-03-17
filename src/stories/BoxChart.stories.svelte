@@ -14,9 +14,7 @@
 <script>
 	import { Story } from '@storybook/addon-svelte-csf';
 	import { XAxis, YAxis, Tick, Box, Grid } from 'graficos';
-	import { csv } from 'd3';
-	import { quantile, bin, extent, min, max } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
+	import { csv, quantile, bin, extent, min, max, scaleLinear } from 'd3';
 
 	let data = [];
 
@@ -84,9 +82,8 @@
 		bind:innerWidth
 		bind:innerHeight
 	>
-
 		<Grid />
-		
+
 		<YAxis scale={yScale} tickArguments={[10, '.2f']} let:tick>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Price</text>
