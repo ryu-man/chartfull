@@ -14,9 +14,7 @@
 <script lang="ts">
 	import { Story } from '@storybook/addon-svelte-csf';
 	import { XAxis, YAxis, Tick, Area, Grid } from 'graficos';
-	import { csv, extent, max, timeParse } from 'd3';
-	import { scaleLinear, scaleTime } from 'd3-scale';
-	import { area } from 'd3-shape';
+	import { csv, extent, max, timeParse, scaleLinear, scaleTime, area } from 'd3';
 	import { code } from './areaChart.code';
 
 	let data = [];

@@ -8,9 +8,9 @@
 		schemeCategory10,
 		timeParse,
 		group,
-		scaleOrdinal
+		scaleOrdinal,
+		line
 	} from 'd3';
-	import { line } from 'd3-shape';
 
 	export let args = {};
 

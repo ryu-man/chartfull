@@ -13,10 +13,20 @@
 
 <script>
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import {  YAxis, Tick } from 'graficos';
+	import { YAxis, Tick } from 'graficos';
 	import { tweened } from 'svelte/motion';
-	import { csv, schemeCategory10, max, extent, group, rollup, range, min } from 'd3';
-	import { scaleLinear, scaleOrdinal } from 'd3-scale';
+	import {
+		csv,
+		schemeCategory10,
+		max,
+		extent,
+		group,
+		rollup,
+		range,
+		min,
+		scaleLinear,
+		scaleOrdinal
+	} from 'd3';
 	import PopulationBar from './PopulationBar.svelte';
 
 	export let args = {};
@@ -103,11 +113,7 @@
 	}}
 />
 
-<Story
-	name="Population"
-	component={Chartfull}
-	let:args
->
+<Story name="Population" component={Chartfull} let:args>
 	<Chartfull
 		bind:innerWidth
 		bind:innerHeight

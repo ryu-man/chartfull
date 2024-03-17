@@ -1,7 +1,13 @@
 <script>
 	import { Chartfull, Line, Area } from 'graficos';
-	import { scaleBand, scaleLinear, scaleRadial } from 'd3-scale';
-	import { lineRadial, curveCardinalClosed, curveCardinal } from 'd3';
+	import {
+		lineRadial,
+		curveCardinalClosed,
+		curveCardinal,
+		scaleBand,
+		scaleLinear,
+		scaleRadial
+	} from 'd3';
 	import { onMount } from 'svelte';
 
 	export let args = {};
@@ -44,7 +50,7 @@
 	$: gen = lineRadial()
 		.radius((d) => yScale(d.value))
 		.angle((d, i) => xScale(d.feature))
-		.curve(curveCardinalClosed.tension(.4));
+		.curve(curveCardinalClosed.tension(0.4));
 </script>
 
 <Chartfull
@@ -74,13 +80,7 @@
 				text-anchor="middle"
 				transform="rotate({(xScale(tick) * 180) / Math.PI - 90})translate({r}, 0)"
 			>
-				<line
-					x1={-r }
-					y1={0}
-					x2={0}
-					y2={0}
-					stroke="rgba(0 0 0 / .09)"
-				/>
+				<line x1={-r} y1={0} x2={0} y2={0} stroke="rgba(0 0 0 / .09)" />
 				<text
 					font-size="24pt"
 					fill="rgba(0 0 0 / .3)"

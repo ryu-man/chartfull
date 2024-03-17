@@ -1,7 +1,6 @@
 <script>
 	import { Chartfull, XAxis, YAxis, Tick, get, Line, Grid } from 'graficos';
-	import { csv, extent, scaleLinear, scaleTime, timeParse } from 'd3';
-	import { line } from 'd3-shape';
+	import { csv, extent, scaleLinear, scaleTime, timeParse, line } from 'd3';
 
 	export let args = {};
 

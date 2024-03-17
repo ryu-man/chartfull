@@ -1,8 +1,7 @@
 export const code = `
 <script>
   import { Chartfull, XAxis, YAxis, Tick, Area } from 'graficos'
-  import { csv, extent, max, timeParse } from 'd3'
-  import { scaleLinear, scaleTime } from 'd3-scale'
+  import { csv, extent, max, timeParse, scaleLinear, scaleTime } from 'd3'
 
   let data = []
   const parser = timeParse('%Y-%m-%d')

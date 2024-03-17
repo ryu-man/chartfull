@@ -14,10 +14,7 @@
 <script lang="ts">
 	import { Story } from '@storybook/addon-svelte-csf';
 	import { XAxis, YAxis, Tick, Line, Grid } from 'graficos';
-	import { csv, zoom, select, zoomIdentity } from 'd3';
-	import { extent } from 'd3-array';
-	import { scaleLinear } from 'd3-scale';
-	import { line } from 'd3';
+	import { csv, zoom, select, zoomIdentity, extent, scaleLinear, line } from 'd3';
 
 	let data = [];
 
