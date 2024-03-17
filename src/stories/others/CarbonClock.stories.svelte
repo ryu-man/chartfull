@@ -102,7 +102,7 @@
 
 		<Grid width={innerWidth} height={innerHeight} />
 
-		<YAxis scale={yScale} tickArguments={[13, '.1f']} duration={100} let:tick let:index>
+		<YAxis scale={yScale} tickArguments={[13, '.1f']} duration={200} let:tick let:index>
 			<Tick {tick} x2={-innerWidth} />
 			<text slot="label" fill="rgb(64 55 201 / 20%)" pointer-events="none" dy="32"
 				>Atmospheric CO₂</text
@@ -111,7 +111,7 @@
 
 		<XAxis
 			scale={xScale}
-			duration={100}
+			duration={200}
 			orient="bottom"
 			y={innerHeight}
 			tickFormat={(d) => d + ''}

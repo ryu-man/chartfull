@@ -77,7 +77,7 @@
 		}}
 		let:args={{ left, duration }}
 	>
-		<Chartfull bind:innerWidth bind:innerHeight>
+		<Chartfull bind:innerWidth bind:innerHeight padding={{top: 48, bottom: 48}}>
 			<YAxis
 				scale={yScale}
 				x={innerWidth / 2}
