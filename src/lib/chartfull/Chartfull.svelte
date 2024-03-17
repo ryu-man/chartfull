@@ -144,8 +144,6 @@
 		background-color: var(--background-color, transparent);
 
 		position: relative;
-
-		overflow: hidden;
 	}
 
 	.chartfull > :global(text.title) {
