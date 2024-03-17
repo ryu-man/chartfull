@@ -15,7 +15,6 @@
 	import { onMount } from 'svelte';
 	import { Story } from '@storybook/addon-svelte-csf';
 	import { csv } from 'd3';
-	import MarginDecorator from '../MarginDecorator.svelte';
 	import HorizontalStory from './Horizontal.svelte';
 	import AnimatedStory from './Animated.svelte';
 	import VerticalStory from './Vertical.svelte';
@@ -44,38 +43,36 @@
 	});
 </script>
 
-<MarginDecorator>
-	<Story name="Horizontal" let:args>
-		<HorizontalStory {args} />
-	</Story>
+<Story name="Horizontal" let:args>
+	<HorizontalStory {args} />
+</Story>
 
-	<Story
-		name="Vertical"
-		args={{
-			padding: { bottom: 0, left: 48, top: 0, right: 0 }
-		}}
-		let:args
-	>
-		<VerticalStory {args} />
-	</Story>
-	<!-- <Story
-		name="Population"
-		args={{
-			height: 0,
-			padding: { bottom: 0, left: 48, top: 0, right: 0 }
-		}}
-		let:args
-	>
-		<PopulationBarChart {args} />
-	</Story> -->
+<Story
+	name="Vertical"
+	args={{
+		padding: { bottom: 0, left: 48, top: 0, right: 0 }
+	}}
+	let:args
+>
+	<VerticalStory {args} />
+</Story>
+<!-- <Story
+	name="Population"
+	args={{
+		height: 0,
+		padding: { bottom: 0, left: 48, top: 0, right: 0 }
+	}}
+	let:args
+>
+	<PopulationBarChart {args} />
+</Story> -->
 
-	<Story
-		name="Animated"
-		args={{
-			horizontal: true
-		}}
-		let:args
-	>
-		<AnimatedStory {args} />
-	</Story>
-</MarginDecorator>
+<Story
+	name="Animated"
+	args={{
+		horizontal: true
+	}}
+	let:args
+>
+	<AnimatedStory {args} />
+</Story>

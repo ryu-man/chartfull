@@ -16,7 +16,6 @@
 	import { XAxis, YAxis, Tick } from 'graficos';
 	import { csv, extent, timeParse, timeMonths, scaleTime, timeFormat } from 'd3';
 	import { startOfYear, endOfYear, addYears, set } from 'date-fns';
-	import MarginDecorator from './MarginDecorator.svelte';
 	import { onMount } from 'svelte';
 
 	const timeParser = timeParse('%Y%m%d');
@@ -44,53 +43,51 @@
 
 <Meta title="Components/Axis" component={Chartfull} />
 
-<MarginDecorator>
-	<Story
-		id="xaxis"
-		name="XAxis"
-		args={{
-			top: false,
-			duration: 1000
-		}}
-		let:args={{ top, duration }}
-	>
-		<Chartfull bind:innerWidth bind:innerHeight>
-			<XAxis
-				scale={xScale}
-				y={innerHeight / 2}
-				orient={top ? 'top' : 'bottom'}
-				tickSize={6}
-				{duration}
-				let:tick
-			>
-				<Tick {tick} />
-			</XAxis>
-		</Chartfull>
-	</Story>
+<Story
+	id="xaxis"
+	name="XAxis"
+	args={{
+		top: false,
+		duration: 1000
+	}}
+	let:args={{ top, duration }}
+>
+	<Chartfull bind:innerWidth bind:innerHeight>
+		<XAxis
+			scale={xScale}
+			y={innerHeight / 2}
+			orient={top ? 'top' : 'bottom'}
+			tickSize={6}
+			{duration}
+			let:tick
+		>
+			<Tick {tick} />
+		</XAxis>
+	</Chartfull>
+</Story>
 
-	<Story
-		id="yaxis"
-		name="YAxis"
-		args={{
-			left: true,
-			duration: 1000
-		}}
-		let:args={{ left, duration }}
-	>
-		<Chartfull bind:innerWidth bind:innerHeight padding={{top: 48, bottom: 48}}>
-			<YAxis
-				scale={yScale}
-				x={innerWidth / 2}
-				y={0}
-				orient={left ? 'left' : 'right'}
-				tickSize={6}
-				stroke="gray"
-				strokeWidth="2"
-				{duration}
-				let:tick
-			>
-				<Tick {tick} />
-			</YAxis>
-		</Chartfull>
-	</Story>
-</MarginDecorator>
+<Story
+	id="yaxis"
+	name="YAxis"
+	args={{
+		left: true,
+		duration: 1000
+	}}
+	let:args={{ left, duration }}
+>
+	<Chartfull bind:innerWidth bind:innerHeight padding={{top: 48, bottom: 48}}>
+		<YAxis
+			scale={yScale}
+			x={innerWidth / 2}
+			y={0}
+			orient={left ? 'left' : 'right'}
+			tickSize={6}
+			stroke="gray"
+			strokeWidth="2"
+			{duration}
+			let:tick
+		>
+			<Tick {tick} />
+		</YAxis>
+	</Chartfull>
+</Story>
