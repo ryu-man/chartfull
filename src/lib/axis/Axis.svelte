@@ -76,7 +76,7 @@
 	$: $context$.tickPadding = tickPadding * k;
 
 	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
-	$: console.log(ticks);
+
 	function number(scale: Scale) {
 		// console.log(scale.domain());
 		return (d: any) => scale(d);

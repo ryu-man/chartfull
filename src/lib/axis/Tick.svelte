@@ -2,10 +2,10 @@
 	// https://github.com/d3/d3-axis/blob/master/src/axis.js
 
 	import { onMount } from 'svelte';
-	import { tweened, type Tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
+	import { linear } from 'svelte/easing';
 	import { getAxisContext } from './context';
 	import { derived } from 'svelte/store';
+	import gsap from 'gsap';
 
 	// const {
 	// 	currentScale$,
@@ -25,7 +25,7 @@
 	let xy = $context$.xy;
 	let k = $context$.k;
 	let tickFormat = $context$.tickFormat;
-	let easing = $context$.easing;
+	let easing = $context$.easing ?? linear;
 
 	const currentPosition$ = derived(context$, (context) => context.currentPosition);
 	const previousPosition$ = derived(context$, (context) => context.previousPosition);
@@ -77,24 +77,52 @@
 	let x = xy === 'x' ? previousPosition(tick) || currentPosition(tick) : 0;
 	let y = xy === 'y' ? previousPosition(tick) || currentPosition(tick) : 0;
 
-	const x$ = tweened(x, { duration: $duration$, delay: $delay$, easing });
-	const y$ = tweened(y, { duration: $duration$, delay: $delay$, easing });
-	const opacity$ = tweened(0, { duration: $duration$, delay: $delay$, easing });
+	let element: SVGGElement;
 
 	onMount(() => {
 		const setter = ((xy: 'x' | 'y') => {
 			if (xy === 'x') {
-				return (val: number) => x$.set(val);
+				element.dataset.pos = x + '';
+				gsap.set(element, {
+					transform: `translate3d(${x}px,${0}px, 1px)`
+				});
+
+				return (val: number) => {
+					const pos = parseFloat(element.dataset.pos ?? '0');
+
+					gsap.to(element, {
+						transform: `translate3d(${val}px,${0}px, 1px)`,
+						duration: $duration$ / 1000,
+						delay: 0,
+						ease: easing
+					});
+
+					element.dataset.pos = val + '';
+				};
 			} else {
-				return (val: number) => y$.set(val);
+				element.dataset.pos = y + '';
+				gsap.set(element, {
+					transform: `translate3d(${0}px,${y}px, 1px)`
+				});
+
+				return (val: number) => {
+					gsap.to(element, {
+						transform: `translate3d(${0}px,${val}px, 1px)`,
+						duration: $duration$ / 1000,
+						ease: easing,
+						delay: 0
+					});
+
+					element.dataset.pos = val + '';
+				};
 			}
 		})(xy);
 
 		return currentPosition$.subscribe((position) => setter(position(tick)));
 	});
 
-	function enter(node: SVGGElement, { duration = 0, easing = cubicOut }) {
-		opacity$.set(1);
+	function enter(node: SVGGElement, { duration = 0, easing = linear }) {
+		gsap.to(node, { opacity: 1, duration: duration / 1000, easing });
 
 		return () => ({
 			duration,
@@ -104,23 +132,21 @@
 		});
 	}
 
-	function exit(node: SVGGElement, { duration = 0, easing = cubicOut }) {
-		opacity$.set(0);
+	function exit(node: SVGGElement, { duration = 0, easing = linear }) {
+		gsap.to(node, { opacity: 0, duration: duration / 1000, easing });
 
-		return {
+		return () => ({
 			duration,
 			delay: 0,
 			easing,
 			css: () => ''
-		};
+		});
 	}
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <g
 	class="tick {xy}"
-	style:transform={`translate3d(${$x$ + dx}px,${$y$ + dy}px, 1px)`}
-	style:opacity={$opacity$}
 	font-family={fontFamily}
 	font-size={fontSize}
 	font-weight={fontWeight}
@@ -133,6 +159,9 @@
 	{fill}
 	fill-opacity={fillOpacity}
 	role="group"
+	data-pos={xy === 'x' ? x : y}
+	style:opacity={0}
+	bind:this={element}
 	in:enter|local={{ duration: $duration$, easing }}
 	out:exit|local={{ duration: $duration$, easing }}
 	on:keypress
