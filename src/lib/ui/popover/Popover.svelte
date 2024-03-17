@@ -17,7 +17,7 @@
 	const open_store = popover_context.open;
 
 	export let open = false;
-	export let reference: Element;
+	export let reference: Element | undefined = undefined;
 	export let placements: Placement[] = [];
 	export let offset = 8;
 
@@ -25,21 +25,32 @@
 	let dx = 0;
 	let dy = 0;
 
-	type InitParamas = { reference: Element; placements: Placement[] | undefined };
+	type InitParamas = { reference?: Element; placements: Placement[] | undefined };
 
 	function init(node: HTMLElement, { placements, reference }: InitParamas) {
 		node.hidden = true;
 
+		if (!reference && !node.parentElement) {
+			throw new Error('<Popover> reference element is undefined');
+		}
+
+		const ref = reference ?? node.parentElement ?? undefined;
+
 		let cleanup: (() => void) | undefined = undefined;
 
 		portal(node, chartfull_context.html_layer_element);
-		attach(node, { reference, placements }).then(() => {
-			cleanup = autoUpdate(reference, node, async () => {
+		attach(node, { reference: ref, placements }).then(() => {
+			cleanup = autoUpdate(ref, node, async () => {
 				node.hidden = true;
 				portal(node, chartfull_context.html_layer_element);
 				await tick();
 				attach(node, { reference, placements });
 			});
+		});
+
+		const click_outside_action = clickOutside(node, {
+			callback: onclick_outside,
+			exclude: [ref]
 		});
 
 		return {
@@ -49,6 +60,7 @@
 			},
 			destroy() {
 				cleanup?.();
+				click_outside_action.destroy();
 			}
 		};
 
@@ -79,14 +91,10 @@
 	}
 </script>
 
-{#if $open_store && reference}
+{#if $open_store}
 	<div
 		class="chartfull-popover w-min h-min pointer-events-auto"
 		use:init={{ reference: reference, placements }}
-		use:clickOutside={{
-			callback: onclick_outside,
-			exclude: [reference]
-		}}
 	>
 		{#if mounted}
 			<slot {dx} {dy} />
