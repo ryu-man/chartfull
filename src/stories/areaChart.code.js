@@ -1,8 +1,7 @@
 export const code = `
 <script>
-  import { Grafico, XAxis, YAxis, Tick, Area } from 'graficos'
-  import { csv, extent, max, timeParse } from 'd3'
-  import { scaleLinear, scaleTime } from 'd3-scale'
+  import { Chartfull, XAxis, YAxis, Tick, Area } from 'graficos'
+  import { csv, extent, max, timeParse, scaleLinear, scaleTime } from 'd3'
 
   let data = []
   const parser = timeParse('%Y-%m-%d')
@@ -25,7 +24,7 @@ export const code = `
   $: y1Scaled = (d) => yScale(yAccessor(d))
 </script>
 
-<Grafico
+<Chartfull
     {data}
     padding={{ top: 24, left: 64, right: 0, bottom: 24 }}
     fontSize="14"
@@ -46,5 +45,5 @@ export const code = `
         <text slot="label">Value</text>
     </YAxis>
     <Area x={xScaled} y0={innerHeight} y1={y1Scaled} {data} fill="grey"/>
-</Grafico>
+</Chartfull>
 `

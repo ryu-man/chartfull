@@ -1,79 +1,74 @@
 <script>
-  import { Grafico, Declare, ScaleOrdinal, XAxis, Tick } from 'graficos'
-  import Spring from 'graficos/components/Spring.svelte'
+	import { Chartfull, XAxis, Tick, get, Rect } from 'graficos';
+	import Spring from 'graficos/components/Spring.svelte';
+	import { csv, schemeCategory10, max, scaleLinear, scaleBand, min, scaleOrdinal } from 'd3';
 
-  import { onMount } from 'svelte'
-  import { csv, schemeCategory10, max } from 'd3'
-  import { scaleLinear, scaleBand } from 'd3-scale'
+	export let args = {};
 
-  export let args = {}
+	let data = [];
 
-  let data = []
+	csv('./7_OneCatOneNum_header.csv', ({ Country, Value }) => ({
+		Country: Country + '',
+		Value: +Value
+	})).then((res) => (data = res));
 
-  csv('./7_OneCatOneNum_header.csv', ({ Country, Value }) => ({
-    Country: Country + '',
-    Value: +Value
-  })).then((res) => (data = res))
+	let innerWidth;
+	let innerHeight;
 
-  let innerWidth
-  let innerHeight
+	const [xAccessor, yAccessor] = [(d) => +d.Value, (d) => d.Country];
 
-  const [xAccessor, yAccessor] = [(d) => +d.Value, (d) => d.Country]
+	$: xScale = scaleLinear([0, max(data, xAccessor)], [0, innerWidth]);
+	$: yScale = scaleBand(data.map(yAccessor), [innerHeight, 0]).padding(0.2);
+	$: colorScale = scaleOrdinal(data.map(yAccessor), schemeCategory10);
 
-  let xScale = scaleLinear([0, max(data, xAccessor)], [0, innerWidth])
-  $: xScale = xScale.domain([0, max(data, xAccessor)]).range([0, innerWidth])
-
-  let yScale = scaleBand(data.map(yAccessor), [innerHeight, 0]).padding(0.2)
-  $: yScale = yScale
-    .domain(data.map(yAccessor))
-    .range([innerHeight, 0])
-    .padding(0.2)
+	$: xGet = get(xScale, xAccessor);
+	$: yGet = get(yScale, yAccessor);
 </script>
 
-<Grafico
-  padding={{ left: 96 }}
-  bind:innerWidth
-  bind:innerHeight
-  {...args}
->
-  <XAxis scale={xScale} y={innerHeight} orient="bottom" let:text let:x>
-    <Tick {x} y2={-innerHeight}>
-      <text>{text}</text>
-    </Tick>
-  </XAxis>
-  <ScaleOrdinal
-    domain={data.map(yAccessor)}
-    range={schemeCategory10}
-    let:scale={scaleOrdinale}
-  >
-    <Declare
-      value={[(d) => xScale(xAccessor(d)), (d) => yScale(yAccessor(d))]}
-      let:value={[xGet, yGet]}
-    >
-      {#each data as item, i (i)}
-        <Spring
-          from={[0, 0, 0, 0]}
-          to={[yGet(item), xGet(item), yScale.bandwidth(), 1]}
-          damping={0.5}
-          stiffness={0.04}
-          let:value={[y, width, height, opacity]}
-        >
-          <g transform={`translate(${0},${yGet(item)})`}>
-            <text
-              dx={-16}
-              dy={yScale.bandwidth() / 2}
-              text-anchor="end"
-              fonts-size="24"
-              fill="gray">{yAccessor(item)}</text
-            >
-            <rect
-              width={xGet(item)}
-              height={yScale.bandwidth()}
-              fill={scaleOrdinale(yAccessor(item))}
-            />
-          </g>
-        </Spring>
-      {/each}
-    </Declare>
-  </ScaleOrdinal>
-</Grafico>
+<Chartfull padding={{ left: 0, top: 8, bottom: 48 }} bind:innerWidth bind:innerHeight {...args}>
+	<XAxis scale={xScale} y={innerHeight} orient="bottom" tickArguments={[10, '.2f']} let:tick>
+		<Tick {tick} y2={-innerHeight} />
+
+		<text
+			slot="label"
+			x={innerWidth}
+			y={-innerHeight}
+			font-weight="700"
+			font-size="24pt"
+			fill="black"
+			fill-opacity=".2"
+			text-anchor="end"
+			dominant-baseline="hanging">INCOME</text
+		>
+	</XAxis>
+
+	{#each data as item, i (i)}
+		{@const min_range = min(xScale.range())}
+		{@const max_range = max(xScale.range())}
+		{@const x = xGet(item)}
+		{@const width = x - min_range}
+
+		<g transform={`translate(${min_range},${yGet(item)})`}>
+			<text
+				x={Math.min(width + 16, max_range - 164)}
+				dy={yScale.bandwidth() / 2}
+				text-anchor="start"
+				dominant-baseline="middle"
+				font-size="14pt"
+				font-weight="400"
+				fill={colorScale(yAccessor(item))}
+			>
+				{yAccessor(item)}
+			</text>
+
+			<Rect
+				{width}
+				height={yScale.bandwidth()}
+				fill={colorScale(yAccessor(item))}
+				fill-opacity=".3"
+				stroke={colorScale(yAccessor(item))}
+				r="4"
+			/>
+		</g>
+	{/each}
+</Chartfull>

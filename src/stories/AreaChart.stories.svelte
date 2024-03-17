@@ -1,8 +1,20 @@
-<script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico, XAxis, YAxis, Tick, Area } from 'graficos';
-	import { csv, extent, max, timeParse } from 'd3';
-	import { scaleLinear, scaleTime } from 'd3-scale';
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Area chart',
+		component: Chartfull,
+		argTypes: {
+			width: { type: 'string' },
+			height: { type: 'string' }
+		}
+	};
+</script>
+
+<script lang="ts">
+	import { Story } from '@storybook/addon-svelte-csf';
+	import { XAxis, YAxis, Tick, Area, Grid } from 'graficos';
+	import { csv, extent, max, timeParse, scaleLinear, scaleTime, area } from 'd3';
 	import { code } from './areaChart.code';
 
 	let data = [];
@@ -13,11 +25,15 @@
 		value: +d.value
 	});
 
-	csv('./3_TwoNumOrdered_comma.csv', dataConverter).then((res) => (data = res));
+	const ready = csv('./3_TwoNumOrdered_comma.csv', dataConverter).then(async (array) => {
+		data = array;
+	});
 
 	const [xAccessor, yAccessor] = [(d) => d.date, (d) => +d.value];
-	let innerWidth;
-	let innerHeight;
+	let innerWidth = 1;
+	let innerHeight = 1;
+
+	$: areaDataPath = area().x(xScaled).y0(innerHeight).y1(y1Scaled);
 
 	$: xScale = scaleTime(extent(data, xAccessor), [0, innerWidth]);
 	$: yScale = scaleLinear([0, max(data, yAccessor)], [innerHeight, 0]);
@@ -26,49 +42,28 @@
 	$: y1Scaled = (d) => yScale(yAccessor(d));
 </script>
 
-<Meta
-	title="Charts/Area chart"
-	component={Grafico}
-	argTypes={{
-		height: { control: { type: 'number' } },
-		xScale: { control: { type: 'object' } },
-		yScale: { control: { type: 'object' } }
-	}}
-/>
-
-<Story
-	name="one"
-	args={{
-		height: 0,
-		xScale: {},
-		yScale: {}
-	}}
-	source={code}
-	let:args
->
-	<Grafico
+<Story name="Area chart" source={code} let:args>
+	<Chartfull
 		{...args}
 		{data}
 		padding={{ top: 24, left: 64, right: 0, bottom: 24 }}
-		fontSize="14"
 		bind:innerWidth
 		bind:innerHeight
 	>
-		<XAxis scale={xScale} y={innerHeight} orient="bottom" let:x let:text>
-			<Tick {x} y2={-innerHeight} stroke="#e8e8e8">
-				<text>{text}</text>
-			</Tick>
-			<text x={innerWidth} y={24} slot="label">Year</text>
+		<Grid width={innerWidth} height={innerHeight} />
+
+		<XAxis scale={xScale} y={innerHeight} orient="bottom" duration={100} let:tick>
+			<Tick {tick} y1={0} y2={-innerHeight} />
+			<text slot="label" x={innerWidth}>Year</text>
 		</XAxis>
 
-		<YAxis scale={yScale} let:y let:text>
-			<Tick {y} x2={-innerWidth} stroke="#e8e8e8">
-				<text>{text}</text>
-			</Tick>
+		<YAxis scale={yScale} tickFormat={(d) => Math.trunc(d / 1000) + 'K'} duration={100} let:tick>
+			<Tick {tick} x2={-innerWidth} />
 			<text slot="label">Value</text>
 		</YAxis>
-		<Area x={xScaled} y0={innerHeight} y1={y1Scaled} {data} fill="grey" />
-	</Grafico>
+
+		<Area d={areaDataPath(data)} stroke-width="1" />
+	</Chartfull>
 </Story>
 
 <style>

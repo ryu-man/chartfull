@@ -1,13 +1,25 @@
+<script context="module">
+	import { Chartfull } from 'graficos';
+
+	export const meta = {
+		title: 'Charts/Bar chart',
+		component: Chartfull,
+		argTypes: {
+			width: { control: { type: 'string' } },
+			height: { control: { type: 'string' } }
+		}
+	};
+</script>
+
 <script>
 	import { onMount } from 'svelte';
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { Grafico } from 'graficos';
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { csv } from 'd3';
-
 	import MarginDecorator from '../MarginDecorator.svelte';
 	import HorizontalStory from './Horizontal.svelte';
 	import AnimatedStory from './Animated.svelte';
 	import VerticalStory from './Vertical.svelte';
+	import PopulationBarChart from '../others/PopulationBarChart.stories.svelte';
 
 	let data = [];
 
@@ -32,39 +44,34 @@
 	});
 </script>
 
-<Meta
-	title="Charts/Bar chart"
-	component={Grafico}
-	argTypes={{ height: { control: { type: 'number' } } }}
-/>
-
 <MarginDecorator>
-	<Story
-		name="Horizontal"
-		args={{
-			height: 600,
-			horizontal: true
-		}}
-		let:args
-	>
+	<Story name="Horizontal" let:args>
 		<HorizontalStory {args} />
 	</Story>
 
 	<Story
 		name="Vertical"
 		args={{
-			height: 600,
 			padding: { bottom: 0, left: 48, top: 0, right: 0 }
 		}}
 		let:args
 	>
 		<VerticalStory {args} />
 	</Story>
+	<!-- <Story
+		name="Population"
+		args={{
+			height: 0,
+			padding: { bottom: 0, left: 48, top: 0, right: 0 }
+		}}
+		let:args
+	>
+		<PopulationBarChart {args} />
+	</Story> -->
 
 	<Story
 		name="Animated"
 		args={{
-			height: 600,
 			horizontal: true
 		}}
 		let:args

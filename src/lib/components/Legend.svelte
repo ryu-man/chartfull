@@ -1,43 +1,48 @@
-<script>
-  import { css } from '../utils'
-  // import LegendItem from './legend/legend_item.svelte'
-  import { graficoContext } from '../Grafico.svelte'
+<script lang="ts">
+	import { portal } from 'svelte-portal';
+	import { getChartfullContext } from 'chartfull/chartfull';
 
-  export let top = 'unset'
-  export let left = 'unset'
-  export let right = 'unset'
-  export let bottom = 'unset'
-  export let style = {}
+	const { contentElement } = getChartfullContext();
 
-  const context = graficoContext()
-  const { colorScale, keys } = $context
+	export let x = 0;
+	export let y = 0;
+	export let width = 'fit-content';
+	export let height = 'fit-content';
 
-  let _style = {
-    backgroundColor: '#fff',
-    padding: '8px',
-    boxShadow: '0 0 4px 2px #00000017',
-    ...style
-  }
+	export let dx = '0px';
+	export let dy = '0px';
 </script>
 
 <div
-  use:css={_style}
-  class="legend"
-  style={`top:${top}; left:${left}; bottom:${bottom}; right:${right}`}
+	class="chartfull-legend"
+	style:transform="translate({x}px, {y}px) translate({dx}, {dy})"
+	style:width
+	style:height
+	use:portal={contentElement}
 >
-  {#each keys as key}
-    <slot {key} color={colorScale(key)}>
-      <!-- <LegendItem color={colorScale(key)}>{key}</LegendItem> -->
-    </slot>
-  {/each}
+	<slot />
 </div>
 
+
 <style>
-  div.legend {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: self-start;
-    gap: 0.3vw;
-  }
+	.chartfull-legend {
+		padding: 14px;
+		border-radius: 6px;
+		position: absolute;
+		left: 0;
+		top: 0;
+
+        background-color: white;
+
+        display: flex;
+        flex-direction: column;
+
+        border: 1px solid rgb(0 0 0 / .06);
+
+        box-shadow: 0px 1px 4px .4px rgb(0 0 0 / .06);
+
+        pointer-events: all;
+
+        cursor: auto;
+	}
 </style>

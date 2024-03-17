@@ -1,129 +1,84 @@
-<script>
-  import { graficoContext } from '../Grafico.svelte'
-  import { Declare } from '../components'
-  import { classNames } from '../utils'
-  import Axis from './Axis.svelte'
-  import Tick from './Tick.svelte'
-  import TickContext from './TickContext.svelte'
-  import { writable } from 'svelte/store'
+<script lang="ts">
+	import { cubicOut } from 'svelte/easing';
+	import { getChartfullContext } from 'graficos/chartfull';
+	import { classNames } from '$lib/utils';
+	import Axis from './Axis.svelte';
+	import Tick from './Tick.svelte';
+	import type { Scale } from './types';
 
-  const { innerHeightStore, scales } = graficoContext()
+	const { innerHeight$ } = getChartfullContext();
 
-  export let id = 'y'
-  export let x = 0
-  export let y = 0
-  export let scale
-  export let ticks
-  export let orient = 'left'
-  export let tickArguments
-  export let tickValues
-  export let tickFormat
+	export let scale: Scale;
+	export let x = 0;
+	export let y = 0;
+	export let orient: 'left' | 'right' = 'left';
+	export let tickArguments: unknown[] = [10];
+	export let tickValues: string | undefined = undefined;
+	export let tickFormat: ((tick: string | number | Date) => string) | undefined = undefined;
 
-  export let tickSize = 6
-  export let tickPadding = 8
-  export let tickOffset =
-    typeof window !== 'undefined' && window.devicePixelRatio > 1 ? 0 : 0.5
+	export let tickSize = 6;
+	export let tickPadding = 8;
 
-  export let fontFamily
-  export let fontSize = '12pt'
-  export let fontSizeAdjust
-  export let fontStretch
-  export let fontStyle
-  export let fontVariant
-  export let fontWeight
+	export let fontFamily: string | undefined = undefined;
+	export let fontSize = '12pt';
+	export let fontSizeAdjust: string | undefined = undefined;
+	export let fontStretch: string | undefined = undefined;
+	export let fontStyle: string | undefined = undefined;
+	export let fontVariant: string | undefined = undefined;
+	export let fontWeight: string | undefined = undefined;
 
-  export let stroke = '#9b9b9b'
-  export let strokeWidth = 2
-  export let strokeOpacity
-  export let strokeLinecap
-  export let strokeLinejoin
-  export let strokeDasharray
-  export let strokeDashoffset
-  export let strokeMiterlimit
-  export let fill = '#9b9b9b'
-  export let d
+	export let fill = 'rgba(0 0 0 / .4)';
 
-  let _class = ''
-  export { _class as class }
+	export let textAnchor: 'start' | 'middle' | 'end' = 'end';
 
-  $: $scales[id] = scale
+	export let duration = 100;
+	export let delay = 0;
+	export let easing = cubicOut;
 
-  const k = orient === 'left' ? -1 : 1
+	let _class = '';
+	export { _class as class };
 
-  const isPathDataSet = !!d
-
-  const context = writable({
-    xy: 'x',
-    k,
-    offset: tickOffset,
-    size: tickSize,
-    padding: tickPadding,
-    textAnchor: orient === 'left' ? 'end' : 'start'
-  })
-
-  $: $context.size = tickSize
-  $: $context.padding = tickPadding
-  $: $context.offset = tickOffset
-
-  $: !isPathDataSet && (d = `M${k * 6},0H0V${$innerHeightStore}H${k * 6}`)
+	const k = orient === 'left' ? -1 : 1;
 </script>
 
-<TickContext value={context}>
-  <Axis
-    {scale}
-    {x}
-    {y}
-    {id}
-    {ticks}
-    {tickArguments}
-    {tickValues}
-    {tickFormat}
-    {fontFamily}
-    {fontWeight}
-    {fontSize}
-    {fontSizeAdjust}
-    {fontVariant}
-    {fontStyle}
-    {fontStretch}
-    class={classNames(_class, 'y', orient)}
-    style="--axis-fill: {fill};"
-    let:ticks
-    let:format
-  >
-    {#each ticks as tick, index (+tick || tick)}
-      <Declare value={scale(tick)} let:value={y}>
-        <slot
-          {index}
-          {tick}
-          x={0}
-          {y}
-          {format}
-          formatedTick={format(tick)}
-          text={format(tick)}
-        >
-          <Tick {y}>
-            <text>{format(tick)}</text>
-          </Tick>
-        </slot>
-      </Declare>
-    {/each}
+<Axis
+	{scale}
+	{x}
+	{y}
+	{orient}
+	{tickPadding}
+	{fontFamily}
+	{fontWeight}
+	{fontSize}
+	{fontSizeAdjust}
+	{fontVariant}
+	{fontStyle}
+	{fontStretch}
+	{textAnchor}
+	{fill}
+	{tickValues}
+	{tickArguments}
+	{tickSize}
+	{duration}
+	{delay}
+	{easing}
+	{tickFormat}
+	class={classNames(_class, 'y', orient)}
+	let:ticks
+	let:tickFormat
+>
+	{#each ticks as tick, index (+tick || tick)}
+		<slot {index} {tick} {tickFormat}>
+			<Tick {tick} />
+		</slot>
+	{/each}
 
-    <path
-      class="domain"
-      fill="none"
-      {stroke}
-      stroke-width={strokeWidth}
-      stroke-dasharray={strokeDasharray}
-      stroke-dashoffset={strokeDashoffset}
-      stroke-opacity={strokeOpacity}
-      stroke-linecap={strokeLinecap}
-      stroke-linejoin={strokeLinejoin}
-      stroke-miterlimit={strokeMiterlimit}
-      {d}
-    />
+	{@const d = `M${k * 6},0H0V${$innerHeight$}H${k * 6}`}
+	<slot name="domain" {d}>
+		<path class="domain" fill="none" stroke="rgba(0 0 0/ .5)" {d} />
+	</slot>
 
-    <g class="label">
-      <slot name="label" />
-    </g>
-  </Axis>
-</TickContext>
+	<g class="label" id="y-axis-label">
+		<slot name="label" />
+	</g>
+</Axis>

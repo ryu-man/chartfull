@@ -1,86 +1,86 @@
 <script>
-  import { Grafico, Declare, ScaleOrdinal, XAxis, YAxis, Tick } from 'graficos'
+	import { Chartfull, YAxis, Tick, Rect } from 'graficos';
+	import Spring from 'graficos/components/Spring.svelte';
+	import { csv, schemeCategory10, max, scaleBand, scaleLinear, scaleOrdinal } from 'd3';
 
-  import { csv, schemeCategory10, max } from 'd3'
-  import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale'
+	export let args = {};
 
-  export let args = {}
+	let data = [];
 
-  let data = []
+	csv('./7_OneCatOneNum_header.csv', ({ Country, Value }) => ({
+		Country: Country + '',
+		Value: +Value
+	})).then((res) => (data = res));
 
-  csv('./7_OneCatOneNum_header.csv', ({ Country, Value }) => ({
-    Country: Country + '',
-    Value: +Value
-  })).then((res) => (data = res))
+	let samples = [];
 
-  let samples = []
+	let innerWidth;
+	let innerHeight;
+	const [xAccessor, yAccessor] = [(d) => d.Country, (d) => +d.Value];
 
-  let innerWidth
-  let innerHeight
-  const [xAccessor, yAccessor] = [(d) => d.Country, (d) => +d.Value]
+	$: xScale = scaleBand(data.map(xAccessor), [innerWidth, 0]).padding(0.1);
+	$: yScale = scaleLinear([0, max(data, (d) => +d.Value)], [innerHeight, 0]);
+	$: colorScale = scaleOrdinal(data.map(xAccessor), schemeCategory10);
 
-  $: xScale = scaleBand(data.map(xAccessor), [innerWidth, 0]).padding(0.1)
-  $: yScale = scaleLinear([0, max(data, (d) => +d.Value)], [innerHeight, 0])
-  $: colorScale = scaleOrdinal(data.map(xAccessor), schemeCategory10)
-
-  $: xGet = (d) => xScale(xAccessor(d))
-  $: yGet = (d) => yScale(yAccessor(d))
+	$: xGet = (d) => xScale(xAccessor(d));
+	$: yGet = (d) => yScale(yAccessor(d));
 </script>
 
-<Grafico
-  bind:innerWidth
-  bind:innerHeight
-  {...args}
-  data={samples}
-  padding={{ bottom: 32, left: 32 }}
-  fontSize="16"
+<Chartfull
+	bind:innerWidth
+	bind:innerHeight
+	{...args}
+	data={samples}
+	padding={{ bottom: 48, left: 32 }}
+	fontSize="16"
 >
-  <YAxis
-    scale={yScale}
-    orient="left"
-    tickSize={innerWidth}
-    stroke="gray"
-    let:text
-    let:y
-  >
-    <Tick {y} x2={-innerWidth}>
-      <text>{text}</text>
-    </Tick>
-    <text slot="label" font-weight="700" font-size="24" fill="gray">Income</text
-    >
-  </YAxis>
+	{#each data as item (xAccessor(item))}
+	{@const y = yGet(item)}
 
-  <XAxis
-    scale={xScale}
-    y={innerHeight}
-    orient="bottom"
-    stroke="gray"
-    let:text
-    let:x
-  >
-    <Tick x={x + xScale.bandwidth() / 2} stroke="#e8e8e8">
-      <text>{text}</text>
-    </Tick>
-    <text
-      slot="label"
-      x={innerWidth}
-      dy={54}
-      text-anchor="end"
-      font-weight="700"
-      font-size="24"
-      fill="gray">Country</text
-    >
-  </XAxis>
+		<g transform={`translate(${xGet(item)},${0})`}>
+			<Rect
+				class={item.Country}
+				y={y}
+				width={xScale.bandwidth()}
+				height={innerHeight - y }
+				fill={colorScale(item.Country)}
+				fill-opacity=".3"
+				stroke={colorScale(item.Country)}
+				r="2 2 0 0"
+			/>
+			<text
+				y={Math.max(128, y - 16)}
+				
+				dx={xScale.bandwidth() / 2}
+				text-anchor="end"
+				font-size="14pt"
+				font-weight="600"
+				fill={colorScale(item.Country)}
+				writing-mode="vertical-lr"
+				style:mix-blend-mode="plus-lighter">{xAccessor(item)}</text
+			>
+		</g>
+	{/each}
+	<text
+		x={innerWidth}
+		y={innerHeight}
+		dy={48}
+		text-anchor="end"
+		font-size="24pt"
+		font-weight="700"
+		fill="rgb(0 0 0 / .2)">Countries</text
+	>
 
-  {#each data as item (item.Country)}
-    <rect
-      class={item.Country}
-      x={0}
-      y={yGet(item)}
-      width={xScale.bandwidth()}
-      height={innerHeight - yGet(item)}
-      fill={colorScale(item.Country)}
-      transform={`translate(${xGet(item)},${0})`}
-    />
-  {/each}
-</Grafico>
+	<YAxis
+		scale={yScale}
+		orient="left"
+		tickFormat={(d) => {
+			const q = d / 1000;
+			return q === 0 ? '0' : q + 'K';
+		}}
+		let:tick
+	>
+		<Tick {tick} x2={-innerWidth} />
+		<text slot="label" letter-spacing="0">Income</text>
+	</YAxis>
+</Chartfull>
