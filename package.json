@@ -27,7 +27,8 @@
     "format": "prettier --plugin-search-dir . --write .",
     "storybook:dev": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
-    "lib:build": "svelte-package"
+    "lib:build": "pnpm run package",
+    "prepublishOnly": "pnpm run lib:build"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
