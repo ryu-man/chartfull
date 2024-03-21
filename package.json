@@ -25,7 +25,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-    "storybook:dev": "storybook dev -p 6006",
+    "storybook:dev": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
     "lib:build": "svelte-package"
   },
