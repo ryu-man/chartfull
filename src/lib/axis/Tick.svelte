@@ -82,38 +82,40 @@
 	onMount(() => {
 		const setter = ((xy: 'x' | 'y') => {
 			if (xy === 'x') {
-				element.dataset.pos = x + '';
 				gsap.set(element, {
-					transform: `translate3d(${x}px,${0}px, 1px)`
+					x,
+					y: 0,
+					duration: $duration$ / 1000,
+					delay: 0,
+					ease: easing
 				});
 
 				return (val: number) => {
-					const pos = parseFloat(element.dataset.pos ?? '0');
-
 					gsap.to(element, {
-						transform: `translate3d(${val}px,${0}px, 1px)`,
+						x: val,
+						y: 0,
 						duration: $duration$ / 1000,
 						delay: 0,
 						ease: easing
 					});
-
-					element.dataset.pos = val + '';
 				};
 			} else {
-				element.dataset.pos = y + '';
 				gsap.set(element, {
-					transform: `translate3d(${0}px,${y}px, 1px)`
+					x: 0,
+					y: y,
+					duration: $duration$ / 1000,
+					delay: 0,
+					ease: easing
 				});
 
 				return (val: number) => {
 					gsap.to(element, {
-						transform: `translate3d(${0}px,${val}px, 1px)`,
+						x: 0,
+						y: val,
 						duration: $duration$ / 1000,
-						ease: easing,
-						delay: 0
+						delay: 0,
+						ease: easing
 					});
-
-					element.dataset.pos = val + '';
 				};
 			}
 		})(xy);
@@ -122,7 +124,7 @@
 	});
 
 	function enter(node: SVGGElement, { duration = 0, easing = linear }) {
-		gsap.to(node, { opacity: 1, duration: duration / 1000, easing });
+		gsap.to(node, { opacity: 1, duration: duration / 1000, ease: easing });
 
 		return () => ({
 			duration,
@@ -133,7 +135,7 @@
 	}
 
 	function exit(node: SVGGElement, { duration = 0, easing = linear }) {
-		gsap.to(node, { opacity: 0, duration: duration / 1000, easing });
+		gsap.to(node, { opacity: 0, duration: duration / 1000, ease: easing });
 
 		return () => ({
 			duration,
@@ -159,7 +161,6 @@
 	{fill}
 	fill-opacity={fillOpacity}
 	role="group"
-	data-pos={xy === 'x' ? x : y}
 	style:opacity={0}
 	bind:this={element}
 	in:enter|local={{ duration: $duration$, easing }}
