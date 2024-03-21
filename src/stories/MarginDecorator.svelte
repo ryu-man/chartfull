@@ -4,7 +4,7 @@
 
 <style>
   div {
-    padding: 2em;
+    padding: 4rem;
     box-sizing: border-box;
     display: flex;
     justify-content: center;

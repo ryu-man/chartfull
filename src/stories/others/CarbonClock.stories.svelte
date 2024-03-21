@@ -13,8 +13,10 @@
 
 <script lang="ts">
 	import { Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, Tick, Line, Grid } from 'graficos';
+	import { XAxis, YAxis, Tick, Line, Grid, } from 'chartfull';
+	import Tooltip from 'graficos/components/Tooltip.svelte'
 	import { csv, zoom, select, zoomIdentity, extent, scaleLinear, line } from 'd3';
+	import { fade } from 'svelte/transition';
 
 	let data = [];
 
@@ -65,9 +67,10 @@
 		[innerWidth, innerHeight]
 	]);
 
-	let padding = { top: 54, left: 72, bottom: 32 };
+	let padding = { top: 0, left: 0, bottom: 0, right: 0 };
 	let offsetX = 0;
 	let offsetY = 0;
+	let show_guidelines = false;
 
 	function zoomable(node, zoom, x, y) {
 		select(node).call(zoom);
@@ -82,7 +85,18 @@
 </script>
 
 <Story name="Carbon clock chart" let:args>
-	<Chartfull height={args.height} {padding} {data} bind:innerWidth bind:innerHeight>
+	<Chartfull
+		height={args.height}
+		{data}
+		bind:innerWidth
+		bind:innerHeight
+		on:pointerenter={() => {
+			show_guidelines = true;
+		}}
+		on:pointerleave={() => {
+			show_guidelines = false;
+		}}
+	>
 		<defs>
 			<clipPath id="clip">
 				<rect width={innerWidth} height={innerHeight} />
@@ -145,38 +159,49 @@
 			/>
 		</g>
 
-		<g color="rgb(0 0 0 / .3)" pointer-events="none" stroke-dasharray="8">
-			<g>
-				<line x2={innerWidth} y1={offsetY} y2={offsetY} stroke="currentColor" />
-				<text
-					x={0}
-					y={Math.max(40, offsetY)}
-					dx={20}
-					dy={-20}
-					text-anchor="start"
-					fill="currentColor"
-					font-size="14pt"
-					font-weight="900"
-				>
-					{yScale.invert(offsetY).toFixed(2)}
-				</text>
-			</g>
+		{#if show_guidelines}
+			<g
+				color="rgb(0 0 0 / .3)"
+				pointer-events="none"
+				stroke-dasharray="8"
+				transition:fade={{ duration: 200 }}
+			>
+				<g>
+					<line x2={innerWidth} y1={offsetY} y2={offsetY} stroke="currentColor" />
+					<text
+						x={0}
+						y={Math.min(Math.max(40, offsetY), innerHeight-56)}
+						dx={20}
+						dy={-20}
+						text-anchor="start"
+						fill="currentColor"
+						font-size="14pt"
+						font-weight="900"
+					>
+						{yScale.invert(offsetY).toFixed(2)}
+					</text>
+				</g>
 
-			<g>
-				<line x1={offsetX} x2={offsetX} y2={innerHeight} stroke="currentColor" />
-				<text
-					x={Math.min(offsetX, innerWidth - 80)}
-					y={innerHeight}
-					dx={20}
-					dy={-20}
-					fill="currentColor"
-					font-size="14pt"
-					font-weight="900"
-					text-anchor="start"
-				>
-					{xScale.invert(offsetX).toFixed(0)}
-				</text>
+				<g>
+					<line x1={offsetX} x2={offsetX} y2={innerHeight} stroke="currentColor" />
+					<text
+						x={Math.max(Math.min(offsetX, innerWidth - 80), 56)}
+						y={innerHeight}
+						dx={20}
+						dy={-20}
+						fill="currentColor"
+						font-size="14pt"
+						font-weight="900"
+						text-anchor="start"
+					>
+						{xScale.invert(offsetX).toFixed(0)}
+					</text>
+				</g>
 			</g>
-		</g>
+		{/if}
+
+		<Tooltip open={true}>
+			<div>Atmospheric CO</div>
+		</Tooltip>
 	</Chartfull>
 </Story>

@@ -16,7 +16,6 @@
 	import CustomXAxis from 'graficos/axis/CustomXAxis.svelte';
 	import { csv, extent, timeParse, timeMonths, scaleTime, shuffle } from 'd3';
 	import { startOfYear, endOfYear } from 'date-fns';
-	import MarginDecorator from './MarginDecorator.svelte';
 
 	const today = new Date();
 	let data = [];
@@ -45,70 +44,68 @@
 	}
 </script>
 
-<MarginDecorator>
-	<Story id="tweened" name="Tweened" let:args>
-		<Chartfull bind:innerWidth bind:innerHeight {...args}>
+<Story id="tweened" name="Tweened" let:args>
+	<Chartfull bind:innerWidth bind:innerHeight {...args}>
+		<Tweened
+			{to}
+			enter={(d) => ({ ...d, opacity: 0, val: 0 })}
+			exit={(d) => ({ ...d, opacity: 0, val: 0 })}
+			value={(d, i) => d}
+			key={(d) => d.key}
+			duration={2000}
+			let:data
+		>
+			{#each data as t, i (t.key)}
+				<text x={i * 192} fill-opacity={t.opacity}>{t.val.toFixed(2)}</text>
+			{/each}
+		</Tweened>
+	</Chartfull>
+
+	<button
+		on:click={() => {
+			to = [
+				{ val: 1, key: '1', opacity: 1 },
+				{ val: 2, key: '2', opacity: 1 },
+				{ val: 3, key: '3', opacity: 1 }
+			];
+		}}>reset</button
+	>
+	<button
+		on:click={() => {
+			to = [
+				{ val: 2, key: '1', opacity: 1 },
+				{ val: 4, key: '2', opacity: 1 },
+				{ val: 6, key: '3', opacity: 1 },
+				{ val: 8, key: '4', opacity: 1 }
+			];
+		}}>animate</button
+	>
+</Story>
+
+<Story
+	id="customXAxis"
+	name="Custom X Axis"
+	args={{
+		width: 100,
+		top: false
+	}}
+	let:args
+>
+	<Chartfull bind:innerWidth bind:innerHeight {...args}>
+		<CustomXAxis scale={xScale} let:ticks let:format let:previousScale>
 			<Tweened
-				{to}
-				enter={(d) => ({ ...d, opacity: 0, val: 0 })}
-				exit={(d) => ({ ...d, opacity: 0, val: 0 })}
+				to={ticks.map((d) => ({ tick: d, x: xScale(d), opacity: 1 }))}
+				enter={({ tick }) => ({ tick, x: previousScale(tick), opacity: 0 })}
+				exit={({ tick }) => ({ tick, x: xScale(tick), opacity: 0 })}
 				value={(d, i) => d}
-				key={(d) => d.key}
+				key={(d) => d.tick.toString()}
 				duration={2000}
 				let:data
 			>
-				{#each data as t, i (t.key)}
-					<text x={i * 192} fill-opacity={t.opacity}>{t.val.toFixed(2)}</text>
+				{#each data as { tick, x, opacity }, i (tick)}
+					<text {x} fill-opacity={opacity}>{format(tick)}</text>
 				{/each}
 			</Tweened>
-		</Chartfull>
-
-		<button
-			on:click={() => {
-				to = [
-					{ val: 1, key: '1', opacity: 1 },
-					{ val: 2, key: '2', opacity: 1 },
-					{ val: 3, key: '3', opacity: 1 }
-				];
-			}}>reset</button
-		>
-		<button
-			on:click={() => {
-				to = [
-					{ val: 2, key: '1', opacity: 1 },
-					{ val: 4, key: '2', opacity: 1 },
-					{ val: 6, key: '3', opacity: 1 },
-					{ val: 8, key: '4', opacity: 1 }
-				];
-			}}>animate</button
-		>
-	</Story>
-
-	<Story
-		id="customXAxis"
-		name="Custom X Axis"
-		args={{
-			width: 100,
-			top: false
-		}}
-		let:args
-	>
-		<Chartfull bind:innerWidth bind:innerHeight {...args}>
-			<CustomXAxis scale={xScale} let:ticks let:format let:previousScale>
-				<Tweened
-					to={ticks.map((d) => ({ tick: d, x: xScale(d), opacity: 1 }))}
-					enter={({ tick }) => ({ tick, x: previousScale(tick), opacity: 0 })}
-					exit={({ tick }) => ({ tick, x: xScale(tick), opacity: 0 })}
-					value={(d, i) => d}
-					key={(d) => d.tick.toString()}
-					duration={2000}
-					let:data
-				>
-					{#each data as { tick, x, opacity }, i (tick)}
-						<text {x} fill-opacity={opacity}>{format(tick)}</text>
-					{/each}
-				</Tweened>
-			</CustomXAxis>
-		</Chartfull>
-	</Story>
-</MarginDecorator>
+		</CustomXAxis>
+	</Chartfull>
+</Story>

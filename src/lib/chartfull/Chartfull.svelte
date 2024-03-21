@@ -88,17 +88,19 @@
 	style:--padding-bottom="{$paddingBottom$}px"
 	style:--padding-left="{$paddingLeft$}px"
 	style:--padding-right="{$paddingRight$}px"
-	on:mouseenter
-	on:mouseleave
-	on:mousemove
-	on:mouseout
-	on:mouseover
+	on:pointerenter
+	on:pointerleave
+	on:pointerout
+	on:pointerover
 	on:focus
 	on:blur
-	on:pointermove
 >
 	{#await tick() then _}
-		<svg viewBox="0 0 {$width$} {$height$}" preserveAspectRatio="none" bind:this={context.svg_layer_element}>
+		<svg
+			viewBox="0 0 {$width$} {$height$}"
+			preserveAspectRatio="none"
+			bind:this={context.svg_layer_element}
+		>
 			<g
 				transform={`translate(${$paddingLeft$}, ${$paddingTop$})`}
 				font-family={fontFamily}
@@ -144,8 +146,6 @@
 		background-color: var(--background-color, transparent);
 
 		position: relative;
-
-		overflow: hidden;
 	}
 
 	.chartfull > :global(text.title) {
@@ -163,7 +163,6 @@
 	}
 
 	.html-layer {
-
 		padding-top: var(--padding-top, 0);
 		padding-right: var(--padding-right, 0);
 		padding-bottom: var(--padding-bottom, 0);
@@ -172,7 +171,7 @@
 		cursor: pointer;
 		box-sizing: border-box;
 
-		position:absolute;
+		position: absolute;
 		inset: 0;
 
 		z-index: 2;
@@ -184,6 +183,5 @@
 		width: 100%;
 		height: 100%;
 		position: relative;
-
 	}
 </style>

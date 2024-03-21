@@ -16,7 +16,10 @@
 	const popover_context = getChartfullPopoverContext();
 	const open_store = popover_context.open;
 
-	export let open = false;
+	export let open = $open_store;
+	$: open_store.set(open)
+	$: open = $open_store
+	
 	export let reference: Element | undefined = undefined;
 	export let placements: Placement[] = [];
 	export let offset = 8;
@@ -25,10 +28,11 @@
 	let dx = 0;
 	let dy = 0;
 
-	type InitParamas = { reference?: Element; placements: Placement[] | undefined };
+	type InitParamas = { reference: Element; placements: Placement[] | undefined };
 
 	function init(node: HTMLElement, { placements, reference }: InitParamas) {
 		node.hidden = true;
+		const layer_element = chartfull_context.html_overlays_layer_element;
 
 		if (!reference && !node.parentElement) {
 			throw new Error('<Popover> reference element is undefined');
@@ -36,13 +40,17 @@
 
 		const ref = reference ?? node.parentElement ?? undefined;
 
+		if(!ref){
+			throw new Error('<Popover> reference element is undefined')
+		}
+
 		let cleanup: (() => void) | undefined = undefined;
 
-		portal(node, chartfull_context.html_layer_element);
+		portal(node, layer_element);
 		attach(node, { reference: ref, placements }).then(() => {
 			cleanup = autoUpdate(ref, node, async () => {
 				node.hidden = true;
-				portal(node, chartfull_context.html_layer_element);
+				portal(node, layer_element);
 				await tick();
 				attach(node, { reference, placements });
 			});
@@ -56,7 +64,7 @@
 		return {
 			update({ reference }: InitParamas) {
 				if (!reference) return;
-				portal(node, chartfull_context.html_layer_element);
+				portal(node, layer_element);
 			},
 			destroy() {
 				cleanup?.();

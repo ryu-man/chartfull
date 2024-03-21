@@ -1,5 +1,5 @@
 <script context="module">
-	import { Chartfull } from 'graficos';
+	import { Chartfull } from 'chartfull';
 
 	export const meta = {
 		title: 'Charts/Candlestick chart',
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 	import { Meta, Story } from '@storybook/addon-svelte-csf';
-	import { XAxis, YAxis, scaleFinance, Candle, Tick, Grid } from 'graficos';
+	import { XAxis, YAxis, scaleFinance, Candle, Tick, Grid } from 'chartfull';
 	import { csv, min, max, scaleLinear } from 'd3';
 	import { getISOWeek, getWeekOfMonth, format } from 'date-fns';
 

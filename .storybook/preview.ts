@@ -1,6 +1,8 @@
 import type { Preview } from '@storybook/svelte';
 import './global.css';
 
+import MarginDecorator from '../src/stories/MarginDecorator.svelte';
+
 const preview: Preview = {
 	parameters: {
 		controls: {
@@ -9,7 +11,8 @@ const preview: Preview = {
 				date: /Date$/i
 			}
 		}
-	}
+	},
+	decorators: [() => MarginDecorator]
 };
 
 export default preview;
