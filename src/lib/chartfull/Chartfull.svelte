@@ -121,6 +121,9 @@
 					paddingBottom={$paddingBottom$}
 					paddingLeft={$paddingLeft$}
 					paddingRight={$paddingRight$}
+					htmlLayerElement={context.html_layer_element}
+					svgLayerElement={context.svg_layer_element}
+					svgInnerLayerlement={context.svg_inner_layer_element}
 				/>
 			</g>
 		</svg>
