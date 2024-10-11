@@ -188,6 +188,9 @@
 		stroke-dashoffset={strokeDashoffset}
 		stroke-miterlimit={strokeMiterlimit}
 	/>
+
+	
+
 	<slot>
 		<text>{tickFormat(tick)}</text>
 	</slot>

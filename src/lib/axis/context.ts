@@ -4,7 +4,7 @@ import { writable, type Writable } from 'svelte/store';
 
 export const AXIS_CONTEXT_KEY = 'chartfull_axis_context_key';
 
-type AxisContextProps = {
+export type AxisContextProps = {
 	currentScale: (val: any) => number;
 	previousScale: (val: any) => number;
 	currentPosition: (d: any) => number;
@@ -17,6 +17,16 @@ type AxisContextProps = {
 	tickPadding: number;
 	k: number;
 	xy: 'x' | 'y';
+	domain: {
+		stroke?: string;
+		strokeWidth?: string;
+		strokeOpacity?: string;
+		strokeLinecap?: 'inherit' | 'round' | 'butt' | 'square' | null;
+		strokeLinejoin?: 'inherit' | 'round' | 'miter' | 'bevel' | null;
+		strokeDasharray?: string;
+		strokeDashoffset?: string;
+		strokeMiterlimit?: string;
+	};
 };
 
 type AxisContext = Writable<AxisContextProps>;
