@@ -55,18 +55,7 @@
 	}
 </script>
 
-<Story
-	name="Candlestick chart"
-	args={{
-		padding: {
-			left: 48,
-			bottom: 48,
-			top: 96,
-			right: 48
-		}
-	}}
-	let:args
->
+<Story name="Candlestick chart" args={{}} let:args>
 	<Chartfull bind:innerWidth bind:innerHeight {data} {...args}>
 		<text
 			fill-opacity=".1"

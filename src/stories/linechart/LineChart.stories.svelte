@@ -17,14 +17,7 @@
 	import MultiLine from './MultiLine.svelte';
 	import RadialLine from './RadialLine.svelte';
 
-	const args = {
-		padding: {
-			top: 54,
-			right: 0,
-			bottom: 24,
-			left: 72
-		}
-	};
+	const args = {};
 </script>
 
 <Story name="mono line" {args} let:args>
