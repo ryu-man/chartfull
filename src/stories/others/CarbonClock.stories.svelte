@@ -200,8 +200,8 @@
 			</g>
 		{/if}
 
-		<Tooltip open={true}>
+		<!-- <Tooltip open={true}>
 			<div>Atmospheric CO</div>
-		</Tooltip>
+		</Tooltip> -->
 	</Chartfull>
 </Story>
