@@ -2,7 +2,7 @@
 	import { Chartfull } from 'graficos';
 
 	export const meta = {
-		title: 'Components/Animated Path',
+		title: 'Charts/Others',
 		component: Chartfull,
 		argTypes: {
 			width: { type: 'string' },
@@ -12,21 +12,9 @@
 </script>
 
 <script>
-	import { Meta, Story } from '@storybook/addon-svelte-csf';
+	import { Story } from '@storybook/addon-svelte-csf';
 	import { YAxis, Tick } from 'graficos';
-	import { tweened } from 'svelte/motion';
-	import {
-		csv,
-		schemeCategory10,
-		max,
-		extent,
-		group,
-		rollup,
-		range,
-		min,
-		scaleLinear,
-		scaleOrdinal
-	} from 'd3';
+	import { csv, schemeCategory10, max, rollup, range, min, scaleLinear, scaleOrdinal } from 'd3';
 	import PopulationBar from './PopulationBar.svelte';
 
 	export let args = {};
@@ -47,17 +35,12 @@
 	let innerHeight = 0;
 	const [xAccessor, yAccessor] = [(d) => +d.age, (d) => +d.people];
 
-	const duration = 200;
-	const t$ = tweened(
-		[...Array(49)].map((d, i) => ({
-			male: 0,
-			female: 0,
-			birthyear: 1760 + i * 5
-		})),
-		{
-			duration
-		}
-	);
+	const duration = 400;
+	let data_render = [...Array(49)].map((d, i) => ({
+		male: 0,
+		female: 0,
+		birthyear: 1760 + i * 5
+	}));
 
 	$: barWidth = Math.floor(innerWidth / 20);
 	$: barHalfWidth = barWidth / 2;
@@ -75,7 +58,7 @@
 	$: yScale = scaleLinear([0, max(data, yAccessor) || 0], [innerHeight, 0]);
 	$: colorScale = scaleOrdinal(data.map(xAccessor), schemeCategory10);
 
-	$: _ = rollup(
+	$: data_rollup = rollup(
 		data,
 		(d) => d.map((dd) => dd.people),
 		(d) => d.year,
@@ -84,8 +67,8 @@
 
 	$: birthyears = range(year0 - age1, year1 + 1, 5);
 
-	$: tweenedData = birthyears.map((birthyear) => {
-		const [male = 0, female = 0] = _.get(year)?.get(birthyear) ?? [0, 0];
+	$: data_render = birthyears.map((birthyear) => {
+		const [male = 0, female = 0] = data_rollup.get(year)?.get(birthyear) ?? [0, 0];
 
 		return {
 			male,
@@ -94,33 +77,11 @@
 		};
 	});
 
-	$: t$.update((val) => {
-		if (val.length === tweenedData.length) {
-			return tweenedData;
-		}
-
-		return val;
-	});
-
 	let startDrag = false;
 </script>
 
-<Meta
-	title="Charts/Others"
-	argTypes={{
-		width: { control: { type: 'number' } },
-		height: { control: { type: 'number' } }
-	}}
-/>
-
 <Story name="Population" component={Chartfull} let:args>
-	<Chartfull
-		bind:innerWidth
-		bind:innerHeight
-		{...args}
-		padding={{ bottom: 32, right: 64, left: 24, top: 24 }}
-		fontSize="16"
-	>
+	<Chartfull bind:innerWidth bind:innerHeight {...args} fontSize="16">
 		<defs>
 			<clipPath id="clip">
 				<rect width={innerWidth} height={innerHeight} />
@@ -145,7 +106,7 @@
 		</g>
 
 		<g class="data" clip-path="url(#clip)">
-			{#each $t$ as { male, female, birthyear } (birthyear)}
+			{#each data_render as { male, female, birthyear } (birthyear)}
 				<PopulationBar
 					male={yScale(male)}
 					female={yScale(female)}

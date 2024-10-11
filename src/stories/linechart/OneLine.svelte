@@ -1,6 +1,7 @@
 <script>
-	import { Chartfull, XAxis, YAxis, Tick, get, Line, Grid } from 'graficos';
+	import { Chartfull, XAxis, YAxis, Tick, get, Line, Grid, Tooltip } from 'graficos';
 	import { csv, extent, scaleLinear, scaleTime, timeParse, line } from 'd3';
+	import { format } from 'date-fns';
 
 	export let args = {};
 
@@ -28,14 +29,7 @@
 	$: dataPath = line(xGet, yGet);
 </script>
 
-<Chartfull
-	padding={{ left: 72, top: 16, right: 16, bottom: 16 }}
-	fontSize="16"
-	{...args}
-	{data}
-	bind:innerWidth
-	bind:innerHeight
->
+<Chartfull fontSize="16" {...args} {data} bind:innerWidth bind:innerHeight>
 	<Grid width={innerWidth} height={innerHeight} />
 
 	<YAxis scale={yScale} tickArguments={[10, '.2f']} let:tick>
@@ -61,4 +55,13 @@
 	</text>
 
 	<Line d={dataPath(data)} stroke="rgba(0 0 0 / .6)" strokeWidth="1" />
+
+	<Tooltip x={[xScale, xAccessor]} y={[yScale, yAccessor]} {data} let:value>
+		{#if value}
+			<div class="">
+				<div>Years: {format(xAccessor(value), 'MMMM dd, yyyy')}</div>
+				<div>Daily Close: {yAccessor(value)}</div>
+			</div>
+		{/if}
+	</Tooltip>
 </Chartfull>

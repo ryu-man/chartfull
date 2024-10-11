@@ -5,6 +5,8 @@
 	import Axis from './Axis.svelte';
 	import Tick from './Tick.svelte';
 	import type { Scale } from './types';
+	import type { AxisContextProps } from './context';
+	import type { Writable } from 'svelte/store';
 
 	const { innerWidth$ } = getChartfullContext();
 
@@ -29,6 +31,15 @@
 
 	export let fill = 'rgba(0 0 0 / .4)';
 
+	export let stroke: string | undefined = 'rgba(0 0 0/ .5)';
+	export let strokeWidth: string | undefined = '';
+	export let strokeOpacity: string | undefined = '';
+	export let strokeLinecap: 'inherit' | 'round' | 'butt' | 'square' | null | undefined = undefined;
+	export let strokeLinejoin: 'inherit' | 'round' | 'miter' | 'bevel' | null | undefined = undefined;
+	export let strokeDasharray: string | undefined = '';
+	export let strokeDashoffset: string | undefined = '';
+	export let strokeMiterlimit: string | undefined = '';
+
 	export let textAnchor: 'start' | 'middle' | 'end' = 'middle';
 	export let d: string | undefined = undefined;
 
@@ -38,6 +49,23 @@
 
 	let _class = '';
 	export { _class as class };
+
+	let context: Writable<AxisContextProps>;
+	$: if (context) {
+		context.update((val) => ({
+			...val,
+			domain: {
+				stroke,
+				strokeWidth,
+				strokeOpacity,
+				strokeLinecap,
+				strokeLinejoin,
+				strokeDasharray,
+				strokeDashoffset,
+				strokeMiterlimit
+			}
+		}));
+	}
 
 	const k = orient === 'top' ? -1 : 1;
 
@@ -72,6 +100,7 @@
 	{easing}
 	{tickFormat}
 	class={classNames(_class, 'x', orient)}
+	bind:context
 	let:ticks
 	let:tickFormat
 >
@@ -84,7 +113,19 @@
 	{@const d = `M0,${k * 6}V0H${$innerWidth$}V${k * 6}`}
 
 	<slot name="domain" {d}>
-		<path class="domain" fill="none" stroke="rgba(0 0 0/ .5)" {d} />
+		<path
+			class="domain"
+			fill="none"
+			{stroke}
+			stroke-width={strokeWidth}
+			stroke-opacity={strokeOpacity}
+			stroke-linecap={strokeLinecap}
+			stroke-linejoin={strokeLinejoin}
+			stroke-dasharray={strokeDasharray}
+			stroke-dashoffset={strokeDashoffset}
+			stroke-miterlimit={strokeMiterlimit}
+			{d}
+		/>
 	</slot>
 
 	<g class="label" id="x-axis-label">

@@ -56,7 +56,7 @@
 	const identity = (d) => d;
 	const _tickFormat = tickFormat ?? scale?.tickFormat?.apply(scale, tickArguments) ?? identity;
 
-	const context$ = setAxisContext({
+	export const context = setAxisContext({
 		currentScale,
 		previousScale,
 		currentPosition,
@@ -64,16 +64,21 @@
 		easing: easing,
 		tickFormat: _tickFormat,
 		k,
-		xy
+		xy,
+		domain: {
+			stroke: '',
+			strokeWidth: 1,
+			strokeOpacity: 1
+		}
 	});
 
-	$: $context$.currentPosition = currentPosition;
-	$: $context$.previousPosition = previousPosition;
+	$: $context.currentPosition = currentPosition;
+	$: $context.previousPosition = previousPosition;
 
-	$: $context$.duration = duration;
-	$: $context$.delay = delay;
-	$: $context$.tickSize = tickSize;
-	$: $context$.tickPadding = tickPadding * k;
+	$: $context.duration = duration;
+	$: $context.delay = delay;
+	$: $context.tickSize = tickSize;
+	$: $context.tickPadding = tickPadding * k;
 
 	$: ticks = tickValues ?? scale?.ticks?.apply(scale, tickArguments) ?? scale.domain();
 
@@ -123,7 +128,7 @@
 	{fill}
 	style:--tick-padding={tickPadding * k + 'px'}
 >
-		<slot {ticks} {tickFormat} />
+	<slot {ticks} {tickFormat} />
 </g>
 
 <style>
